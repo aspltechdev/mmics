@@ -7,31 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============= USER MODEL =============
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  password      String
-  role          Role      @default(EDITOR)
-  isActive      Boolean   @default(true)
-  lastLoginAt   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  enquiries     Enquiry[] @relation("AssignedEnquiries")
-  news          News[]
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  password    String
+  role        Role      @default(EDITOR)
+  isActive    Boolean   @default(true)
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  enquiries   Enquiry[] @relation("AssignedEnquiries")
+  news        News[]
 
   @@map("users")
 }
 
-enum Role {
-  SUPER_ADMIN
-  ADMIN
-  EDITOR
-}
-
-// ============= CATEGORY MODEL =============
 model Category {
   id            String    @id @default(cuid())
   name          String
@@ -43,60 +34,54 @@ model Category {
   sortOrder     Int       @default(0)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-
   products      Product[]
 
   @@map("categories")
 }
 
-// ============= PRODUCT MODEL =============
 model Product {
-  id              String    @id @default(cuid())
-  name            String
-  slug            String    @unique
-  categoryId      String
+  id               String         @id @default(cuid())
+  name             String
+  slug             String         @unique
+  categoryId       String
   shortDescription String?
   fullDescription  String?
-  material        String?
-  specifications  Json?
-  applications    String[]
-  moq             String?
-  customization   String?
-  isFeatured      Boolean   @default(false)
-  isActive        Boolean   @default(true)
-  sortOrder       Int       @default(0)
-  seoTitle        String?
-  seoDescription  String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  category        Category  @relation(fields: [categoryId], references: [id])
-  images          ProductImage[]
-  enquiries       Enquiry[]
+  material         String?
+  specifications   Json?
+  applications     String[]
+  moq              String?
+  customization    String?
+  isFeatured       Boolean        @default(false)
+  isActive         Boolean        @default(true)
+  sortOrder        Int            @default(0)
+  seoTitle         String?
+  seoDescription   String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  enquiries        Enquiry[]
+  images           ProductImage[]
+  category         Category       @relation(fields: [categoryId], references: [id])
 
   @@map("products")
 }
 
-// ============= PRODUCT IMAGE MODEL =============
 model ProductImage {
-  id            String    @id @default(cuid())
-  productId     String
-  url           String
-  publicId      String
-  altText       String?
-  sortOrder     Int       @default(0)
-  isPrimary     Boolean   @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  product       Product   @relation(fields: [productId], references: [id])
+  id        String   @id @default(cuid())
+  productId String
+  url       String
+  publicId  String
+  altText   String?
+  sortOrder Int      @default(0)
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id])
 
   @@map("product_images")
 }
 
-// ============= ENQUIRY MODEL =============
 model Enquiry {
-  id            String          @id @default(cuid())
+  id            String        @id @default(cuid())
   productId     String?
   name          String
   company       String?
@@ -105,18 +90,139 @@ model Enquiry {
   quantity      String?
   requirements  String?
   message       String?
-  status        EnquiryStatus   @default(NEW)
+  status        EnquiryStatus @default(NEW)
   assignedToId  String?
   internalNotes String?
   ipAddress     String?
   userAgent     String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-
-  product       Product?        @relation(fields: [productId], references: [id])
-  assignedTo    User?           @relation("AssignedEnquiries", fields: [assignedToId], references: [id])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  assignedTo    User?         @relation("AssignedEnquiries", fields: [assignedToId], references: [id])
+  product       Product?      @relation(fields: [productId], references: [id])
 
   @@map("enquiries")
+}
+
+model ContactMessage {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  status    ContactStatus @default(NEW)
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("contact_messages")
+}
+
+model Director {
+  id            String   @id @default(cuid())
+  name          String
+  designation   String
+  qualification String?
+  experience    String?
+  biography     String?
+  photo         String?
+  photoPublicId String?
+  linkedinUrl   String?
+  displayOrder  Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("directors")
+}
+
+model GalleryImage {
+  id          String          @id @default(cuid())
+  title       String?
+  description String?
+  url         String
+  publicId    String
+  category    GalleryCategory
+  isFeatured  Boolean         @default(false)
+  sortOrder   Int             @default(0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@map("gallery_images")
+}
+
+model News {
+  id                 String    @id @default(cuid())
+  title              String
+  slug               String    @unique
+  excerpt            String?
+  content            String
+  coverImage         String?
+  coverImagePublicId String?
+  authorId           String
+  category           String?
+  isPublished        Boolean   @default(false)
+  publishedAt        DateTime?
+  seoTitle           String?
+  seoDescription     String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  author             User      @relation(fields: [authorId], references: [id])
+
+  @@map("news")
+}
+
+model Testimonial {
+  id            String   @id @default(cuid())
+  customerName  String
+  designation   String?
+  company       String?
+  photo         String?
+  photoPublicId String?
+  testimonial   String
+  rating        Int?     @default(5)
+  isActive      Boolean  @default(true)
+  isFeatured    Boolean  @default(false)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("testimonials")
+}
+
+model SiteSettings {
+  id              String   @id @default(cuid())
+  companyName     String   @default("MMMICS Limited")
+  tagline         String?  @default("Packaging Solutions for MSMEs")
+  logo            String?
+  logoPublicId    String?
+  favicon         String?
+  faviconPublicId String?
+  email           String   @default("info@mmmicslimited.com")
+  phone           String   @default("0484 265 4871")
+  whatsapp        String?
+  address         String?  @default("Kadavanthara, Ernakulam, Kerala")
+  googleMapsUrl   String?
+  facebook        String?
+  instagram       String?
+  linkedin        String?
+  twitter         String?
+  youtube         String?
+  footerText      String?  @default("MMMICS Limited - Packaging Solutions")
+  copyright       String?  @default("© 2024 MMMICS Limited. All rights reserved.")
+  metaTitle       String?  @default("MMMICS Limited - Packaging Solutions for MSMEs")
+  metaDescription String?  @default("MMMICS Limited is a cooperative organization focused on providing quality packaging solutions for MSMEs, cooperatives, and businesses.")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
 }
 
 enum EnquiryStatus {
@@ -128,63 +234,11 @@ enum EnquiryStatus {
   CLOSED
 }
 
-// ============= CONTACT MESSAGE MODEL =============
-model ContactMessage {
-  id            String        @id @default(cuid())
-  name          String
-  email         String
-  phone         String?
-  subject       String
-  message       String
-  status        ContactStatus @default(NEW)
-  ipAddress     String?
-  userAgent     String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-
-  @@map("contact_messages")
-}
-
 enum ContactStatus {
   NEW
   READ
   REPLIED
   ARCHIVED
-}
-
-// ============= DIRECTOR MODEL =============
-model Director {
-  id            String    @id @default(cuid())
-  name          String
-  designation   String
-  qualification String?
-  experience    String?
-  biography     String?
-  photo         String?
-  photoPublicId String?
-  linkedinUrl   String?
-  displayOrder  Int       @default(0)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  @@map("directors")
-}
-
-// ============= GALLERY MODEL =============
-model GalleryImage {
-  id            String    @id @default(cuid())
-  title         String?
-  description   String?
-  url           String
-  publicId      String
-  category      GalleryCategory
-  isFeatured    Boolean   @default(false)
-  sortOrder     Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  @@map("gallery_images")
 }
 
 enum GalleryCategory {
@@ -196,74 +250,20 @@ enum GalleryCategory {
   COMMUNITY
   CORPORATE
 }
+model Member {
+  id                   String   @id @default(cuid())
+  membershipNumber     String   @unique
+  name                 String
+  email                String   @unique
+  password             String
+  phone                String?
+  address              String?
+  profileImage         String?
+  profileImagePublicId String?
+  isActive             Boolean  @default(false)
+  lastLoginAt          DateTime?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
-// ============= NEWS MODEL =============
-model News {
-  id            String    @id @default(cuid())
-  title         String
-  slug          String    @unique
-  excerpt       String?
-  content       String
-  coverImage    String?
-  coverImagePublicId String?
-  authorId      String
-  category      String?
-  isPublished   Boolean   @default(false)
-  publishedAt   DateTime?
-  seoTitle      String?
-  seoDescription String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  author        User      @relation(fields: [authorId], references: [id])
-
-  @@map("news")
-}
-
-// ============= TESTIMONIAL MODEL =============
-model Testimonial {
-  id            String    @id @default(cuid())
-  customerName  String
-  designation   String?
-  company       String?
-  photo         String?
-  photoPublicId String?
-  testimonial   String
-  rating        Int?      @default(5)
-  isActive      Boolean   @default(true)
-  isFeatured    Boolean   @default(false)
-  sortOrder     Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  @@map("testimonials")
-}
-
-// ============= SITE SETTINGS MODEL =============
-model SiteSettings {
-  id              String    @id @default(cuid())
-  companyName     String    @default("MMMICS Limited")
-  tagline         String?   @default("Packaging Solutions for MSMEs")
-  logo            String?
-  logoPublicId    String?
-  favicon         String?
-  faviconPublicId String?
-  email           String    @default("info@mmmicslimited.com")
-  phone           String    @default("0484 265 4871")
-  whatsapp        String?
-  address         String?   @default("Kadavanthara, Ernakulam, Kerala")
-  googleMapsUrl   String?
-  facebook        String?
-  instagram       String?
-  linkedin        String?
-  twitter         String?
-  youtube         String?
-  footerText      String?   @default("MMMICS Limited - Packaging Solutions")
-  copyright       String?   @default("© 2024 MMMICS Limited. All rights reserved.")
-  metaTitle       String?   @default("MMMICS Limited - Packaging Solutions for MSMEs")
-  metaDescription String?   @default("MMMICS Limited is a cooperative organization focused on providing quality packaging solutions for MSMEs, cooperatives, and businesses.")
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  @@map("site_settings")
+  @@map("members")
 }

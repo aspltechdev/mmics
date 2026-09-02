@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+:root {
+  --green: #16352a;
+  --green-dark: #092019;
+  --green-deep: #061811;
+  --green-light: #244b3b;
+  --cream: #f7f4ed;
+  --cream-dark: #ebe5d8;
+  --gold: #b89a62;
+  --gold-light: #d8bd86;
+  --terracotta: #c96b5b;
+  --text: #26302b;
+  --muted: #727a75;
+  --white: #fff;
+}
+
+img { max-width: 100%; }
+button, input, textarea, select { font-family: inherit; }
+
+.products-page{width:100%;min-height:100vh;background:var(--cream);color:var(--text);font-family:"DM Sans",Arial,sans-serif;overflow:hidden}
+.products-content-width{width:100%;max-width:1320px;margin:auto;padding:0 5%}
+.products-section-label{display:flex;align-items:center;gap:13px;color:var(--gold);font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase}
+.products-section-label::before{content:"";width:45px;height:1px;background:var(--gold)}
+.products-hero{position:relative;width:100%;height:500px;display:flex;align-items:center;overflow:hidden;background:linear-gradient(90deg,var(--green-deep),var(--green))}
+.products-hero::after{content:"";position:absolute;width:600px;height:600px;right:-200px;top:-250px;border:1px solid rgba(216,189,134,.18);border-radius:50%}
+.products-hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,24,17,.8),rgba(3,24,17,.2))}
+.products-hero-content{position:relative;z-index:2;width:100%;max-width:1320px;margin:auto;padding:0 7%}
+.products-eyebrow{display:flex;align-items:center;gap:13px;margin-bottom:20px;color:var(--gold-light);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase}
+.products-eyebrow span{width:45px;height:1px;background:var(--gold)}
+.products-hero h1{max-width:850px;margin:0;color:#fff;font:500 clamp(55px,7vw,95px)/.92 "Playfair Display",Georgia,serif;letter-spacing:-4px}
+.products-hero h1 em{display:block;color:var(--gold-light);font-style:italic}
+.products-hero-content>p{max-width:600px;margin:24px 0 0;color:rgba(255,255,255,.68);font-size:13px;line-height:1.8}
+.products-breadcrumb{display:flex;gap:12px;margin-top:30px;font-size:8px;font-weight:700;letter-spacing:1.5px}.products-breadcrumb a{color:var(--gold)}.products-breadcrumb span{color:rgba(255,255,255,.35)}.products-breadcrumb strong{color:rgba(255,255,255,.75)}
+.products-intro{padding:95px 0;background:var(--cream)}.products-intro .products-content-width{display:grid;grid-template-columns:70px 1fr 170px;gap:35px;align-items:end}
+.products-intro-number{color:var(--gold);font:500 17px "Playfair Display",Georgia,serif}.products-intro-main{max-width:800px}.products-intro-main .products-section-label{margin-bottom:20px}.products-intro-main h2{margin:0;color:var(--green);font:500 clamp(42px,5vw,68px)/1 "Playfair Display",Georgia,serif;letter-spacing:-2px}.products-intro-main h2 em{display:block;color:var(--gold);font-style:italic}.products-intro-main p{max-width:650px;margin:22px 0 0;color:var(--muted);font-size:13px;line-height:1.9}.products-intro-side{padding-left:20px;border-left:1px solid #d6cec1;display:flex;flex-direction:column;gap:8px}.products-intro-side span{color:var(--muted);font-size:8px;font-weight:700;letter-spacing:1.5px}
+.product-collection{padding:100px 0 120px;background:#eee6da}.product-heading-row{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:40px}.product-heading-row .products-section-label{margin-bottom:18px}.product-heading-row h2{margin:0;color:var(--green);font:500 clamp(42px,5vw,68px)/1 "Playfair Display",Georgia,serif;letter-spacing:-2px}.product-heading-row h2 em{color:var(--gold);font-style:italic}.product-heading-row>p{max-width:340px;margin:0;color:var(--muted);font-size:12px;line-height:1.8}
+.product-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:38px;padding-bottom:18px;border-bottom:1px solid #d3c9bb}.product-filters button{padding:10px 17px;border:1px solid transparent;background:transparent;color:var(--muted);font-size:8px;font-weight:700;letter-spacing:1.2px;cursor:pointer;transition:.25s}.product-filters button:hover,.product-filters button.active{border-color:var(--green);background:var(--green);color:#fff}
+.products-page-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.products-page-card{min-width:0;background:#fff;transition:.35s;overflow:hidden}.products-page-card:hover{transform:translateY(-7px);box-shadow:0 20px 40px rgba(0,0,0,.1)}
+.products-page-image{position:relative;height:310px;overflow:hidden;background:var(--cream-dark)}.products-page-image img{width:100%;height:100%;object-fit:cover;transition:.7s}.products-page-card:hover .products-page-image img{transform:scale(1.06)}.products-page-image-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,24,17,.65),transparent 55%);opacity:0;transition:.3s}.products-page-card:hover .products-page-image-overlay{opacity:1}
+.products-page-card-content{padding:18px}.products-card-category{display:block;margin-bottom:7px;color:var(--gold);font-size:8px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase}.products-page-card h3{margin:0;color:var(--green);font:500 21px "Playfair Display",Georgia,serif}.products-page-card p{margin:8px 0 0;color:var(--muted);font-size:11px;line-height:1.7}.products-card-link{display:inline-flex;margin-top:14px;color:var(--green);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase}.product-index{color:var(--gold);font-size:9px}.products-statement{padding:100px 20px;background:var(--green);text-align:center}.statement-content{max-width:800px;margin:auto}.statement-number{color:var(--gold-light);font-size:9px;letter-spacing:2px}.products-statement h2{margin:15px 0 0;color:#fff;font:500 clamp(38px,5vw,58px) "Playfair Display",Georgia,serif}.products-statement h2 span{color:var(--gold-light)}.products-statement p{max-width:650px;margin:18px auto 0;color:rgba(255,255,255,.68);font-size:13px;line-height:1.9}.statement-lines{width:60px;height:1px;margin:25px auto;background:var(--gold)}
+.products-cta{position:relative;padding:85px 20px;background:var(--green-deep);overflow:hidden}.products-cta-overlay{position:absolute;inset:0;background:radial-gradient(circle at 80% 50%,rgba(184,154,98,.12),transparent 40%)}.products-cta-content{position:relative;z-index:2;max-width:800px;margin:auto;text-align:center}.products-cta h2{margin:0;color:#fff;font:500 clamp(38px,5vw,58px) "Playfair Display",Georgia,serif}.products-cta p{color:rgba(255,255,255,.65);font-size:13px}.products-cta-button{display:inline-flex;margin-top:18px;padding:14px 24px;background:#fff;color:var(--green);text-decoration:none;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase}.products-cta-button:hover{background:var(--gold);color:#fff}
+@media(max-width:1050px){.products-page-grid{grid-template-columns:repeat(3,1fr)}.products-intro .products-content-width{grid-template-columns:1fr}.products-intro-side{border-left:0;border-top:1px solid #d6cec1;padding:15px 0}}
+@media(max-width:750px){.products-hero{height:430px}.product-heading-row{display:block}.product-heading-row>p{margin-top:18px}.products-page-grid{grid-template-columns:repeat(2,1fr)}.products-intro,.product-collection{padding:70px 0 80px}}
+@media(max-width:480px){.products-page-grid{grid-template-columns:1fr}.products-hero h1{font-size:55px}}

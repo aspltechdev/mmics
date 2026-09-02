@@ -1,0 +1,457 @@
+/* =========================================================
+   MMICS WEBSITE NAVBAR
+   FULL WIDTH / PREMIUM / POSH
+========================================================= */
+
+.website-navbar {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  width: 100%;
+
+  height: 92px;
+
+  z-index: 9999;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(3, 20, 14, 0.96) 0%,
+      rgba(3, 20, 14, 0.88) 45%,
+      rgba(3, 20, 14, 0.15) 100%
+    );
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.navbar-container {
+  width: 100%;
+
+  height: 100%;
+
+  margin: 0;
+
+  padding: 0 4%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 30px;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.navbar-logo {
+  display: flex;
+
+  align-items: center;
+
+  gap: 17px;
+
+  flex-shrink: 0;
+
+  color: white;
+
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   DIAMOND LOGO
+========================================================= */
+
+.navbar-logo-symbol {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid #c9aa6b;
+
+  transform: rotate(45deg);
+}
+
+.navbar-logo-symbol span {
+  display: block;
+
+  transform: rotate(-45deg);
+
+  color: white;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 24px;
+
+  font-weight: 400;
+}
+
+
+/* =========================================================
+   LOGO TEXT
+========================================================= */
+
+.navbar-logo-name {
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  line-height: 1;
+}
+
+.navbar-logo-name strong {
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  letter-spacing: 3.5px;
+}
+
+.navbar-logo-name span {
+  margin-top: 7px;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 7px;
+
+  font-weight: 600;
+
+  letter-spacing: 1.8px;
+}
+
+.navbar-logo-name small {
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.48);
+
+  font-size: 5px;
+
+  font-weight: 500;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   NAVIGATION MENU
+========================================================= */
+
+.navbar-menu {
+  flex: 1;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 35px;
+}
+
+
+/* =========================================================
+   NAV LINKS
+========================================================= */
+
+.navbar-link {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  height: 100%;
+
+  padding: 3px 0 0;
+
+  color: rgba(255, 255, 255, 0.76);
+
+  text-decoration: none;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.8px;
+
+  white-space: nowrap;
+
+  transition: color 0.3s ease;
+}
+
+
+/* UNDERLINE */
+
+.navbar-link::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  bottom: 27px;
+
+  width: 0;
+
+  height: 1px;
+
+  background: #d7b873;
+
+  transition: width 0.3s ease;
+}
+
+
+/* HOVER */
+
+.navbar-link:hover {
+  color: white;
+}
+
+.navbar-link:hover::after {
+  width: 100%;
+}
+
+
+/* ACTIVE */
+
+.navbar-link.active {
+  color: white;
+}
+
+.navbar-link.active::after {
+  width: 100%;
+}
+
+
+/* =========================================================
+   GET IN TOUCH BUTTON
+========================================================= */
+
+.navbar-contact {
+  width: 175px;
+
+  height: 52px;
+
+  padding: 0 17px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  flex-shrink: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.42);
+
+  color: white;
+
+  text-decoration: none;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.navbar-contact-text {
+  font-size: 9px;
+
+  font-weight: 600;
+
+  letter-spacing: 1px;
+}
+
+.navbar-contact-arrow {
+  color: #d7b873;
+
+  font-size: 17px;
+
+  line-height: 1;
+
+  transition: transform 0.3s ease;
+}
+
+.navbar-contact:hover {
+  background: white;
+
+  border-color: white;
+
+  color: #12372a;
+}
+
+.navbar-contact:hover .navbar-contact-arrow {
+  transform: translate(3px, -3px);
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1200px) {
+
+  .navbar-container {
+    padding: 0 3%;
+  }
+
+  .navbar-menu {
+    gap: 23px;
+  }
+
+  .navbar-link {
+    font-size: 9px;
+  }
+
+  .navbar-contact {
+    width: 145px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .website-navbar {
+    height: 82px;
+  }
+
+  .navbar-menu {
+    gap: 15px;
+  }
+
+  .navbar-link {
+    font-size: 8px;
+  }
+
+  .navbar-contact {
+    width: 125px;
+
+    height: 46px;
+  }
+
+  .navbar-logo {
+    gap: 12px;
+  }
+
+  .navbar-logo-symbol {
+    width: 42px;
+    height: 42px;
+  }
+
+  .navbar-logo-name strong {
+    font-size: 12px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 750px) {
+
+  .website-navbar {
+    position: absolute;
+
+    height: 75px;
+
+    background:
+      rgba(3, 20, 14, 0.96);
+  }
+
+  .navbar-container {
+    padding: 0 5%;
+  }
+
+  .navbar-menu {
+    display: none;
+  }
+
+  .navbar-contact {
+    width: auto;
+
+    height: 42px;
+
+    padding: 0 13px;
+
+    gap: 15px;
+  }
+
+  .navbar-contact-text {
+    font-size: 8px;
+  }
+
+  .navbar-logo-symbol {
+    width: 38px;
+    height: 38px;
+  }
+
+  .navbar-logo-symbol span {
+    font-size: 18px;
+  }
+
+  .navbar-logo-name strong {
+    font-size: 11px;
+
+    letter-spacing: 2.5px;
+  }
+
+  .navbar-logo-name span {
+    font-size: 5px;
+
+    letter-spacing: 1px;
+  }
+
+  .navbar-logo-name small {
+    display: none;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 450px) {
+
+  .navbar-contact {
+    display: none;
+  }
+
+  .navbar-container {
+    justify-content: flex-start;
+  }
+
+}

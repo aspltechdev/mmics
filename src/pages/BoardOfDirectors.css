@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+:root {
+  --green: #16352a;
+  --green-dark: #092019;
+  --green-deep: #061811;
+  --green-light: #244b3b;
+  --cream: #f7f4ed;
+  --cream-dark: #ebe5d8;
+  --gold: #b89a62;
+  --gold-light: #d8bd86;
+  --terracotta: #c96b5b;
+  --text: #26302b;
+  --muted: #727a75;
+  --white: #fff;
+}
+
+img { max-width: 100%; }
+button, input, textarea, select { font-family: inherit; }
+
+.board-page{width:100%;min-height:100vh;background:var(--cream);color:var(--text);font-family:"DM Sans",Arial,sans-serif;overflow-x:hidden}
+.board-hero{position:relative;width:100%;height:390px;display:flex;align-items:center;overflow:hidden;background:linear-gradient(90deg,var(--green-deep),var(--green))}
+.board-hero::before,.board-hero::after{content:"";position:absolute;border:1px solid rgba(216,189,134,.2);border-radius:50%}
+.board-hero::before{width:560px;height:560px;right:-230px;top:-300px}.board-hero::after{width:430px;height:430px;left:-220px;bottom:-270px}
+.board-hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,22,15,.35),transparent)}
+.board-hero-content{position:relative;z-index:2;width:100%;max-width:1320px;margin:auto;padding:0 7%;text-align:left}
+.board-eyebrow,.section-eyebrow{display:flex;align-items:center;gap:13px;margin-bottom:18px;color:var(--gold-light);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase}
+.board-eyebrow::before,.section-eyebrow::before{content:"";width:45px;height:1px;background:var(--gold)}
+.board-hero-content h1{margin:0;color:#fff;font:500 clamp(50px,6vw,80px)/1 "Playfair Display",Georgia,serif;letter-spacing:-3px}
+.board-hero-content p{max-width:620px;margin:22px 0 0;color:rgba(255,255,255,.7);font-size:13px;line-height:1.8}
+.directors-section{padding:95px 0 110px;background:var(--cream)}
+.directors-container{width:100%;max-width:1320px;margin:auto;padding:0 5%}
+.directors-heading{max-width:800px;margin:0 0 50px}
+.directors-heading h2{margin:0;color:var(--green);font:500 clamp(40px,5vw,62px)/1.04 "Playfair Display",Georgia,serif;letter-spacing:-2px}
+.directors-heading h2 span{color:var(--gold)}
+.directors-heading p{max-width:650px;margin:18px 0 0;color:var(--muted);font-size:13px;line-height:1.8}
+.directors-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.director-card{min-width:0;transition:.35s ease}
+.director-card:hover{transform:translateY(-7px)}
+.director-image-wrapper{position:relative;width:100%;aspect-ratio:.82;overflow:hidden;background:#fff;box-shadow:0 12px 30px rgba(22,53,42,.08)}
+.director-image{width:100%;height:100%;object-fit:cover;display:block;transition:transform .65s ease}
+.director-card:hover .director-image{transform:scale(1.04)}
+.director-image-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 45%,rgba(6,24,17,.45));opacity:0;transition:.3s}
+.director-card:hover .director-image-overlay{opacity:1}
+.director-socials{position:absolute;left:50%;bottom:25px;transform:translate(-50%,15px);display:flex;gap:9px;opacity:0;transition:.3s}
+.director-card:hover .director-socials{opacity:1;transform:translate(-50%,0)}
+.director-social{width:43px;height:43px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#fff;color:var(--green);text-decoration:none;transition:.25s}
+.director-social:hover{background:var(--gold);color:#fff}
+.director-social-svg{width:18px;height:18px}
+.director-info{padding:20px 6px;text-align:left}
+.director-info h3{margin:0;color:var(--green);font:600 16px/1.4 "DM Sans",Arial,sans-serif}
+.director-info p{margin:6px 0 0;color:var(--muted);font-size:11px}
+.leadership-statement{padding:100px 20px;background:var(--green);text-align:center}
+.leadership-statement-inner{max-width:850px;margin:auto}
+.leadership-statement .section-eyebrow{justify-content:center;color:var(--gold-light)}
+.leadership-statement .section-eyebrow::before{display:none}
+.leadership-statement h2{margin:0;color:#fff;font:500 clamp(38px,5vw,58px)/1.08 "Playfair Display",Georgia,serif}
+.leadership-statement h2 span{color:var(--gold-light)}
+.leadership-statement p{max-width:680px;margin:20px auto 0;color:rgba(255,255,255,.68);font-size:13px;line-height:1.9}
+@media(max-width:1000px){.directors-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.board-hero{height:340px}.directors-grid{grid-template-columns:1fr}.directors-section{padding:70px 0}.leadership-statement{padding:75px 20px}}

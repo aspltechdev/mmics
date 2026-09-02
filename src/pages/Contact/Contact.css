@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+:root {
+  --green: #16352a;
+  --green-dark: #092019;
+  --green-deep: #061811;
+  --green-light: #244b3b;
+  --cream: #f7f4ed;
+  --cream-dark: #ebe5d8;
+  --gold: #b89a62;
+  --gold-light: #d8bd86;
+  --terracotta: #c96b5b;
+  --text: #26302b;
+  --muted: #727a75;
+  --white: #fff;
+}
+
+img { max-width: 100%; }
+button, input, textarea, select { font-family: inherit; }
+
+.contact-page{width:100%;min-height:100vh;background:var(--cream);color:var(--text);font-family:"DM Sans",Arial,sans-serif;overflow-x:hidden}
+.contact-map-section{position:relative;width:100%;height:360px;overflow:hidden;background:#d9ddd5}
+.contact-map{width:100%;height:100%;display:block;border:0;filter:saturate(.75)}
+.contact-map-overlay{position:absolute;inset:0;pointer-events:none}
+.contact-location-card{position:absolute;left:5%;bottom:28px;display:flex;align-items:center;gap:13px;padding:13px 18px;background:rgba(255,255,255,.95);box-shadow:0 10px 30px rgba(0,0,0,.12)}
+.contact-location-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--green);color:var(--gold-light)}
+.contact-location-icon svg{width:20px;height:20px}
+.contact-location-card span{display:block;margin-bottom:3px;color:var(--gold);font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+.contact-location-card strong{display:block;color:var(--green);font-size:12px}
+.contact-content-section{padding:90px 0 100px;background:var(--cream)}
+.contact-container{width:100%;max-width:1100px;margin:auto;padding:0 5%;display:grid;grid-template-columns:1.05fr .95fr;gap:75px}
+.contact-eyebrow{display:flex;align-items:center;gap:13px;margin-bottom:16px;color:var(--gold);font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase}
+.contact-eyebrow::before{content:"";width:42px;height:1px;background:var(--gold)}
+.contact-form-column h1{margin:0;color:var(--green);font:500 clamp(40px,5vw,56px)/1.05 "Playfair Display",Georgia,serif}
+.contact-form-column h1 span{color:var(--gold)}
+.contact-intro{max-width:570px;margin:18px 0 30px;color:var(--muted);font-size:13px;line-height:1.8}
+.contact-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.contact-field{position:relative;margin-bottom:15px}
+.contact-field input,.contact-field textarea{width:100%;border:1px solid #d9d5cc;outline:none;border-radius:0;background:#fff;color:var(--green);font-size:12px;padding:13px 15px;transition:.25s}
+.contact-field input{height:44px}.contact-field textarea{min-height:125px;resize:vertical}
+.contact-field input:focus,.contact-field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,154,98,.08)}
+.contact-field label{position:absolute;left:12px;top:-6px;padding:0 5px;background:var(--cream);color:var(--gold);font-size:8px;opacity:0}
+.contact-submit{display:inline-flex;align-items:center;gap:14px;padding:13px 22px;border:0;border-radius:0;background:var(--green);color:#fff;font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:.3s}
+.contact-submit:hover{background:var(--gold)}
+.contact-submit-arrow{font-size:15px}
+.contact-success{margin-top:18px;padding:14px;background:rgba(22,53,42,.05);border:1px solid rgba(22,53,42,.12)}
+.contact-success-icon{display:inline-flex;width:25px;height:25px;align-items:center;justify-content:center;border-radius:50%;background:var(--green);color:#fff}
+.contact-success strong{display:block;margin:8px 0 3px;color:var(--green);font-size:12px}.contact-success p{margin:0;color:var(--muted);font-size:11px}
+.contact-info-column{padding-top:4px}
+.contact-info-block{display:flex;gap:14px;margin-bottom:28px}
+.contact-info-icon{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(22,53,42,.07);color:var(--green)}
+.contact-info-icon svg{width:18px;height:18px}
+.contact-info-block h3,.contact-social-block h3{margin:0 0 7px;color:var(--green);font-size:12px;font-weight:700}
+.contact-info-block p,.contact-info-link{margin:0;color:var(--muted);font-size:11px;line-height:1.8;text-decoration:none}
+.contact-phone-list{display:flex;flex-direction:column;gap:4px}
+.contact-socials{display:flex;gap:8px}.contact-social{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--green);color:#fff;text-decoration:none;transition:.25s}.contact-social:hover{background:var(--gold)}
+.contact-cta{padding:85px 20px;background:var(--green);text-align:center}.contact-cta-inner{max-width:800px;margin:auto}.contact-cta h2{margin:0;color:#fff;font:500 clamp(38px,5vw,58px) "Playfair Display",Georgia,serif}.contact-cta p{color:rgba(255,255,255,.68);font-size:13px}.contact-cta-button{display:inline-flex;margin-top:18px;padding:14px 24px;background:#fff;color:var(--green);text-decoration:none;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase}.contact-cta-button:hover{background:var(--gold);color:#fff}
+@media(max-width:850px){.contact-container{grid-template-columns:1fr;gap:50px}.contact-map-section{height:320px}}
+@media(max-width:600px){.contact-form-row{grid-template-columns:1fr}.contact-content-section{padding:65px 0 75px}.contact-location-card{left:20px;right:20px}}
