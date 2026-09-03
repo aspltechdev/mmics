@@ -1,37 +1,46 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import Login from './pages/Login';
+import Login from './pages/login';
 import AdminLayout from './components/layout/AdminLayout';
 import Dashboard from './pages/Admin/Dashboard';
-
-// Import your public pages
-import Home from './pages/Home/Home';
-import About from './pages/About/About';
-import Contact from './pages/Contact/Contact';
+import MemberLayout from './components/layout/MemberLayout';
+import MemberDashboard from './pages/Member/Dashboard';
 
 const AppRoutes = () => {
   return (
     <AuthProvider>
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* Admin Routes */}
+        {/* Admin Routes - Protected */}
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'ADMIN', 'EDITOR']}>
               <AdminLayout />
             </ProtectedRoute>
           }
         >
           <Route path="dashboard" element={<Dashboard />} />
-          {/* Add more admin routes here */}
         </Route>
+
+        {/* Member Routes - Protected */}
+        <Route
+          path="/member"
+          element={
+            <ProtectedRoute allowedRoles={['MEMBER']}>
+              <MemberLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="dashboard" element={<MemberDashboard />} />
+        </Route>
+
+        {/* Catch all */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </AuthProvider>
   );

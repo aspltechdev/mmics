@@ -1,97 +1,128 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import '../styles/login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  const { login, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (['SUPER_ADMIN', 'ADMIN', 'EDITOR'].includes(user.role)) {
+        navigate('/admin/dashboard', { replace: true });
+      } else if (user.role === 'MEMBER') {
+        navigate('/member/dashboard', { replace: true });
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    const result = await login(email, password);
-    if (result.success) {
-      navigate('/admin/dashboard');
-    } else {
-      setError(result.message || 'Login failed. Please try again.');
+    try {
+      const result = await login(email, password);
+      if (!result.success) {
+        setError(result.message || 'Invalid email or password');
+        setLoading(false);
+      }
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            MMMICS Admin
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Sign in to manage your website
-          </p>
+  if (isAuthenticated && user) {
+    return (
+      <div className="login-page">
+        <div className="login-container">
+          <div className="login-card" style={{ textAlign: 'center' }}>
+            <div className="spinner" style={{ margin: '0 auto' }}></div>
+            <p style={{ marginTop: '16px', color: '#718096' }}>Redirecting to dashboard...</p>
+          </div>
         </div>
+      </div>
+    );
+  }
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+  return (
+    <div className="login-page">
+      <div className="login-container">
+        <div className="login-card">
+          {/* Logo */}
+          <div className="login-logo">
+            <div className="logo-icon">M</div>
+          </div>
+
+          <h2>Welcome Back</h2>
+          <p className="login-subtitle">Sign in to your MMMICS account</p>
+
           {error && (
-            <div className="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <div className="login-error">
+              <span className="error-icon">✕</span>
               {error}
             </div>
           )}
 
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-              />
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Email Address</label>
+              <div className="input-wrapper">
+                <span className="input-icon">📧</span>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-              />
-            </div>
-          </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              {loading ? 'Signing in...' : 'Sign in'}
+            <div className="form-group">
+              <label>Password</label>
+              <div className="input-wrapper">
+                <span className="input-icon">🔒</span>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" className="login-btn" disabled={loading}>
+              {loading ? (
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <span className="spinner-small"></span>
+                  Signing in...
+                </span>
+              ) : (
+                'Sign In'
+              )}
             </button>
-          </div>
+          </form>
 
-          <div className="text-center text-sm text-gray-500">
-            <p>Default: admin@mmmicslimited.com / SecurePassword123!</p>
+          <div className="login-footer">
+            <p>Secure portal for members and administrators</p>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

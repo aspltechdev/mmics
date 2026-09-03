@@ -19,8 +19,18 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
+  // If user is admin but trying to access member route
+  if (allowedRoles.includes('MEMBER') && ['SUPER_ADMIN', 'ADMIN', 'EDITOR'].includes(user?.role)) {
     return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  // If user is member but trying to access admin route
+  if (allowedRoles.includes('SUPER_ADMIN') && user?.role === 'MEMBER') {
+    return <Navigate to="/member/dashboard" replace />;
+  }
+
+  if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
+    return <Navigate to="/login" replace />;
   }
 
   return children;

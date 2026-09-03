@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { productAPI, enquiryAPI, contactAPI, directorAPI, galleryAPI, newsAPI } from '../../services/api';
+import '../../styles/dashboard.css';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({

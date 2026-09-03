@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       const token = localStorage.getItem('token');
       const storedUser = localStorage.getItem('user');
-      
+
       if (token && storedUser) {
         try {
           const userData = JSON.parse(storedUser);
@@ -44,7 +44,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    authAPI.logout();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setUser(null);
     setIsAuthenticated(false);
   };
@@ -54,11 +55,19 @@ export const AuthProvider = ({ children }) => {
     if (role === 'SUPER_ADMIN') return user.role === 'SUPER_ADMIN';
     if (role === 'ADMIN') return ['SUPER_ADMIN', 'ADMIN'].includes(user.role);
     if (role === 'EDITOR') return ['SUPER_ADMIN', 'ADMIN', 'EDITOR'].includes(user.role);
+    if (role === 'MEMBER') return user.role === 'MEMBER';
     return false;
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAuthenticated, login, logout, hasRole }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      isAuthenticated, 
+      login, 
+      logout, 
+      hasRole 
+    }}>
       {children}
     </AuthContext.Provider>
   );
@@ -73,3 +82,58 @@ export const useAuth = () => {
 };
 
 export default AuthContext;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
