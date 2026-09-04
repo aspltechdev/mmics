@@ -6,6 +6,7 @@ import AdminLayout from './components/layout/AdminLayout';
 import Dashboard from './pages/Admin/Dashboard';
 import MemberLayout from './components/layout/MemberLayout';
 import MemberDashboard from './pages/Member/Dashboard';
+import HeroManager from './pages/Admin/Hero/HeroManager';
 
 const AppRoutes = () => {
   return (
@@ -25,6 +26,7 @@ const AppRoutes = () => {
           }
         >
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="hero" element={<HeroManager />} />
         </Route>
 
         {/* Member Routes - Protected */}

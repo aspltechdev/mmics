@@ -251,3 +251,21 @@ enum GalleryCategory {
   COMMUNITY
   CORPORATE
 }
+
+// ============= HERO SECTION MODEL =============
+model Hero {
+  id            String    @id @default(cuid())
+  title         String    @default("Welcome to MMMICS Limited")
+  subtitle      String?   @default("Packaging Solutions for MSMEs, Cooperatives & Businesses")
+  ctaText       String    @default("Explore Products")
+  ctaLink       String    @default("/products")
+  ctaText2      String?   @default("Request a Quote")
+  ctaLink2      String?   @default("/quote")
+  backgroundImage String?
+  backgroundImagePublicId String?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("hero")
+}

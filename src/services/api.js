@@ -202,4 +202,24 @@ export const settingsAPI = {
   },
 };
 
+// ============= HERO =============
+export const heroAPI = {
+  get: () => api.get('/hero').then(res => res.data.data),
+  update: (data) => {
+    const formData = new FormData();
+    Object.keys(data).forEach(key => {
+      if (data[key] !== undefined && data[key] !== null) {
+        if (key === 'backgroundImage' && data[key] instanceof File) {
+          formData.append(key, data[key]);
+        } else {
+          formData.append(key, data[key]);
+        }
+      }
+    });
+    return api.put('/hero', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then(res => res.data.data);
+  },
+};
+
 export default api;

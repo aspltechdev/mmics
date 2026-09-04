@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { productAPI, enquiryAPI, contactAPI, directorAPI, galleryAPI, newsAPI } from '../../services/api';
-import '../../styles/dashboard.css';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -13,132 +12,139 @@ const Dashboard = () => {
   });
   const [recentEnquiries, setRecentEnquiries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [greeting, setGreeting] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [products, enquiries, contacts, directors, gallery, news] = await Promise.all([
-          productAPI.getAll({ limit: 100 }),
-          enquiryAPI.getAll({ limit: 100 }),
-          contactAPI.getAll({ limit: 100 }),
-          directorAPI.getAll(),
-          galleryAPI.getAll(),
-          newsAPI.getAll({ limit: 100 }),
-        ]);
-
-        setStats({
-          products: products.data?.length || 0,
-          enquiries: enquiries.data?.length || 0,
-          contacts: contacts.data?.length || 0,
-          directors: directors.length || 0,
-          gallery: gallery.length || 0,
-          news: news.data?.length || 0,
-        });
-
-        // Get recent enquiries
-        const recent = enquiries.data?.slice(0, 5) || [];
-        setRecentEnquiries(recent);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting('Good Morning');
+    else if (hour < 17) setGreeting('Good Afternoon');
+    else setGreeting('Good Evening');
+    fetchDashboardData();
   }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      const [products, enquiries, contacts, directors, gallery, news] = await Promise.all([
+        productAPI.getAll({ limit: 100 }),
+        enquiryAPI.getAll({ limit: 100 }),
+        contactAPI.getAll({ limit: 100 }),
+        directorAPI.getAll(),
+        galleryAPI.getAll(),
+        newsAPI.getAll({ limit: 100 }),
+      ]);
+
+      setStats({
+        products: products.data?.length || 0,
+        enquiries: enquiries.data?.length || 0,
+        contacts: contacts.data?.length || 0,
+        directors: directors.length || 0,
+        gallery: gallery.length || 0,
+        news: news.data?.length || 0,
+      });
+
+      const recent = enquiries.data?.slice(0, 5) || [];
+      setRecentEnquiries(recent);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cards = [
+    { label: 'Total Products', value: stats.products, color: 'blue', icon: '📦', sub: 'Active products' },
+    { label: 'Total Enquiries', value: stats.enquiries, color: 'green', icon: '✉️', sub: 'Quote requests' },
+    { label: 'Contact Messages', value: stats.contacts, color: 'yellow', icon: '💬', sub: 'From contact form' },
+    { label: 'Directors', value: stats.directors, color: 'purple', icon: '👤', sub: 'Board members' },
+    { label: 'Gallery Images', value: stats.gallery, color: 'pink', icon: '🖼️', sub: 'In gallery' },
+    { label: 'News Articles', value: stats.news, color: 'indigo', icon: '📰', sub: 'Published' },
+  ];
+
+  const statusMap = {
+    NEW: 'badge-new',
+    CONTACTED: 'badge-contacted',
+    IN_PROGRESS: 'badge-in-progress',
+    QUOTED: 'badge-quoted',
+    CONVERTED: 'badge-converted',
+    CLOSED: 'badge-closed',
+  };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '300px' }}>
+        <div className="spinner"></div>
       </div>
     );
   }
 
-  const cards = [
-    { label: 'Total Products', value: stats.products, color: 'blue', icon: '📦' },
-    { label: 'Total Enquiries', value: stats.enquiries, color: 'green', icon: '✉️' },
-    { label: 'Contact Messages', value: stats.contacts, color: 'yellow', icon: '💬' },
-    { label: 'Directors', value: stats.directors, color: 'purple', icon: '👤' },
-    { label: 'Gallery Images', value: stats.gallery, color: 'pink', icon: '🖼️' },
-    { label: 'News Articles', value: stats.news, color: 'indigo', icon: '📰' },
-  ];
-
-  const colorClasses = {
-    blue: 'bg-blue-500',
-    green: 'bg-green-500',
-    yellow: 'bg-yellow-500',
-    purple: 'bg-purple-500',
-    pink: 'bg-pink-500',
-    indigo: 'bg-indigo-500',
-  };
-
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Overview</h2>
+      <div className="dash-header">
+        <h1>{greeting}! 👋</h1>
+        <p>Here's what's happening with your website</p>
+      </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {cards.map((card, index) => (
-          <div key={index} className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">{card.label}</p>
-                <p className="text-2xl font-bold text-gray-800">{card.value}</p>
-              </div>
-              <div className={`${colorClasses[card.color]} text-white p-3 rounded-full text-xl`}>
-                {card.icon}
-              </div>
+      <div className="stats-grid">
+        {cards.map((card, i) => (
+          <div key={i} className={`stat-card stat-${card.color}`}>
+            <div className="top">
+              <div className="icon">{card.icon}</div>
             </div>
+            <div className="value">{card.value}</div>
+            <div className="label">{card.label}</div>
+            <div className="sub">{card.sub}</div>
           </div>
         ))}
       </div>
 
-      {/* Recent Enquiries */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="p-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-800">Recent Enquiries</h3>
+      <div className="table-card">
+        <div className="head">
+          <div>
+            <h3>Recent Enquiries</h3>
+            <span className="sub">Latest quote requests from customers</span>
+          </div>
+          <a href="/admin/enquiries" className="link">View all →</a>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
+        <div className="table-wrap">
+          <table className="table-custom">
+            <thead>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Status</th>
+                <th>Date</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody>
               {recentEnquiries.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
-                    No enquiries yet
+                  <td colSpan="4">
+                    <div className="empty-state">
+                      <span className="icon">📭</span>
+                      <p>No enquiries yet</p>
+                    </div>
                   </td>
                 </tr>
               ) : (
-                recentEnquiries.map((enquiry, index) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{enquiry.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{enquiry.email}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {enquiry.product?.name || 'N/A'}
+                recentEnquiries.map((enq, i) => (
+                  <tr key={i}>
+                    <td>
+                      <div style={{ fontWeight: 500 }}>{enq.name}</div>
+                      <div style={{ fontSize: '13px', color: '#64748b' }}>{enq.email}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs rounded-full ${
-                        enquiry.status === 'NEW' ? 'bg-blue-100 text-blue-800' :
-                        enquiry.status === 'CONTACTED' ? 'bg-yellow-100 text-yellow-800' :
-                        enquiry.status === 'IN_PROGRESS' ? 'bg-purple-100 text-purple-800' :
-                        enquiry.status === 'QUOTED' ? 'bg-green-100 text-green-800' :
-                        enquiry.status === 'CONVERTED' ? 'bg-teal-100 text-teal-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {enquiry.status || 'NEW'}
+                    <td>{enq.product?.name || 'Not specified'}</td>
+                    <td>
+                      <span className={`badge ${statusMap[enq.status] || 'badge-closed'}`}>
+                        {enq.status || 'NEW'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(enquiry.createdAt).toLocaleDateString()}
+                    <td>
+                      {new Date(enq.createdAt).toLocaleDateString('en-IN', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
                     </td>
                   </tr>
                 ))

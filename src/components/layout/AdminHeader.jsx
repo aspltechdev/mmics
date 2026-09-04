@@ -5,19 +5,13 @@ const AdminHeader = () => {
   const { user } = useAuth();
 
   return (
-    <header className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
-      <div>
-        <h1 className="text-xl font-semibold text-gray-800">Dashboard</h1>
+    <div className="admin-header">
+      <h1>Dashboard</h1>
+      <div className="right">
+        <span className="name">{user?.name || 'Admin'}</span>
+        <div className="avatar">{user?.name?.charAt(0) || 'A'}</div>
       </div>
-      <div className="flex items-center space-x-4">
-        <span className="text-sm text-gray-600">
-          👤 {user?.name || 'Admin'}
-        </span>
-        <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded">
-          {user?.role || 'User'}
-        </span>
-      </div>
-    </header>
+    </div>
   );
 };
 

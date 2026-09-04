@@ -4,6 +4,10 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { apiLimiter } from './middleware/rateLimiter.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import heroRoutes from './routes/heroRoutes.js';
+
+
+
 
 // Import routes
 import authRoutes from './routes/authRoutes.js';
@@ -48,6 +52,8 @@ app.use('/api/news', newsRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/hero', heroRoutes);
+
 
 // Health check
 app.get('/api/health', (req, res) => {
