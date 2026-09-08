@@ -23,6 +23,13 @@ model User {
   @@map("users")
 }
 
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  MEMBER
+}
+
 model Category {
   id            String    @id @default(cuid())
   name          String
@@ -103,6 +110,15 @@ model Enquiry {
   @@map("enquiries")
 }
 
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  IN_PROGRESS
+  QUOTED
+  CONVERTED
+  CLOSED
+}
+
 model ContactMessage {
   id        String        @id @default(cuid())
   name      String
@@ -117,6 +133,13 @@ model ContactMessage {
   updatedAt DateTime      @updatedAt
 
   @@map("contact_messages")
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  REPLIED
+  ARCHIVED
 }
 
 model Director {
@@ -150,6 +173,16 @@ model GalleryImage {
   updatedAt   DateTime        @updatedAt
 
   @@map("gallery_images")
+}
+
+enum GalleryCategory {
+  PRODUCTS
+  MANUFACTURING
+  FACILITIES
+  EVENTS
+  MEETINGS
+  COMMUNITY
+  CORPORATE
 }
 
 model News {
@@ -219,37 +252,23 @@ model SiteSettings {
   @@map("site_settings")
 }
 
-enum Role {
-  SUPER_ADMIN
-  ADMIN
-  EDITOR
-  MEMBER
-}
+// ============= MEMBER MODEL =============
+model Member {
+  id                   String   @id @default(cuid())
+  membershipNumber     String   @unique
+  name                 String
+  email                String   @unique
+  password             String
+  phone                String?
+  address              String?
+  profileImage         String?
+  profileImagePublicId String?
+  isActive             Boolean  @default(false)
+  lastLoginAt          DateTime?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
-enum EnquiryStatus {
-  NEW
-  CONTACTED
-  IN_PROGRESS
-  QUOTED
-  CONVERTED
-  CLOSED
-}
-
-enum ContactStatus {
-  NEW
-  READ
-  REPLIED
-  ARCHIVED
-}
-
-enum GalleryCategory {
-  PRODUCTS
-  MANUFACTURING
-  FACILITIES
-  EVENTS
-  MEETINGS
-  COMMUNITY
-  CORPORATE
+  @@map("members")
 }
 
 // ============= HERO SECTION MODEL =============
