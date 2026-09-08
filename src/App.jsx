@@ -13,6 +13,12 @@ import AdminLayout from "./components/layout/AdminLayout";
 import Login from "./pages/login";
 import Dashboard from "./pages/Admin/Dashboard";
 import HeroManager from "./pages/Admin/Hero/HeroManager";
+import ProductList from "./pages/Admin/Products/ProductList";
+import ProductForm from "./pages/Admin/Products/ProductForm";
+
+// ✅ ADD CATEGORY IMPORTS
+import CategoryList from "./pages/Admin/Categories/CategoryList";
+import CategoryForm from "./pages/Admin/Categories/CategoryForm";
 
 // Public Website Pages
 import Home from "./pages/Home/Home";
@@ -26,7 +32,6 @@ import "./App.css";
 
 /* =========================================================
    PUBLIC WEBSITE LAYOUT
-   Navbar and Footer are shared across all public pages.
    ========================================================= */
 
 const WebsiteLayout = () => {
@@ -83,6 +88,14 @@ function App() {
           >
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="hero" element={<HeroManager />} />
+            <Route path="products" element={<ProductList />} />
+            <Route path="products/new" element={<ProductForm />} />
+            <Route path="products/edit/:id" element={<ProductForm />} />
+            
+            {/* ✅ CATEGORY ROUTES */}
+            <Route path="categories" element={<CategoryList />} />
+            <Route path="categories/new" element={<CategoryForm />} />
+            <Route path="categories/edit/:id" element={<CategoryForm />} />
           </Route>
 
           {/* =================================================

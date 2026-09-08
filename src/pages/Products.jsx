@@ -1,103 +1,118 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { productAPI, categoryAPI } from "../services/api";
 import "./Products.css";
 
-/* =========================================================
-   PRODUCTS DATA WITH PRODUCT-SPECIFIC IMAGES
-   ========================================================= */
-
-const products = [
-  {
-    id: 1,
-    name: "Paper Cups",
-    category: "PAPER PRODUCTS",
-    description:
-      "Quality paper cups designed for businesses, institutions and everyday commercial use.",
-    image: "https://images.unsplash.com/photo-1550338861-b7cfeaf8ffd8?w=400&h=300&fit=crop&q=80",
-  },
-  {
-    id: 2,
-    name: "Jute Files",
-    category: "ECO FRIENDLY PRODUCTS",
-    description:
-      "Durable and sustainable jute files suitable for offices, institutions and promotional use.",
-    image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=300&fit=crop&q=80",
-  },
-  {
-    id: 3,
-    name: "Plastic Crates",
-    category: "INDUSTRIAL PRODUCTS",
-    description:
-      "Strong reusable plastic crates designed for safe storage, handling and transportation.",
-    image: "https://images.unsplash.com/photo-1595853035070-59a39fe84de3?w=400&h=300&fit=crop&q=80",
-  },
-  {
-    id: 4,
-    name: "Corrugated Boxes",
-    category: "PACKAGING PRODUCTS",
-    description:
-      "Reliable corrugated packaging solutions for storage, transportation and business requirements.",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop&q=80",
-  },
-  {
-    id: 5,
-    name: "Paper Shopping Bags",
-    category: "PAPER PRODUCTS",
-    description:
-      "Practical paper shopping bags offering a sustainable alternative for retail and businesses.",
-    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=400&h=300&fit=crop&q=80",
-  },
-  {
-    id: 6,
-    name: "Eco Friendly Bags",
-    category: "ECO FRIENDLY PRODUCTS",
-    description:
-      "Reusable and environmentally conscious bags created for modern business needs.",
-    image: "https://images.unsplash.com/photo-1598532163256-ae1e0df25cb8?w=400&h=300&fit=crop&q=80",
-  },
-  {
-    id: 7,
-    name: "Wooden Pallets",
-    category: "INDUSTRIAL PRODUCTS",
-    description:
-      "Strong wooden pallets suitable for material handling, storage and industrial transportation.",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop&q=80",
-  },
-  {
-    id: 8,
-    name: "Jute Products",
-    category: "ECO FRIENDLY PRODUCTS",
-    description:
-      "Natural jute-based products combining traditional materials with practical business applications.",
-    image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=300&fit=crop&q=80",
-  },
-];
-
-/* =========================================================
-   CATEGORIES
-   ========================================================= */
-
-const categories = [
-  "ALL PRODUCTS",
-  "PAPER PRODUCTS",
-  "ECO FRIENDLY PRODUCTS",
-  "INDUSTRIAL PRODUCTS",
-  "PACKAGING PRODUCTS",
-];
 
 /* =========================================================
    PRODUCTS PAGE
    ========================================================= */
 
 const Products = () => {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+
   const [activeCategory, setActiveCategory] = useState("ALL PRODUCTS");
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  /* =========================================================
+     FETCH PRODUCTS + CATEGORIES
+     ========================================================= */
+
+  useEffect(() => {
+    fetchProductsAndCategories();
+  }, []);
+
+  const fetchProductsAndCategories = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const [productsResponse, categoriesResponse] =
+        await Promise.all([
+          productAPI.getAll({
+            limit: 100,
+            active: "true",
+          }),
+
+          categoryAPI.getAll({
+            active: "true",
+          }),
+        ]);
+
+      /*
+       * productAPI.getAll() returns:
+       *
+       * {
+       *   success: true,
+       *   data: [...],
+       *   pagination: {...}
+       * }
+       */
+
+      setProducts(productsResponse?.data || []);
+
+      /*
+       * categoryAPI.getAll() already returns:
+       *
+       * res.data.data
+       *
+       * so categoriesResponse is the array itself.
+       */
+
+      setCategories(categoriesResponse || []);
+    } catch (err) {
+      console.error(
+        "Error fetching products and categories:",
+        err
+      );
+
+      setError(
+        "Unable to load products. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* =========================================================
+     FILTER PRODUCTS BY CATEGORY
+     ========================================================= */
 
   const filteredProducts =
     activeCategory === "ALL PRODUCTS"
       ? products
       : products.filter(
-          (product) => product.category === activeCategory
+          (product) =>
+            product.category?.name?.toUpperCase() ===
+            activeCategory
         );
+
+  /* =========================================================
+     GET PRIMARY PRODUCT IMAGE
+     ========================================================= */
+
+  const getProductImage = (product) => {
+    if (!product?.images || product.images.length === 0) {
+      return null;
+    }
+
+    const primaryImage = product.images.find(
+      (image) => image.isPrimary
+    );
+
+    return (
+      primaryImage?.url ||
+      product.images[0]?.url ||
+      null
+    );
+  };
+
+  /* =========================================================
+     RENDER
+     ========================================================= */
 
   return (
     <main className="products-page">
@@ -123,8 +138,9 @@ const Products = () => {
           </h1>
 
           <p>
-            Practical packaging and industrial solutions designed
-            around quality, value and long-term partnerships.
+            Practical packaging and industrial solutions
+            designed around quality, value and long-term
+            partnerships.
           </p>
 
           <div className="products-breadcrumb">
@@ -162,20 +178,18 @@ const Products = () => {
             </h2>
 
             <p>
-              MMICS brings together practical manufacturing and
-              packaging solutions for businesses, institutions and
-              communities. Our product range focuses on reliability,
-              usability and value.
+              MMICS brings together practical manufacturing
+              and packaging solutions for businesses,
+              institutions and communities. Our product range
+              focuses on reliability, usability and value.
             </p>
 
           </div>
 
           <div className="products-intro-side">
-
             <span>QUALITY</span>
             <span>VALUE</span>
             <span>RELIABILITY</span>
-
           </div>
 
         </div>
@@ -220,85 +234,277 @@ const Products = () => {
 
           <div className="product-filters">
 
-            {categories.map((category) => (
+            {/* ALL PRODUCTS */}
 
-              <button
-                key={category}
-                type="button"
-                className={
-                  activeCategory === category
-                    ? "active"
-                    : ""
-                }
-                onClick={() =>
-                  setActiveCategory(category)
-                }
-              >
-                {category}
-              </button>
+            <button
+              type="button"
+              className={
+                activeCategory === "ALL PRODUCTS"
+                  ? "active"
+                  : ""
+              }
+              onClick={() =>
+                setActiveCategory("ALL PRODUCTS")
+              }
+            >
+              ALL PRODUCTS
+            </button>
 
-            ))}
+
+            {/* DATABASE CATEGORIES */}
+
+            {categories.map((category) => {
+
+              const categoryName =
+                category.name?.toUpperCase();
+
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  className={
+                    activeCategory === categoryName
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    setActiveCategory(categoryName)
+                  }
+                >
+                  {categoryName}
+                </button>
+              );
+
+            })}
 
           </div>
+
+
+          {/* =================================================
+              LOADING STATE
+          ================================================= */}
+
+          {loading && (
+            <div
+              className="flex-center"
+              style={{
+                minHeight: "300px",
+              }}
+            >
+              <div className="spinner" />
+            </div>
+          )}
+
+
+          {/* =================================================
+              ERROR STATE
+          ================================================= */}
+
+          {!loading && error && (
+            <div
+              className="products-error"
+              style={{
+                textAlign: "center",
+                padding: "60px 20px",
+              }}
+            >
+              <p>{error}</p>
+
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={fetchProductsAndCategories}
+                style={{ marginTop: "16px" }}
+              >
+                Try Again
+              </button>
+            </div>
+          )}
 
 
           {/* =================================================
               PRODUCT GRID
           ================================================= */}
 
-          <div className="products-page-grid">
+          {!loading &&
+            !error &&
+            filteredProducts.length > 0 && (
+              <div className="products-page-grid">
 
-            {filteredProducts.map((product, index) => (
+                {filteredProducts.map(
+                  (product, index) => {
 
-              <Link
-                to="/contact"
-                className="products-page-card"
-                key={product.id}
+                    const productImage =
+                      getProductImage(product);
+
+                    return (
+                      <Link
+                        to="/contact"
+                        className="products-page-card"
+                        key={product.id}
+                      >
+
+                        {/* PRODUCT IMAGE */}
+
+                        <div className="products-page-image">
+
+                          {productImage ? (
+                            <img
+                              src={productImage}
+                              alt={product.name}
+                            />
+                          ) : (
+                            <div
+                              className="product-image-placeholder"
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                background: "#f5f5f5",
+                              }}
+                            >
+                              <span>
+                                NO IMAGE
+                              </span>
+                            </div>
+                          )}
+
+
+                          {/* IMAGE OVERLAY */}
+
+                          <div className="products-page-image-overlay">
+
+                            <span>
+                              VIEW PRODUCT
+                            </span>
+
+                            <strong>
+                              ↗
+                            </strong>
+
+                          </div>
+
+
+                          {/* PRODUCT INDEX */}
+
+                          <div className="product-index">
+                            {String(index + 1).padStart(
+                              2,
+                              "0"
+                            )}
+                          </div>
+
+                        </div>
+
+
+                        {/* PRODUCT CONTENT */}
+
+                        <div className="products-page-card-content">
+
+                          {/* CATEGORY */}
+
+                          <span className="products-card-category">
+                            {product.category?.name ||
+                              "GENERAL"}
+                          </span>
+
+
+                          {/* PRODUCT NAME */}
+
+                          <h3>
+                            {product.name}
+                          </h3>
+
+
+                          {/* DESCRIPTION */}
+
+                          <p>
+                            {product.shortDescription ||
+                              product.fullDescription ||
+                              "Quality products designed for your business needs."}
+                          </p>
+
+
+                          {/* ENQUIRE */}
+
+                          <div className="products-card-link">
+
+                            <span>
+                              ENQUIRE NOW
+                            </span>
+
+                            <strong>
+                              →
+                            </strong>
+
+                          </div>
+
+                        </div>
+
+                      </Link>
+                    );
+                  }
+                )}
+
+              </div>
+            )}
+
+
+          {/* =================================================
+              EMPTY STATE
+          ================================================= */}
+
+          {!loading &&
+            !error &&
+            filteredProducts.length === 0 && (
+              <div
+                className="products-empty"
+                style={{
+                  textAlign: "center",
+                  padding: "80px 20px",
+                }}
               >
 
-                <div className="products-page-image">
-
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                  />
-
-                  <div className="products-page-image-overlay">
-
-                    <span>VIEW PRODUCT</span>
-                    <strong>↗</strong>
-
-                  </div>
-
-                  <div className="product-index">
-                    {String(index + 1).padStart(2, "0")}
-                  </div>
-
+                <div
+                  style={{
+                    fontSize: "48px",
+                    marginBottom: "16px",
+                  }}
+                >
+                  📦
                 </div>
 
+                <h3>
+                  No products found
+                </h3>
 
-                <div className="products-page-card-content">
+                <p>
+                  There are currently no active products
+                  in this category.
+                </p>
 
-                  <span className="products-card-category">
-                    {product.category}
-                  </span>
+                {activeCategory !==
+                  "ALL PRODUCTS" && (
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() =>
+                      setActiveCategory(
+                        "ALL PRODUCTS"
+                      )
+                    }
+                    style={{
+                      marginTop: "16px",
+                    }}
+                  >
+                    View All Products
+                  </button>
+                )}
 
-                  <h3>{product.name}</h3>
-
-                  <p>{product.description}</p>
-
-                  <div className="products-card-link">
-                    <span>ENQUIRE NOW</span>
-                    <strong>→</strong>
-                  </div>
-
-                </div>
-
-              </Link>
-
-            ))}
-
-          </div>
+              </div>
+            )}
 
         </div>
 
@@ -330,9 +536,9 @@ const Products = () => {
 
             <p>
               From everyday packaging requirements to
-              specialized business needs, we focus on delivering
-              solutions that balance quality, functionality and
-              value.
+              specialized business needs, we focus on
+              delivering solutions that balance quality,
+              functionality and value.
             </p>
 
           </div>
