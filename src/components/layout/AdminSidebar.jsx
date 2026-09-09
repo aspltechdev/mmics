@@ -16,6 +16,8 @@ const AdminSidebar = () => {
     { path: '/admin/news', label: 'News', icon: '📰' },
     { path: '/admin/testimonials', label: 'Testimonials', icon: '⭐' },
     { path: '/admin/settings', label: 'Settings', icon: '⚙️' },
+    // In menuItems array, add:
+
     // Add this to menuItems
 { path: '/admin/hero', label: 'Hero Section', icon: '🎯' },
   ];

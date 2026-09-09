@@ -15,6 +15,8 @@ import Dashboard from "./pages/Admin/Dashboard";
 import HeroManager from "./pages/Admin/Hero/HeroManager";
 import ProductList from "./pages/Admin/Products/ProductList";
 import ProductForm from "./pages/Admin/Products/ProductForm";
+import EnquiryList from './pages/Admin/Enquiries/EnquiryList';
+import EnquiryDetail from './pages/Admin/Enquiries/EnquiryDetail';
 
 // ✅ ADD CATEGORY IMPORTS
 import CategoryList from "./pages/Admin/Categories/CategoryList";
@@ -91,11 +93,13 @@ function App() {
             <Route path="products" element={<ProductList />} />
             <Route path="products/new" element={<ProductForm />} />
             <Route path="products/edit/:id" element={<ProductForm />} />
-            
+
             {/* ✅ CATEGORY ROUTES */}
             <Route path="categories" element={<CategoryList />} />
             <Route path="categories/new" element={<CategoryForm />} />
             <Route path="categories/edit/:id" element={<CategoryForm />} />
+            <Route path="enquiries" element={<EnquiryList />} />
+            <Route path="enquiries/:id" element={<EnquiryDetail />} />
           </Route>
 
           {/* =================================================
