@@ -76,7 +76,7 @@ export const login = async (req, res) => {
     console.error('Login error:', error);
     res.status(500).json({
       success: false,
-      message: error.message || 'Internal server error'
+      message: 'An error occurred during login' // ✅ Generic error message
     });
   }
 };
@@ -104,7 +104,7 @@ export const getMe = async (req, res) => {
     console.error('Get me error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching user data' // ✅ Generic error message
     });
   }
 };
@@ -112,6 +112,15 @@ export const getMe = async (req, res) => {
 export const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
+
+    // ✅ Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email format'
+      });
+    }
 
     const existingUser = await prisma.user.findUnique({
       where: { email }
@@ -149,7 +158,7 @@ export const register = async (req, res) => {
     console.error('Register error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred during registration' // ✅ Generic error message
     });
   }
 };
@@ -158,6 +167,14 @@ export const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
     const userId = req.user.id;
+
+    // ✅ Validate new password
+    if (!newPassword || newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: 'New password must be at least 6 characters'
+      });
+    }
 
     const user = await prisma.user.findUnique({
       where: { id: userId }
@@ -186,7 +203,7 @@ export const changePassword = async (req, res) => {
     console.error('Change password error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while changing password' // ✅ Generic error message
     });
   }
 };

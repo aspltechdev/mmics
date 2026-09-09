@@ -22,7 +22,7 @@ export const getGallery = async (req, res) => {
     console.error('Get gallery error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching gallery images' // ✅ Generic error message
     });
   }
 };
@@ -31,10 +31,18 @@ export const uploadGallery = async (req, res) => {
   try {
     const { title, description, category, isFeatured, sortOrder } = req.body;
 
+    // ✅ Validate required fields
     if (!req.file) {
       return res.status(400).json({
         success: false,
         message: 'Image file is required'
+      });
+    }
+
+    if (!title) {
+      return res.status(400).json({
+        success: false,
+        message: 'Title is required'
       });
     }
 
@@ -60,7 +68,7 @@ export const uploadGallery = async (req, res) => {
     console.error('Upload gallery error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while uploading the image' // ✅ Generic error message
     });
   }
 };
@@ -68,6 +76,13 @@ export const uploadGallery = async (req, res) => {
 export const deleteGallery = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Image ID is required'
+      });
+    }
 
     const image = await prisma.galleryImage.findUnique({
       where: { id }
@@ -94,7 +109,7 @@ export const deleteGallery = async (req, res) => {
     console.error('Delete gallery error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while deleting the image' // ✅ Generic error message
     });
   }
 };

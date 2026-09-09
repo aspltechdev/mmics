@@ -5,6 +5,8 @@
 @import './styles/global.css';
 @import './styles/login.css';
 @import './styles/admin.css';
+@import './styles/portal.css';
+@import './styles/member.css';
 
 /* Base styles */
 * {

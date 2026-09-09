@@ -1,9 +1,40 @@
 import prisma from '../src/config/database.js';
 import { sendEmail } from '../src/config/email.js';
 
+// ✅ Email validation helper
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+// ✅ Sanitize email to prevent injection
+const sanitizeEmail = (email) => {
+  // Remove any newlines or carriage returns
+  return email.replace(/[\r\n]/g, '').trim();
+};
+
 export const submitContact = async (req, res) => {
   try {
     const { name, email, phone, subject, message } = req.body;
+
+    // ✅ Validate required fields
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name, email, subject, and message are required'
+      });
+    }
+
+    // ✅ Validate email format
+    if (!validateEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email format'
+      });
+    }
+
+    // ✅ Sanitize email
+    const sanitizedEmail = sanitizeEmail(email);
 
     // Get IP and user agent
     const ipAddress = req.ip || req.connection.remoteAddress;
@@ -12,7 +43,7 @@ export const submitContact = async (req, res) => {
     const contact = await prisma.contactMessage.create({
       data: {
         name,
-        email,
+        email: sanitizedEmail,
         phone,
         subject,
         message,
@@ -28,7 +59,7 @@ export const submitContact = async (req, res) => {
       html: `
         <h2>New Contact Message</h2>
         <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Email:</strong> ${sanitizedEmail}</p>
         <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
         <p><strong>Subject:</strong> ${subject}</p>
         <p><strong>Message:</strong></p>
@@ -38,7 +69,7 @@ export const submitContact = async (req, res) => {
 
     // Send auto-reply to customer
     await sendEmail({
-      to: email,
+      to: sanitizedEmail, // ✅ Using sanitized email
       subject: 'Thank you for contacting MMMICS Limited',
       html: `
         <h2>Thank You for Contacting Us</h2>
@@ -63,7 +94,7 @@ export const submitContact = async (req, res) => {
     console.error('Submit contact error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while submitting your message' // ✅ Generic error message
     });
   }
 };
@@ -72,17 +103,20 @@ export const getContacts = async (req, res) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
 
+    // ✅ Validate and sanitize pagination
+    const pageNumber = Math.max(1, parseInt(page, 10) || 1);
+    const limitNumber = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
+    const skip = (pageNumber - 1) * limitNumber;
+
     const where = {};
     if (status) where.status = status;
-
-    const skip = (parseInt(page) - 1) * parseInt(limit);
 
     const [contacts, total] = await Promise.all([
       prisma.contactMessage.findMany({
         where,
         orderBy: { createdAt: 'desc' },
         skip,
-        take: parseInt(limit)
+        take: limitNumber
       }),
       prisma.contactMessage.count({ where })
     ]);
@@ -91,17 +125,17 @@ export const getContacts = async (req, res) => {
       success: true,
       data: contacts,
       pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
+        page: pageNumber,
+        limit: limitNumber,
         total,
-        totalPages: Math.ceil(total / parseInt(limit))
+        totalPages: Math.ceil(total / limitNumber)
       }
     });
   } catch (error) {
     console.error('Get contacts error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching contacts' // ✅ Generic error message
     });
   }
 };
@@ -109,6 +143,13 @@ export const getContacts = async (req, res) => {
 export const getContactById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Contact ID is required'
+      });
+    }
 
     const contact = await prisma.contactMessage.findUnique({
       where: { id }
@@ -129,7 +170,7 @@ export const getContactById = async (req, res) => {
     console.error('Get contact error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching the contact' // ✅ Generic error message
     });
   }
 };
@@ -138,6 +179,13 @@ export const updateContact = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Contact ID is required'
+      });
+    }
 
     const contact = await prisma.contactMessage.findUnique({
       where: { id }
@@ -163,7 +211,7 @@ export const updateContact = async (req, res) => {
     console.error('Update contact error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while updating the contact' // ✅ Generic error message
     });
   }
 };
@@ -171,6 +219,13 @@ export const updateContact = async (req, res) => {
 export const deleteContact = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Contact ID is required'
+      });
+    }
 
     const contact = await prisma.contactMessage.findUnique({
       where: { id }
@@ -195,7 +250,7 @@ export const deleteContact = async (req, res) => {
     console.error('Delete contact error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while deleting the contact' // ✅ Generic error message
     });
   }
 };

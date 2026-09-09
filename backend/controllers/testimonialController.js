@@ -22,7 +22,7 @@ export const getTestimonials = async (req, res) => {
     console.error('Get testimonials error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching testimonials' // ✅ Generic error message
     });
   }
 };
@@ -39,6 +39,14 @@ export const createTestimonial = async (req, res) => {
       isFeatured,
       sortOrder
     } = req.body;
+
+    // ✅ Validate required fields
+    if (!customerName || !testimonial) {
+      return res.status(400).json({
+        success: false,
+        message: 'Customer name and testimonial are required'
+      });
+    }
 
     let photoData = {};
     if (req.file) {
@@ -71,7 +79,7 @@ export const createTestimonial = async (req, res) => {
     console.error('Create testimonial error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while creating the testimonial' // ✅ Generic error message
     });
   }
 };
@@ -89,6 +97,13 @@ export const updateTestimonial = async (req, res) => {
       isFeatured,
       sortOrder
     } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Testimonial ID is required'
+      });
+    }
 
     const existing = await prisma.testimonial.findUnique({
       where: { id }
@@ -136,7 +151,7 @@ export const updateTestimonial = async (req, res) => {
     console.error('Update testimonial error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while updating the testimonial' // ✅ Generic error message
     });
   }
 };
@@ -144,6 +159,13 @@ export const updateTestimonial = async (req, res) => {
 export const deleteTestimonial = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Testimonial ID is required'
+      });
+    }
 
     const testimonial = await prisma.testimonial.findUnique({
       where: { id }
@@ -172,7 +194,7 @@ export const deleteTestimonial = async (req, res) => {
     console.error('Delete testimonial error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while deleting the testimonial' // ✅ Generic error message
     });
   }
 };

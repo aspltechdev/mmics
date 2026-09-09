@@ -1,6 +1,17 @@
 import prisma from '../src/config/database.js';
 import { sendEmail } from '../src/config/email.js';
 
+// ✅ Email validation helper
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+// ✅ Sanitize email to prevent injection
+const sanitizeEmail = (email) => {
+  return email.replace(/[\r\n]/g, '').trim();
+};
+
 export const submitEnquiry = async (req, res) => {
   try {
     const {
@@ -14,6 +25,25 @@ export const submitEnquiry = async (req, res) => {
       message
     } = req.body;
 
+    // ✅ Validate required fields
+    if (!name || !email || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name, email, and phone are required'
+      });
+    }
+
+    // ✅ Validate email format
+    if (!validateEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email format'
+      });
+    }
+
+    // ✅ Sanitize email
+    const sanitizedEmail = sanitizeEmail(email);
+
     const ipAddress = req.ip || req.connection.remoteAddress;
     const userAgent = req.headers['user-agent'];
 
@@ -22,7 +52,7 @@ export const submitEnquiry = async (req, res) => {
         productId,
         name,
         company,
-        email,
+        email: sanitizedEmail,
         phone,
         quantity,
         requirements,
@@ -52,7 +82,7 @@ export const submitEnquiry = async (req, res) => {
         <p><strong>Product:</strong> ${productName}</p>
         <p><strong>Customer:</strong> ${name}</p>
         <p><strong>Company:</strong> ${company || 'Not provided'}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Email:</strong> ${sanitizedEmail}</p>
         <p><strong>Phone:</strong> ${phone}</p>
         <p><strong>Quantity:</strong> ${quantity || 'Not specified'}</p>
         <p><strong>Requirements:</strong> ${requirements || 'Not specified'}</p>
@@ -64,7 +94,7 @@ export const submitEnquiry = async (req, res) => {
 
     // Send acknowledgement to customer
     await sendEmail({
-      to: email,
+      to: sanitizedEmail, // ✅ Using sanitized email
       subject: 'Thank you for your enquiry - MMMICS Limited',
       html: `
         <h2>Thank You for Your Enquiry</h2>
@@ -92,7 +122,7 @@ export const submitEnquiry = async (req, res) => {
     console.error('Submit enquiry error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while submitting your enquiry' // ✅ Generic error message
     });
   }
 };
@@ -100,6 +130,11 @@ export const submitEnquiry = async (req, res) => {
 export const getEnquiries = async (req, res) => {
   try {
     const { status, productId, search, page = 1, limit = 20 } = req.query;
+
+    // ✅ Validate and sanitize pagination
+    const pageNumber = Math.max(1, parseInt(page, 10) || 1);
+    const limitNumber = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
+    const skip = (pageNumber - 1) * limitNumber;
 
     const where = {};
     if (status) where.status = status;
@@ -111,8 +146,6 @@ export const getEnquiries = async (req, res) => {
         { company: { contains: search, mode: 'insensitive' } }
       ];
     }
-
-    const skip = (parseInt(page) - 1) * parseInt(limit);
 
     const [enquiries, total] = await Promise.all([
       prisma.enquiry.findMany({
@@ -127,7 +160,7 @@ export const getEnquiries = async (req, res) => {
         },
         orderBy: { createdAt: 'desc' },
         skip,
-        take: parseInt(limit)
+        take: limitNumber
       }),
       prisma.enquiry.count({ where })
     ]);
@@ -136,17 +169,17 @@ export const getEnquiries = async (req, res) => {
       success: true,
       data: enquiries,
       pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
+        page: pageNumber,
+        limit: limitNumber,
         total,
-        totalPages: Math.ceil(total / parseInt(limit))
+        totalPages: Math.ceil(total / limitNumber)
       }
     });
   } catch (error) {
     console.error('Get enquiries error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching enquiries' // ✅ Generic error message
     });
   }
 };
@@ -154,6 +187,13 @@ export const getEnquiries = async (req, res) => {
 export const getEnquiryById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Enquiry ID is required'
+      });
+    }
 
     const enquiry = await prisma.enquiry.findUnique({
       where: { id },
@@ -182,7 +222,7 @@ export const getEnquiryById = async (req, res) => {
     console.error('Get enquiry error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching the enquiry' // ✅ Generic error message
     });
   }
 };
@@ -191,6 +231,13 @@ export const updateEnquiry = async (req, res) => {
   try {
     const { id } = req.params;
     const { status, assignedToId, internalNotes } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Enquiry ID is required'
+      });
+    }
 
     const enquiry = await prisma.enquiry.findUnique({
       where: { id }
@@ -228,7 +275,7 @@ export const updateEnquiry = async (req, res) => {
     console.error('Update enquiry error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while updating the enquiry' // ✅ Generic error message
     });
   }
 };
@@ -236,6 +283,13 @@ export const updateEnquiry = async (req, res) => {
 export const deleteEnquiry = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Enquiry ID is required'
+      });
+    }
 
     const enquiry = await prisma.enquiry.findUnique({
       where: { id }
@@ -260,7 +314,7 @@ export const deleteEnquiry = async (req, res) => {
     console.error('Delete enquiry error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while deleting the enquiry' // ✅ Generic error message
     });
   }
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { productAPI, categoryAPI } from '../../../services/api';
+import SmartImage from '../../../components/common/SmartImage';
 
 const ProductForm = () => {
   const { id } = useParams();
@@ -88,12 +89,12 @@ const ProductForm = () => {
       setError('');
 
       /*
-       * Your existing API uses /products/:slug.
-       *
-       * The backend code should support both slug and ID.
-       * See the small backend change provided below this file.
+       * Must be getById: this form holds a database id, and
+       * the slug endpoint filters on slug + isActive, so
+       * calling it with an id returned 404 every time and
+       * editing a product was impossible.
        */
-      const product = await productAPI.getBySlug(id);
+      const product = await productAPI.getById(id);
 
       if (!product) {
         throw new Error('Product not found');
@@ -102,7 +103,7 @@ const ProductForm = () => {
       setFormData({
         name: product.name || '',
         slug: product.slug || '',
-        categoryId: product.categoryId || '',
+        categoryId: product.categoryId || product.category?.id || '',
         shortDescription: product.shortDescription || '',
         fullDescription: product.fullDescription || '',
         material: product.material || '',
@@ -897,7 +898,7 @@ const ProductForm = () => {
                       }}
                     >
 
-                      <img
+                      <SmartImage
                         src={preview}
                         alt={`Product preview ${
                           index + 1
@@ -1000,8 +1001,10 @@ const ProductForm = () => {
                         }}
                       >
 
-                        <img
+                        <SmartImage
                           src={image.url}
+                          width={260}
+                          height={260}
                           alt={
                             image.altText ||
                             formData.name ||

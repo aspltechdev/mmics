@@ -20,6 +20,7 @@ model User {
   enquiries   Enquiry[] @relation("AssignedEnquiries")
   news        News[]
 
+  @@index([isActive])
   @@map("users")
 }
 
@@ -43,6 +44,8 @@ model Category {
   updatedAt     DateTime  @updatedAt
   products      Product[]
 
+  @@index([isActive, sortOrder])
+  @@index([sortOrder])
   @@map("categories")
 }
 
@@ -69,6 +72,11 @@ model Product {
   images           ProductImage[]
   category         Category       @relation(fields: [categoryId], references: [id])
 
+  @@index([categoryId])
+  @@index([isActive, createdAt(sort: Desc)])
+  @@index([isActive, isFeatured])
+  @@index([categoryId, isActive, sortOrder])
+  @@index([createdAt(sort: Desc)])
   @@map("products")
 }
 
@@ -82,8 +90,10 @@ model ProductImage {
   isPrimary Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
+  @@index([productId, sortOrder])
+  @@index([productId, isPrimary])
   @@map("product_images")
 }
 
@@ -107,6 +117,10 @@ model Enquiry {
   assignedTo    User?         @relation("AssignedEnquiries", fields: [assignedToId], references: [id])
   product       Product?      @relation(fields: [productId], references: [id])
 
+  @@index([status, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@index([productId])
+  @@index([assignedToId])
   @@map("enquiries")
 }
 
@@ -132,6 +146,8 @@ model ContactMessage {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
+  @@index([status, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
   @@map("contact_messages")
 }
 
@@ -157,6 +173,7 @@ model Director {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  @@index([isActive, displayOrder])
   @@map("directors")
 }
 
@@ -172,6 +189,8 @@ model GalleryImage {
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
+  @@index([category, sortOrder])
+  @@index([isFeatured, sortOrder])
   @@map("gallery_images")
 }
 
@@ -203,6 +222,8 @@ model News {
   updatedAt          DateTime  @updatedAt
   author             User      @relation(fields: [authorId], references: [id])
 
+  @@index([isPublished, publishedAt(sort: Desc)])
+  @@index([authorId])
   @@map("news")
 }
 
@@ -221,6 +242,8 @@ model Testimonial {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  @@index([isActive, sortOrder])
+  @@index([isFeatured, sortOrder])
   @@map("testimonials")
 }
 
@@ -263,11 +286,16 @@ model Member {
   address              String?
   profileImage         String?
   profileImagePublicId String?
+  membershipType       String?  @default("Regular")
+  joinedAt             DateTime @default(now())
   isActive             Boolean  @default(false)
   lastLoginAt          DateTime?
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 
+  @@index([isActive, createdAt(sort: Desc)])
+  @@index([name])
+  @@index([createdAt(sort: Desc)])
   @@map("members")
 }
 

@@ -1,139 +1,200 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { authAPI } from '../services/api';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+
+import { authAPI, memberAuthAPI, clearSession, getAccountType } from '../services/api';
+
+/**
+ * =========================================================
+ * AUTH CONTEXT
+ * =========================================================
+ *
+ * Handles two independent kinds of session:
+ *
+ *   accountType "admin"  -> users table   (SUPER_ADMIN / ADMIN / EDITOR)
+ *   accountType "member" -> members table (portal members)
+ *
+ * They are separate tables with separate endpoints, so the
+ * context tracks which one is signed in and sends the person
+ * to the matching login screen when the session ends.
+ */
 
 const AuthContext = createContext();
 
+const TOKEN_KEY = 'token';
+const USER_KEY = 'user';
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [accountType, setAccountType] = useState('admin');
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  /* -------------------------------------------------------
+     RESTORE AN EXISTING SESSION
+     ------------------------------------------------------- */
+
   useEffect(() => {
-    const checkAuth = async () => {
-      const token = localStorage.getItem('token');
-      const storedUser = localStorage.getItem('user');
+    try {
+      const token = localStorage.getItem(TOKEN_KEY);
+      const storedUser = localStorage.getItem(USER_KEY);
 
       if (token && storedUser) {
-        try {
-          const userData = JSON.parse(storedUser);
+        const userData = JSON.parse(storedUser);
+
+        if (userData?.id && userData?.email) {
           setUser(userData);
+          setAccountType(getAccountType());
           setIsAuthenticated(true);
-        } catch (error) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
+        } else {
+          clearSession();
         }
       }
+    } catch {
+      clearSession();
+      setUser(null);
+      setIsAuthenticated(false);
+    } finally {
       setLoading(false);
-    };
-    checkAuth();
+    }
   }, []);
 
-  const login = async (email, password) => {
-    try {
-      const response = await authAPI.login(email, password);
-      if (response.success) {
-        const userData = JSON.parse(localStorage.getItem('user'));
-        setUser(userData);
-        setIsAuthenticated(true);
-        return { success: true };
-      }
-      return { success: false, message: response.message };
-    } catch (error) {
-      return { success: false, message: error.response?.data?.message || 'Login failed' };
-    }
-  };
+  /* -------------------------------------------------------
+     SHARED LOGIN HANDLER
+     ------------------------------------------------------- */
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+  const performLogin = useCallback(async (loginFn, type, email, password) => {
+    if (!email || !password) {
+      return { success: false, message: 'Email and password are required' };
+    }
+
+    try {
+      const response = await loginFn(email.trim(), password);
+
+      if (!response?.success) {
+        return {
+          success: false,
+          message: response?.message || 'Invalid email or password',
+        };
+      }
+
+      const token = response.data?.token;
+      const userData = response.data?.user;
+
+      if (!token || !userData) {
+        return {
+          success: false,
+          message: 'Login succeeded but the server response was incomplete',
+        };
+      }
+
+      setUser(userData);
+      setAccountType(type);
+      setIsAuthenticated(true);
+
+      return { success: true, user: userData, accountType: type };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message ||
+          error?.message ||
+          'Unable to reach the server. Please try again.',
+      };
+    }
+  }, []);
+
+  /** Admin / staff login. */
+  const login = useCallback(
+    (email, password) => performLogin(authAPI.login, 'admin', email, password),
+    [performLogin]
+  );
+
+  /** Member portal login. */
+  const memberLogin = useCallback(
+    (email, password) => performLogin(memberAuthAPI.login, 'member', email, password),
+    [performLogin]
+  );
+
+  /* -------------------------------------------------------
+     LOGOUT
+     ------------------------------------------------------- */
+
+  const logout = useCallback(() => {
+    const target = accountType === 'member' ? '/member/login' : '/login';
+
+    clearSession();
     setUser(null);
     setIsAuthenticated(false);
-  };
 
-  const hasRole = (role) => {
-    if (!user) return false;
-    if (role === 'SUPER_ADMIN') return user.role === 'SUPER_ADMIN';
-    if (role === 'ADMIN') return ['SUPER_ADMIN', 'ADMIN'].includes(user.role);
-    if (role === 'EDITOR') return ['SUPER_ADMIN', 'ADMIN', 'EDITOR'].includes(user.role);
-    if (role === 'MEMBER') return user.role === 'MEMBER';
-    return false;
-  };
+    window.location.href = target;
+  }, [accountType]);
 
-  return (
-    <AuthContext.Provider value={{ 
-      user, 
-      loading, 
-      isAuthenticated, 
-      login, 
-      logout, 
-      hasRole 
-    }}>
-      {children}
-    </AuthContext.Provider>
+  /* -------------------------------------------------------
+     UPDATE THE CACHED USER
+     -------------------------------------------------------
+     Called after a member edits their own profile so the
+     header and dashboard reflect the change immediately.
+     ------------------------------------------------------- */
+
+  const updateUser = useCallback((partial) => {
+    setUser((previous) => {
+      const next = { ...previous, ...partial };
+      localStorage.setItem(USER_KEY, JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
+  /* -------------------------------------------------------
+     ROLE HELPERS
+     ------------------------------------------------------- */
+
+  const isMember = accountType === 'member' || user?.role === 'MEMBER';
+  const isAdmin = !isMember && ['SUPER_ADMIN', 'ADMIN'].includes(user?.role);
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+
+  const hasRole = useCallback(
+    (role) => {
+      if (!user?.role) {
+        return false;
+      }
+
+      const hierarchy = {
+        SUPER_ADMIN: ['SUPER_ADMIN'],
+        ADMIN: ['SUPER_ADMIN', 'ADMIN'],
+        EDITOR: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
+        MEMBER: ['MEMBER'],
+      };
+
+      return (hierarchy[role] || []).includes(user.role);
+    },
+    [user]
   );
+
+  const value = {
+    user,
+    accountType,
+    loading,
+    isAuthenticated,
+    isMember,
+    isAdmin,
+    isSuperAdmin,
+    login,
+    memberLogin,
+    logout,
+    updateUser,
+    hasRole,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error('useAuth must be used within an AuthProvider');
   }
+
   return context;
 };
 
 export default AuthContext;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

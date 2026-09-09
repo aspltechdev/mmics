@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { heroAPI } from '../../../services/api';
+import SmartImage from '../../../components/common/SmartImage';
 
 const HeroManager = () => {
   const [loading, setLoading] = useState(true);
@@ -147,7 +148,7 @@ const HeroManager = () => {
           overflow: 'hidden',
         }}>
           {imagePreview && (
-            <img
+            <SmartImage
               src={imagePreview}
               alt="Background"
               style={{

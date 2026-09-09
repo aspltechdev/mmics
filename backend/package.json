@@ -4,12 +4,19 @@
   "description": "MMMICS Limited Backend API",
   "type": "module",
   "main": "src/server.js",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "db:generate": "npx prisma generate",
-    "db:push": "npx prisma db push",
-    "db:studio": "npx prisma studio"
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:seed": "node prisma/seed.js",
+    "db:studio": "prisma studio",
+    "setup": "prisma generate && prisma migrate deploy && node prisma/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

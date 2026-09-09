@@ -1,0 +1,574 @@
+/* ============================================================
+   PORTAL UI PRIMITIVES
+   ============================================================
+
+   The admin pages already reference .btn, .form-control,
+   .form-card, .page-header and friends, but none of these
+   classes existed in any stylesheet, so those screens rendered
+   as unstyled HTML. This file defines them.
+
+   Scoped to the admin and member portals only. Nothing here
+   touches the public website, which is still being designed.
+   ============================================================ */
+
+/* ================= LAYOUT HELPERS ================= */
+
+.dashboard-container {
+  animation: fadeIn 0.35s ease-out;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.page-header p {
+  color: #64748b;
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+.dash-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.dash-columns {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .dash-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.route-loading,
+.route-denied {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 60vh;
+  color: #64748b;
+  text-align: center;
+  padding: 24px;
+}
+
+.route-denied h2 {
+  color: #0f172a;
+}
+
+/* ================= BUTTONS ================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease,
+    transform 0.08s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: #334155;
+  border-color: #d5dde8;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #b9c7d8;
+}
+
+.btn-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #fecaca;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.row-actions {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ================= FORMS ================= */
+
+.form-card {
+  background: #ffffff;
+  border: 1px solid #e6ecf3;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 760px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field-full {
+  grid-column: 1 / -1;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-grid .form-field {
+  margin-bottom: 0;
+}
+
+.form-field label,
+.form-card label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.required {
+  color: #dc2626;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d5dde8;
+  border-radius: 8px;
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  color: #0f172a;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.form-control::placeholder {
+  color: #a2b0c2;
+}
+
+.form-control:hover {
+  border-color: #b9c7d8;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 84px;
+}
+
+select.form-control {
+  cursor: pointer;
+}
+
+.field-hint {
+  font-size: 12px;
+  color: #7c8ba1;
+  line-height: 1.45;
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid #e6ecf3;
+  border-radius: 8px;
+  background: #f8fafc;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.checkbox-field input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #2563eb;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #eef2f7;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ================= FILTER BAR ================= */
+
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-bar .form-control {
+  flex: 1;
+  min-width: 220px;
+}
+
+/* ================= ALERTS ================= */
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.alert-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.alert-success {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+.alert-info {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+/* ================= IMAGES ================= */
+
+.smart-image {
+  display: block;
+  max-width: 100%;
+  object-fit: cover;
+  background: #eef2f7;
+  transition: opacity 0.25s ease;
+}
+
+.smart-image.is-loading {
+  opacity: 0;
+}
+
+.smart-image.is-loaded {
+  opacity: 1;
+}
+
+.smart-image.is-placeholder {
+  object-fit: cover;
+}
+
+.image-picker {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 16px;
+  border: 1px dashed #d5dde8;
+  border-radius: 10px;
+  background: #f8fafc;
+  margin-bottom: 16px;
+}
+
+.image-picker-preview {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
+  flex-shrink: 0;
+}
+
+.image-picker-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.image-picker-controls .btn {
+  cursor: pointer;
+}
+
+/* Thumbnail grid used by the product image manager */
+
+.image-thumb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.image-thumb {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e6ecf3;
+  aspect-ratio: 1 / 1;
+  background: #eef2f7;
+}
+
+.image-thumb img {
+  width: 100%;
+  height: 100%;
+}
+
+.image-thumb-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.72);
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.image-thumb-remove:hover {
+  background: #b91c1c;
+}
+
+/* ================= TABLE EXTRAS ================= */
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.cell-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cell-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.code-chip {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: #334155;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px;
+  border-top: 1px solid #eef2f7;
+}
+
+.pagination-info {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* ================= STAT CARDS AS LINKS ================= */
+
+a.stat-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+a.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+/* ================= DASHBOARD MEMBER MINI LIST ================= */
+
+.member-mini-list {
+  padding: 8px;
+}
+
+.member-mini-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease;
+}
+
+.member-mini-row:hover {
+  background: #f8fafc;
+}
+
+.member-mini-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.member-mini-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-mini-info .name {
+  font-weight: 500;
+  font-size: 14px;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-mini-info .meta {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* ================= CREDENTIAL BOX ================= */
+
+.credential-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  margin-top: 20px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e6ecf3;
+}
+
+.credential-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #7c8ba1;
+  margin-bottom: 4px;
+}
+
+.credential-box code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 15px;
+  color: #0f172a;
+  word-break: break-all;
+}
+
+/* ================= LOGIN EXTRAS ================= */
+
+.login-alt-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.login-alt-link:hover {
+  text-decoration: underline;
+}

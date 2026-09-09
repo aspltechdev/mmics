@@ -21,7 +21,7 @@ export const getDirectors = async (req, res) => {
     console.error('Get directors error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching directors' // ✅ Generic error message
     });
   }
 };
@@ -29,6 +29,13 @@ export const getDirectors = async (req, res) => {
 export const getDirectorById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Director ID is required'
+      });
+    }
 
     const director = await prisma.director.findUnique({
       where: { id }
@@ -49,7 +56,7 @@ export const getDirectorById = async (req, res) => {
     console.error('Get director error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching the director' // ✅ Generic error message
     });
   }
 };
@@ -66,6 +73,14 @@ export const createDirector = async (req, res) => {
       displayOrder,
       isActive
     } = req.body;
+
+    // ✅ Validate required fields
+    if (!name || !designation) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name and designation are required'
+      });
+    }
 
     let photoData = {};
     if (req.file) {
@@ -98,7 +113,7 @@ export const createDirector = async (req, res) => {
     console.error('Create director error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while creating the director' // ✅ Generic error message
     });
   }
 };
@@ -116,6 +131,13 @@ export const updateDirector = async (req, res) => {
       displayOrder,
       isActive
     } = req.body;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Director ID is required'
+      });
+    }
 
     const director = await prisma.director.findUnique({
       where: { id }
@@ -163,7 +185,7 @@ export const updateDirector = async (req, res) => {
     console.error('Update director error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while updating the director' // ✅ Generic error message
     });
   }
 };
@@ -171,6 +193,13 @@ export const updateDirector = async (req, res) => {
 export const deleteDirector = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Director ID is required'
+      });
+    }
 
     const director = await prisma.director.findUnique({
       where: { id }
@@ -199,7 +228,7 @@ export const deleteDirector = async (req, res) => {
     console.error('Delete director error:', error);
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while deleting the director' // ✅ Generic error message
     });
   }
 };

@@ -6,10 +6,6 @@ import {
 
 /**
  * Convert values coming from JSON or FormData into a Boolean.
- *
- * FormData sends Boolean values as strings:
- * true  -> "true"
- * false -> "false"
  */
 const parseBoolean = (value, defaultValue = true) => {
   if (value === undefined || value === null || value === '') {
@@ -35,7 +31,6 @@ const parseSortOrder = (value, defaultValue = 0) => {
 
   return Number.isNaN(parsed) ? defaultValue : parsed;
 };
-
 
 /* =========================================================
    GET ALL CATEGORIES
@@ -78,38 +73,40 @@ export const getCategories = async (req, res) => {
 
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching categories'
     });
   }
 };
 
-
 /* =========================================================
-   GET CATEGORY BY SLUG
+   GET CATEGORY BY SLUG - OPTIMIZED WITH PAGINATION
    ========================================================= */
 
 export const getCategoryBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
+    const { page = 1, limit = 12 } = req.query;
 
+    // Validate and sanitize pagination
+    const pageNumber = Math.max(1, parseInt(page, 10) || 1);
+    const limitNumber = Math.min(50, Math.max(1, parseInt(limit, 10) || 12));
+    const skip = (pageNumber - 1) * limitNumber;
+
+    // First, get the category without products
     const category = await prisma.category.findUnique({
       where: {
         slug
       },
-      include: {
-        products: {
-          where: {
-            isActive: true
-          },
-          include: {
-            images: {
-              where: {
-                isPrimary: true
-              },
-              take: 1
-            }
-          }
-        }
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        image: true,
+        isActive: true,
+        sortOrder: true,
+        createdAt: true,
+        updatedAt: true
       }
     });
 
@@ -120,20 +117,72 @@ export const getCategoryBySlug = async (req, res) => {
       });
     }
 
+    // Get total count of active products in this category
+    const totalProducts = await prisma.product.count({
+      where: {
+        categoryId: category.id,
+        isActive: true
+      }
+    });
+
+    // Get paginated products with limited image data
+    const products = await prisma.product.findMany({
+      where: {
+        categoryId: category.id,
+        isActive: true
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        shortDescription: true,
+        material: true,
+        isFeatured: true,
+        createdAt: true,
+        images: {
+          where: {
+            isPrimary: true
+          },
+          select: {
+            id: true,
+            url: true,
+            altText: true
+          },
+          take: 1
+        }
+      },
+      orderBy: {
+        sortOrder: 'asc'
+      },
+      skip,
+      take: limitNumber
+    });
+
     res.json({
       success: true,
-      data: category
+      data: {
+        ...category,
+        products,
+        _count: {
+          products: totalProducts
+        }
+      },
+      pagination: {
+        page: pageNumber,
+        limit: limitNumber,
+        total: totalProducts,
+        totalPages: Math.ceil(totalProducts / limitNumber)
+      }
     });
   } catch (error) {
     console.error('❌ Get category error:', error);
 
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching category'
     });
   }
 };
-
 
 /* =========================================================
    CREATE CATEGORY
@@ -160,6 +209,15 @@ export const createCategory = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Name and slug are required'
+      });
+    }
+
+    // Validate slug format
+    const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+    if (!slugRegex.test(slug)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Slug can only contain lowercase letters, numbers, and hyphens'
       });
     }
 
@@ -231,11 +289,10 @@ export const createCategory = async (req, res) => {
 
     res.status(500).json({
       success: false,
-      message: error.message || 'Internal server error'
+      message: 'An error occurred while creating the category'
     });
   }
 };
-
 
 /* =========================================================
    UPDATE CATEGORY
@@ -252,6 +309,16 @@ export const updateCategory = async (req, res) => {
       isActive,
       sortOrder
     } = req.body;
+
+    /* -------------------------
+       Validate ID
+       ------------------------- */
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Category ID is required'
+      });
+    }
 
     /* -------------------------
        Find category
@@ -275,6 +342,15 @@ export const updateCategory = async (req, res) => {
        ------------------------- */
 
     if (slug && slug !== category.slug) {
+      // Validate slug format
+      const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+      if (!slugRegex.test(slug)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Slug can only contain lowercase letters, numbers, and hyphens'
+        });
+      }
+
       const existingCategory = await prisma.category.findUnique({
         where: {
           slug
@@ -368,11 +444,10 @@ export const updateCategory = async (req, res) => {
 
     res.status(500).json({
       success: false,
-      message: error.message || 'Internal server error'
+      message: 'An error occurred while updating the category'
     });
   }
 };
-
 
 /* =========================================================
    DELETE CATEGORY
@@ -381,6 +456,16 @@ export const updateCategory = async (req, res) => {
 export const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
+
+    /* -------------------------
+       Validate ID
+       ------------------------- */
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Category ID is required'
+      });
+    }
 
     /* -------------------------
        Find category
@@ -445,7 +530,7 @@ export const deleteCategory = async (req, res) => {
 
     res.status(500).json({
       success: false,
-      message: error.message || 'Internal server error'
+      message: 'An error occurred while deleting the category'
     });
   }
 };

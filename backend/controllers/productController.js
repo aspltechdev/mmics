@@ -1,20 +1,24 @@
 import prisma from '../src/config/database.js';
+
 import {
   uploadToCloudinary,
+  uploadManyToCloudinary,
   deleteFromCloudinary
 } from '../middleware/upload.js';
 
+// =========================================================
+// HELPERS
+// =========================================================
+
 /**
  * Convert values coming from JSON/FormData into real booleans.
- *
- * Handles:
- * true
- * false
- * "true"
- * "false"
  */
 const parseBoolean = (value, defaultValue = true) => {
-  if (value === undefined || value === null || value === '') {
+  if (
+    value === undefined ||
+    value === null ||
+    value === ''
+  ) {
     return defaultValue;
   }
 
@@ -31,13 +35,13 @@ const parseBoolean = (value, defaultValue = true) => {
 
 /**
  * Safely parse JSON values that may arrive as strings.
- *
- * Example:
- * '{"size":"Large"}' -> { size: "Large" }
- * '["Food","Packaging"]' -> ["Food", "Packaging"]
  */
 const parseJSON = (value, defaultValue) => {
-  if (value === undefined || value === null || value === '') {
+  if (
+    value === undefined ||
+    value === null ||
+    value === ''
+  ) {
     return defaultValue;
   }
 
@@ -56,10 +60,9 @@ const parseJSON = (value, defaultValue) => {
   return defaultValue;
 };
 
-
-/* =========================================================
-   GET ALL PRODUCTS
-========================================================= */
+// =========================================================
+// GET ALL PRODUCTS - OPTIMIZED
+// =========================================================
 
 export const getProducts = async (req, res) => {
   try {
@@ -74,17 +77,17 @@ export const getProducts = async (req, res) => {
       sortOrder = 'desc'
     } = req.query;
 
-    const pageNumber = Math.max(parseInt(page, 10) || 1, 1);
-    const limitNumber = Math.min(
-      Math.max(parseInt(limit, 10) || 20, 1),
-      100
-    );
-
+    // Validate and sanitize pagination
+    const pageNumber = Math.max(1, parseInt(page, 10) || 1);
+    const limitNumber = Math.min(100, Math.max(1, parseInt(limit, 10) || 20));
     const skip = (pageNumber - 1) * limitNumber;
 
     const where = {};
 
-    /* Search */
+    // -----------------------------------------------------
+    // SEARCH
+    // -----------------------------------------------------
+
     if (search) {
       where.OR = [
         {
@@ -102,12 +105,18 @@ export const getProducts = async (req, res) => {
       ];
     }
 
-    /* Category */
+    // -----------------------------------------------------
+    // CATEGORY
+    // -----------------------------------------------------
+
     if (categoryId) {
       where.categoryId = categoryId;
     }
 
-    /* Featured */
+    // -----------------------------------------------------
+    // FEATURED
+    // -----------------------------------------------------
+
     if (featured === 'true') {
       where.isFeatured = true;
     }
@@ -116,7 +125,10 @@ export const getProducts = async (req, res) => {
       where.isFeatured = false;
     }
 
-    /* Active */
+    // -----------------------------------------------------
+    // ACTIVE
+    // -----------------------------------------------------
+
     if (active === 'true') {
       where.isActive = true;
     }
@@ -125,7 +137,10 @@ export const getProducts = async (req, res) => {
       where.isActive = false;
     }
 
-    /* Safe sorting */
+    // -----------------------------------------------------
+    // SAFE SORTING
+    // -----------------------------------------------------
+
     const allowedSortFields = [
       'createdAt',
       'updatedAt',
@@ -133,18 +148,38 @@ export const getProducts = async (req, res) => {
       'sortOrder'
     ];
 
-    const safeSortBy = allowedSortFields.includes(sortBy)
-      ? sortBy
-      : 'createdAt';
+    const safeSortBy =
+      allowedSortFields.includes(sortBy)
+        ? sortBy
+        : 'createdAt';
 
     const safeSortOrder =
-      sortOrder === 'asc' ? 'asc' : 'desc';
+      sortOrder === 'asc'
+        ? 'asc'
+        : 'desc';
 
-    const [products, total] = await Promise.all([
+    // -----------------------------------------------------
+    // DATABASE QUERY - OPTIMIZED WITH SELECT
+    // -----------------------------------------------------
+
+    const [
+      products,
+      total
+    ] = await Promise.all([
       prisma.product.findMany({
         where,
 
-        include: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          shortDescription: true,
+          material: true,
+          isFeatured: true,
+          isActive: true,
+          sortOrder: true,
+          createdAt: true,
+          updatedAt: true,
           category: {
             select: {
               id: true,
@@ -152,11 +187,18 @@ export const getProducts = async (req, res) => {
               slug: true
             }
           },
-
           images: {
+            select: {
+              id: true,
+              url: true,
+              altText: true,
+              isPrimary: true,
+              sortOrder: true
+            },
             orderBy: {
               sortOrder: 'asc'
-            }
+            },
+            take: 3 // Limit to first 3 images for performance
           }
         },
 
@@ -165,6 +207,7 @@ export const getProducts = async (req, res) => {
         },
 
         skip,
+
         take: limitNumber
       }),
 
@@ -173,55 +216,106 @@ export const getProducts = async (req, res) => {
       })
     ]);
 
+    // -----------------------------------------------------
+    // RESPONSE
+    // -----------------------------------------------------
+
     res.json({
       success: true,
+
       data: products,
 
       pagination: {
         page: pageNumber,
         limit: limitNumber,
         total,
-        totalPages:
-          total === 0
-            ? 0
-            : Math.ceil(total / limitNumber)
+        totalPages: total === 0 ? 0 : Math.ceil(total / limitNumber)
       }
     });
 
   } catch (error) {
+
     console.error('Get products error:', error);
 
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching products'
     });
   }
 };
 
+// =========================================================
+// GET PRODUCT BY ID
+// =========================================================
 
-/* =========================================================
-   GET PRODUCT BY SLUG
-========================================================= */
-
-export const getProductBySlug = async (req, res) => {
+export const getProductById = async (req, res) => {
   try {
-    const { slug } = req.params;
+    const { id } = req.params;
 
-    const product = await prisma.product.findUnique({
-      where: {
-        slug
-      },
+    // -----------------------------------------------------
+    // VALIDATE ID
+    // -----------------------------------------------------
 
-      include: {
-        category: true,
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Product ID is required'
+      });
+    }
 
-        images: {
-          orderBy: {
-            sortOrder: 'asc'
+    // -----------------------------------------------------
+    // FIND PRODUCT - OPTIMIZED WITH SELECT
+    // -----------------------------------------------------
+
+    const product =
+      await prisma.product.findUnique({
+        where: {
+          id
+        },
+
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          shortDescription: true,
+          fullDescription: true,
+          material: true,
+          specifications: true,
+          applications: true,
+          moq: true,
+          customization: true,
+          isFeatured: true,
+          isActive: true,
+          seoTitle: true,
+          seoDescription: true,
+          sortOrder: true,
+          createdAt: true,
+          updatedAt: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true
+            }
+          },
+          images: {
+            select: {
+              id: true,
+              url: true,
+              altText: true,
+              isPrimary: true,
+              sortOrder: true
+            },
+            orderBy: {
+              sortOrder: 'asc'
+            }
           }
         }
-      }
-    });
+      });
+
+    // -----------------------------------------------------
+    // NOT FOUND
+    // -----------------------------------------------------
 
     if (!product) {
       return res.status(404).json({
@@ -230,42 +324,146 @@ export const getProductBySlug = async (req, res) => {
       });
     }
 
-    /* Related products */
-    const related = await prisma.product.findMany({
-      where: {
-        categoryId: product.categoryId,
+    // -----------------------------------------------------
+    // RESPONSE
+    // -----------------------------------------------------
 
-        id: {
-          not: product.id
+    res.json({
+      success: true,
+      data: product
+    });
+
+  } catch (error) {
+
+    console.error('Get product by ID error:', error);
+
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while fetching the product'
+    });
+  }
+};
+
+// =========================================================
+// GET PRODUCT BY SLUG - OPTIMIZED
+// =========================================================
+
+export const getProductBySlug = async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    // -----------------------------------------------------
+    // FIND PRODUCT - OPTIMIZED WITH SELECT
+    // -----------------------------------------------------
+
+    const product =
+      await prisma.product.findUnique({
+        where: {
+          slug,
+          isActive: true
         },
 
-        isActive: true
-      },
-
-      take: 4,
-
-      include: {
-        category: {
-          select: {
-            id: true,
-            name: true,
-            slug: true
-          }
-        },
-
-        images: {
-          where: {
-            isPrimary: true
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          shortDescription: true,
+          fullDescription: true,
+          material: true,
+          specifications: true,
+          applications: true,
+          moq: true,
+          customization: true,
+          isFeatured: true,
+          isActive: true,
+          seoTitle: true,
+          seoDescription: true,
+          sortOrder: true,
+          createdAt: true,
+          updatedAt: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              description: true
+            }
           },
-
-          take: 1,
-
-          orderBy: {
-            sortOrder: 'asc'
+          images: {
+            select: {
+              id: true,
+              url: true,
+              altText: true,
+              isPrimary: true,
+              sortOrder: true
+            },
+            orderBy: {
+              sortOrder: 'asc'
+            }
           }
         }
-      }
-    });
+      });
+
+    // -----------------------------------------------------
+    // NOT FOUND
+    // -----------------------------------------------------
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found'
+      });
+    }
+
+    // -----------------------------------------------------
+    // RELATED PRODUCTS - OPTIMIZED
+    // -----------------------------------------------------
+
+    const related =
+      await prisma.product.findMany({
+        where: {
+          categoryId:
+            product.category.id,
+
+          id: {
+            not: product.id
+          },
+
+          isActive: true
+        },
+
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          shortDescription: true,
+          material: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true
+            }
+          },
+          images: {
+            where: {
+              isPrimary: true
+            },
+            select: {
+              id: true,
+              url: true,
+              altText: true
+            },
+            take: 1
+          }
+        },
+
+        take: 4
+      });
+
+    // -----------------------------------------------------
+    // RESPONSE
+    // -----------------------------------------------------
 
     res.json({
       success: true,
@@ -277,22 +475,23 @@ export const getProductBySlug = async (req, res) => {
     });
 
   } catch (error) {
+
     console.error('Get product error:', error);
 
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while fetching the product'
     });
   }
 };
 
-
-/* =========================================================
-   CREATE PRODUCT
-========================================================= */
+// =========================================================
+// CREATE PRODUCT
+// =========================================================
 
 export const createProduct = async (req, res) => {
   try {
+
     const {
       name,
       slug,
@@ -310,20 +509,40 @@ export const createProduct = async (req, res) => {
       seoDescription
     } = req.body;
 
-    /* Basic validation */
-    if (!name || !slug || !categoryId) {
+    // -----------------------------------------------------
+    // VALIDATION
+    // -----------------------------------------------------
+
+    if (
+      !name ||
+      !slug ||
+      !categoryId
+    ) {
       return res.status(400).json({
         success: false,
         message: 'Name, slug and category are required'
       });
     }
 
-    /* Check category */
-    const category = await prisma.category.findUnique({
-      where: {
-        id: categoryId
-      }
-    });
+    // Validate slug format
+    const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+    if (!slugRegex.test(slug)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Slug can only contain lowercase letters, numbers, and hyphens'
+      });
+    }
+
+    // -----------------------------------------------------
+    // CHECK CATEGORY
+    // -----------------------------------------------------
+
+    const category =
+      await prisma.category.findUnique({
+        where: {
+          id: categoryId
+        }
+      });
 
     if (!category) {
       return res.status(400).json({
@@ -332,12 +551,16 @@ export const createProduct = async (req, res) => {
       });
     }
 
-    /* Check duplicate slug */
-    const existing = await prisma.product.findUnique({
-      where: {
-        slug
-      }
-    });
+    // -----------------------------------------------------
+    // CHECK DUPLICATE SLUG
+    // -----------------------------------------------------
+
+    const existing =
+      await prisma.product.findUnique({
+        where: {
+          slug
+        }
+      });
 
     if (existing) {
       return res.status(400).json({
@@ -346,74 +569,110 @@ export const createProduct = async (req, res) => {
       });
     }
 
-    /* Convert Boolean values correctly */
-    const featuredValue = parseBoolean(
-      isFeatured,
-      false
-    );
+    // -----------------------------------------------------
+    // BOOLEAN VALUES
+    // -----------------------------------------------------
 
-    const activeValue = parseBoolean(
-      isActive,
-      true
-    );
+    const featuredValue =
+      parseBoolean(
+        isFeatured,
+        false
+      );
 
-    /* Parse JSON fields */
-    const specificationsValue = parseJSON(
-      specifications,
-      {}
-    );
+    const activeValue =
+      parseBoolean(
+        isActive,
+        true
+      );
 
-    const applicationsValue = parseJSON(
-      applications,
-      []
-    );
+    // -----------------------------------------------------
+    // JSON VALUES
+    // -----------------------------------------------------
 
-    const product = await prisma.product.create({
-      data: {
-        name,
-        slug,
-        categoryId,
+    const specificationsValue =
+      parseJSON(
+        specifications,
+        {}
+      );
 
-        shortDescription:
-          shortDescription || null,
+    const applicationsValue =
+      parseJSON(
+        applications,
+        []
+      );
 
-        fullDescription:
-          fullDescription || null,
+    // -----------------------------------------------------
+    // CREATE PRODUCT
+    // -----------------------------------------------------
 
-        material:
-          material || null,
+    const product =
+      await prisma.product.create({
+        data: {
+          name,
 
-        specifications:
-          specificationsValue,
+          slug,
 
-        applications:
-          applicationsValue,
+          categoryId,
 
-        moq:
-          moq || null,
+          shortDescription:
+            shortDescription || null,
 
-        customization:
-          customization || null,
+          fullDescription:
+            fullDescription || null,
 
-        isFeatured:
-          featuredValue,
+          material:
+            material || null,
 
-        isActive:
-          activeValue,
+          specifications:
+            specificationsValue,
 
-        seoTitle:
-          seoTitle || null,
+          applications:
+            applicationsValue,
 
-        seoDescription:
-          seoDescription || null
-      },
+          moq:
+            moq || null,
 
-      include: {
-        category: true,
+          customization:
+            customization || null,
 
-        images: true
-      }
-    });
+          isFeatured:
+            featuredValue,
+
+          isActive:
+            activeValue,
+
+          seoTitle:
+            seoTitle || null,
+
+          seoDescription:
+            seoDescription || null
+        },
+
+        include: {
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true
+            }
+          },
+          images: {
+            select: {
+              id: true,
+              url: true,
+              altText: true,
+              isPrimary: true
+            },
+            orderBy: {
+              sortOrder: 'asc'
+            }
+          }
+        }
+      });
+
+    // -----------------------------------------------------
+    // RESPONSE
+    // -----------------------------------------------------
 
     res.status(201).json({
       success: true,
@@ -421,22 +680,23 @@ export const createProduct = async (req, res) => {
     });
 
   } catch (error) {
+
     console.error('Create product error:', error);
 
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while creating the product'
     });
   }
 };
 
-
-/* =========================================================
-   UPDATE PRODUCT
-========================================================= */
+// =========================================================
+// UPDATE PRODUCT
+// =========================================================
 
 export const updateProduct = async (req, res) => {
   try {
+
     const { id } = req.params;
 
     const {
@@ -456,12 +716,27 @@ export const updateProduct = async (req, res) => {
       seoDescription
     } = req.body;
 
-    /* Find existing product */
-    const product = await prisma.product.findUnique({
-      where: {
-        id
-      }
-    });
+    // -----------------------------------------------------
+    // VALIDATE ID
+    // -----------------------------------------------------
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Product ID is required'
+      });
+    }
+
+    // -----------------------------------------------------
+    // FIND EXISTING PRODUCT
+    // -----------------------------------------------------
+
+    const product =
+      await prisma.product.findUnique({
+        where: {
+          id
+        }
+      });
 
     if (!product) {
       return res.status(404).json({
@@ -470,13 +745,21 @@ export const updateProduct = async (req, res) => {
       });
     }
 
-    /* Check category if changed */
-    if (categoryId && categoryId !== product.categoryId) {
-      const category = await prisma.category.findUnique({
-        where: {
-          id: categoryId
-        }
-      });
+    // -----------------------------------------------------
+    // CHECK CATEGORY
+    // -----------------------------------------------------
+
+    if (
+      categoryId &&
+      categoryId !== product.categoryId
+    ) {
+
+      const category =
+        await prisma.category.findUnique({
+          where: {
+            id: categoryId
+          }
+        });
 
       if (!category) {
         return res.status(400).json({
@@ -486,13 +769,30 @@ export const updateProduct = async (req, res) => {
       }
     }
 
-    /* Check duplicate slug */
-    if (slug && slug !== product.slug) {
-      const existing = await prisma.product.findUnique({
-        where: {
-          slug
-        }
-      });
+    // -----------------------------------------------------
+    // CHECK DUPLICATE SLUG
+    // -----------------------------------------------------
+
+    if (
+      slug &&
+      slug !== product.slug
+    ) {
+
+      // Validate slug format
+      const slugRegex = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+      if (!slugRegex.test(slug)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Slug can only contain lowercase letters, numbers, and hyphens'
+        });
+      }
+
+      const existing =
+        await prisma.product.findUnique({
+          where: {
+            slug
+          }
+        });
 
       if (existing) {
         return res.status(400).json({
@@ -502,22 +802,26 @@ export const updateProduct = async (req, res) => {
       }
     }
 
-    /*
-      IMPORTANT:
-      Preserve existing Boolean values if they were
-      not included in the request.
-    */
-    const featuredValue = parseBoolean(
-      isFeatured,
-      product.isFeatured
-    );
+    // -----------------------------------------------------
+    // BOOLEAN VALUES
+    // -----------------------------------------------------
 
-    const activeValue = parseBoolean(
-      isActive,
-      product.isActive
-    );
+    const featuredValue =
+      parseBoolean(
+        isFeatured,
+        product.isFeatured
+      );
 
-    /* Preserve existing JSON fields when omitted */
+    const activeValue =
+      parseBoolean(
+        isActive,
+        product.isActive
+      );
+
+    // -----------------------------------------------------
+    // JSON VALUES
+    // -----------------------------------------------------
+
     const specificationsValue =
       specifications !== undefined
         ? parseJSON(
@@ -534,85 +838,107 @@ export const updateProduct = async (req, res) => {
           )
         : product.applications;
 
-    const updated = await prisma.product.update({
-      where: {
-        id
-      },
+    // -----------------------------------------------------
+    // UPDATE PRODUCT
+    // -----------------------------------------------------
 
-      data: {
-        name:
-          name !== undefined
-            ? name
-            : product.name,
+    const updated =
+      await prisma.product.update({
+        where: {
+          id
+        },
 
-        slug:
-          slug !== undefined
-            ? slug
-            : product.slug,
+        data: {
 
-        categoryId:
-          categoryId !== undefined
-            ? categoryId
-            : product.categoryId,
+          name:
+            name !== undefined
+              ? name
+              : product.name,
 
-        shortDescription:
-          shortDescription !== undefined
-            ? shortDescription || null
-            : product.shortDescription,
+          slug:
+            slug !== undefined
+              ? slug
+              : product.slug,
 
-        fullDescription:
-          fullDescription !== undefined
-            ? fullDescription || null
-            : product.fullDescription,
+          categoryId:
+            categoryId !== undefined
+              ? categoryId
+              : product.categoryId,
 
-        material:
-          material !== undefined
-            ? material || null
-            : product.material,
+          shortDescription:
+            shortDescription !== undefined
+              ? shortDescription || null
+              : product.shortDescription,
 
-        specifications:
-          specificationsValue,
+          fullDescription:
+            fullDescription !== undefined
+              ? fullDescription || null
+              : product.fullDescription,
 
-        applications:
-          applicationsValue,
+          material:
+            material !== undefined
+              ? material || null
+              : product.material,
 
-        moq:
-          moq !== undefined
-            ? moq || null
-            : product.moq,
+          specifications:
+            specificationsValue,
 
-        customization:
-          customization !== undefined
-            ? customization || null
-            : product.customization,
+          applications:
+            applicationsValue,
 
-        isFeatured:
-          featuredValue,
+          moq:
+            moq !== undefined
+              ? moq || null
+              : product.moq,
 
-        isActive:
-          activeValue,
+          customization:
+            customization !== undefined
+              ? customization || null
+              : product.customization,
 
-        seoTitle:
-          seoTitle !== undefined
-            ? seoTitle || null
-            : product.seoTitle,
+          isFeatured:
+            featuredValue,
 
-        seoDescription:
-          seoDescription !== undefined
-            ? seoDescription || null
-            : product.seoDescription
-      },
+          isActive:
+            activeValue,
 
-      include: {
-        category: true,
+          seoTitle:
+            seoTitle !== undefined
+              ? seoTitle || null
+              : product.seoTitle,
 
-        images: {
-          orderBy: {
-            sortOrder: 'asc'
+          seoDescription:
+            seoDescription !== undefined
+              ? seoDescription || null
+              : product.seoDescription
+        },
+
+        include: {
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true
+            }
+          },
+          images: {
+            select: {
+              id: true,
+              url: true,
+              altText: true,
+              isPrimary: true,
+              sortOrder: true
+            },
+            orderBy: {
+              sortOrder: 'asc'
+            }
           }
         }
-      }
-    });
+      });
+
+    // -----------------------------------------------------
+    // RESPONSE
+    // -----------------------------------------------------
 
     res.json({
       success: true,
@@ -620,33 +946,51 @@ export const updateProduct = async (req, res) => {
     });
 
   } catch (error) {
+
     console.error('Update product error:', error);
 
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while updating the product'
     });
   }
 };
 
-
-/* =========================================================
-   DELETE PRODUCT
-========================================================= */
+// =========================================================
+// DELETE PRODUCT
+// =========================================================
 
 export const deleteProduct = async (req, res) => {
   try {
+
     const { id } = req.params;
 
-    const product = await prisma.product.findUnique({
-      where: {
-        id
-      },
+    // -----------------------------------------------------
+    // VALIDATE ID
+    // -----------------------------------------------------
 
-      include: {
-        images: true
-      }
-    });
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Product ID is required'
+      });
+    }
+
+    // -----------------------------------------------------
+    // FIND PRODUCT + IMAGES
+    // -----------------------------------------------------
+
+    const product =
+      await prisma.product.findUnique({
+        where: {
+          id
+        },
+
+        include: {
+          images: true
+        }
+      });
+
 
     if (!product) {
       return res.status(404).json({
@@ -655,15 +999,22 @@ export const deleteProduct = async (req, res) => {
       });
     }
 
-    /* Delete images from Cloudinary */
+    // -----------------------------------------------------
+    // DELETE IMAGES FROM CLOUDINARY
+    // -----------------------------------------------------
+
     for (const image of product.images) {
+
       try {
+
         if (image.publicId) {
           await deleteFromCloudinary(
             image.publicId
           );
         }
+
       } catch (cloudinaryError) {
+
         console.error(
           'Cloudinary image deletion error:',
           cloudinaryError
@@ -671,12 +1022,19 @@ export const deleteProduct = async (req, res) => {
       }
     }
 
-    /* Delete product from database */
+    // -----------------------------------------------------
+    // DELETE PRODUCT
+    // -----------------------------------------------------
+
     await prisma.product.delete({
       where: {
         id
       }
     });
+
+    // -----------------------------------------------------
+    // RESPONSE
+    // -----------------------------------------------------
 
     res.json({
       success: true,
@@ -684,39 +1042,67 @@ export const deleteProduct = async (req, res) => {
     });
 
   } catch (error) {
+
     console.error('Delete product error:', error);
 
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while deleting the product'
     });
   }
 };
 
+// =========================================================
+// UPLOAD PRODUCT IMAGES
+// =========================================================
 
-/* =========================================================
-   UPLOAD PRODUCT IMAGES
-========================================================= */
-
-export const uploadProductImages = async (req, res) => {
+export const uploadProductImages = async (
+  req,
+  res
+) => {
   try {
+
     const { id } = req.params;
+
     const files = req.files;
 
-    if (!files || files.length === 0) {
+    // -----------------------------------------------------
+    // VALIDATE ID
+    // -----------------------------------------------------
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Product ID is required'
+      });
+    }
+
+    // -----------------------------------------------------
+    // CHECK FILES
+    // -----------------------------------------------------
+
+    if (
+      !files ||
+      files.length === 0
+    ) {
       return res.status(400).json({
         success: false,
         message: 'No files uploaded'
       });
     }
 
-    const product = await prisma.product.findUnique({
-      where: {
-        id
-      },
+    // -----------------------------------------------------
+    // FIND PRODUCT (only the image metadata we need)
+    // -----------------------------------------------------
 
-      include: {
-        images: true
+    const product = await prisma.product.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        images: {
+          select: { sortOrder: true, isPrimary: true }
+        }
       }
     });
 
@@ -727,63 +1113,57 @@ export const uploadProductImages = async (req, res) => {
       });
     }
 
-    const images = [];
+    // -----------------------------------------------------
+    // SORT ORDER + PRIMARY FLAG
+    // -----------------------------------------------------
 
-    /*
-      Get the next sort order instead of always
-      starting from zero.
-    */
     const maxSortOrder =
       product.images.length > 0
-        ? Math.max(
-            ...product.images.map(
-              image => image.sortOrder || 0
-            )
-          )
+        ? Math.max(...product.images.map(image => image.sortOrder || 0))
         : -1;
 
-    /*
-      If the product already has a primary image,
-      uploaded images should not automatically
-      replace the existing primary image.
-    */
-    const alreadyHasPrimary =
-      product.images.some(
-        image => image.isPrimary
-      );
+    const alreadyHasPrimary = product.images.some(image => image.isPrimary);
 
-    for (let i = 0; i < files.length; i++) {
-      const result =
-        await uploadToCloudinary(
-          files[i],
-          `products/${id}`
-        );
+    // -----------------------------------------------------
+    // UPLOAD ALL IMAGES IN PARALLEL
+    // -----------------------------------------------------
+    //
+    // Previously each image was uploaded and inserted one at
+    // a time inside a for loop. Ten images meant ten
+    // sequential round trips to the image host followed by
+    // ten sequential INSERTs. Uploading in parallel and
+    // inserting with a single createMany turns that into one
+    // wait and one write.
 
-      const isPrimary =
-        !alreadyHasPrimary && i === 0;
+    const uploadResults = await uploadManyToCloudinary(
+      files,
+      `products/${id}`
+    );
 
-      const image =
-        await prisma.productImage.create({
-          data: {
-            productId: id,
+    await prisma.productImage.createMany({
+      data: uploadResults.map((result, index) => ({
+        productId: id,
+        url: result.url,
+        publicId: result.publicId,
+        sortOrder: maxSortOrder + index + 1,
+        isPrimary: !alreadyHasPrimary && index === 0,
+        altText: product.name
+      }))
+    });
 
-            url: result.url,
+    // createMany does not return rows, so read back the ones
+    // just written for the response.
+    const images = await prisma.productImage.findMany({
+      where: {
+        productId: id,
+        publicId: { in: uploadResults.map(result => result.publicId) }
+      },
+      orderBy: { sortOrder: 'asc' }
+    });
 
-            publicId:
-              result.publicId,
-
-            sortOrder:
-              maxSortOrder + i + 1,
-
-            isPrimary,
-
-            altText:
-              product.name
-          }
-        });
-
-      images.push(image);
-    }
+    // -----------------------------------------------------
+    // RESPONSE
+    // -----------------------------------------------------
 
     res.json({
       success: true,
@@ -791,32 +1171,50 @@ export const uploadProductImages = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(
-      'Upload product images error:',
-      error
-    );
+
+    console.error('Upload product images error:', error);
 
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while uploading images'
     });
   }
 };
 
+// =========================================================
+// DELETE PRODUCT IMAGE
+// =========================================================
 
-/* =========================================================
-   DELETE PRODUCT IMAGE
-========================================================= */
-
-export const deleteProductImage = async (req, res) => {
+export const deleteProductImage = async (
+  req,
+  res
+) => {
   try {
+
     const { imageId } = req.params;
 
-    const image = await prisma.productImage.findUnique({
-      where: {
-        id: imageId
-      }
-    });
+    // -----------------------------------------------------
+    // VALIDATE ID
+    // -----------------------------------------------------
+
+    if (!imageId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Image ID is required'
+      });
+    }
+
+    // -----------------------------------------------------
+    // FIND IMAGE
+    // -----------------------------------------------------
+
+    const image =
+      await prisma.productImage.findUnique({
+        where: {
+          id: imageId
+        }
+      });
+
 
     if (!image) {
       return res.status(404).json({
@@ -825,36 +1223,48 @@ export const deleteProductImage = async (req, res) => {
       });
     }
 
-    /* Delete from Cloudinary */
+    // -----------------------------------------------------
+    // DELETE FROM CLOUDINARY
+    // -----------------------------------------------------
+
     try {
+
       if (image.publicId) {
+
         await deleteFromCloudinary(
           image.publicId
         );
       }
+
     } catch (cloudinaryError) {
+
       console.error(
         'Cloudinary image deletion error:',
         cloudinaryError
       );
     }
 
-    /* Delete from database */
+    // -----------------------------------------------------
+    // DELETE FROM DATABASE
+    // -----------------------------------------------------
+
     await prisma.productImage.delete({
       where: {
         id: imageId
       }
     });
 
-    /*
-      If the deleted image was primary,
-      automatically make another image primary.
-    */
+    // -----------------------------------------------------
+    // HANDLE PRIMARY IMAGE
+    // -----------------------------------------------------
+
     if (image.isPrimary) {
+
       const nextImage =
         await prisma.productImage.findFirst({
           where: {
-            productId: image.productId
+            productId:
+              image.productId
           },
 
           orderBy: {
@@ -862,7 +1272,9 @@ export const deleteProductImage = async (req, res) => {
           }
         });
 
+
       if (nextImage) {
+
         await prisma.productImage.update({
           where: {
             id: nextImage.id
@@ -875,20 +1287,22 @@ export const deleteProductImage = async (req, res) => {
       }
     }
 
+    // -----------------------------------------------------
+    // RESPONSE
+    // -----------------------------------------------------
+
     res.json({
       success: true,
       message: 'Image deleted successfully'
     });
 
   } catch (error) {
-    console.error(
-      'Delete product image error:',
-      error
-    );
+
+    console.error('Delete product image error:', error);
 
     res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'An error occurred while deleting the image'
     });
   }
 };

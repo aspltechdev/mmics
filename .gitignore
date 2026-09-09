@@ -22,3 +22,21 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files - never commit these.
+# backend/.env is currently TRACKED in this repo and contains a
+# live database password. Untrack it with:
+#     git rm --cached backend/.env
+# and then rotate the credential, because it remains in history.
+.env
+.env.local
+.env.*.local
+backend/.env
+backend/.env.local
+
+# Locally stored image uploads (runtime data)
+backend/uploads/*
+!backend/uploads/.gitignore
+
+# Prisma
+backend/prisma/*.db

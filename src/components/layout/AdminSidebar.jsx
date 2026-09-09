@@ -7,6 +7,7 @@ const AdminSidebar = () => {
 
   const menuItems = [
     { path: '/admin/dashboard', label: 'Dashboard', icon: '📊' },
+    { path: '/admin/members', label: 'Members', icon: '🧑\u200d🤝\u200d🧑' },
     { path: '/admin/products', label: 'Products', icon: '📦' },
     { path: '/admin/categories', label: 'Categories', icon: '🏷️' },
     { path: '/admin/enquiries', label: 'Enquiries', icon: '✉️' },
@@ -15,9 +16,8 @@ const AdminSidebar = () => {
     { path: '/admin/gallery', label: 'Gallery', icon: '🖼️' },
     { path: '/admin/news', label: 'News', icon: '📰' },
     { path: '/admin/testimonials', label: 'Testimonials', icon: '⭐' },
+    { path: '/admin/hero', label: 'Hero Section', icon: '🎯' },
     { path: '/admin/settings', label: 'Settings', icon: '⚙️' },
-    // Add this to menuItems
-{ path: '/admin/hero', label: 'Hero Section', icon: '🎯' },
   ];
 
   const handleLogout = () => {
