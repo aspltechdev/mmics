@@ -1,0 +1,238 @@
+/* =========================================================
+   MMICS FOOTER
+========================================================= */
+
+.mmics-footer {
+  background: #151515;
+  color: #ffffff;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.mmics-footer-main {
+  padding: 70px 0 55px;
+}
+
+.mmics-footer-container {
+  width: min(1240px, calc(100% - 48px));
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns:
+    1.6fr
+    0.8fr
+    0.8fr
+    1.2fr;
+
+  gap: 60px;
+}
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.mmics-footer-brand {
+  max-width: 370px;
+}
+
+.mmics-footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.mmics-footer-logo-mark {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #8b1e2d;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.mmics-footer-logo strong {
+  display: block;
+
+  font-size: 18px;
+  letter-spacing: 0.06em;
+}
+
+.mmics-footer-logo span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #888888;
+
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mmics-footer-brand p {
+  margin-top: 22px;
+
+  color: #a4a4a4;
+
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   COLUMNS
+========================================================= */
+
+.mmics-footer-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mmics-footer-column h3 {
+  margin-bottom: 20px;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mmics-footer-column a {
+  margin-bottom: 11px;
+
+  color: #999999;
+
+  font-size: 13px;
+
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.mmics-footer-column a:hover {
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.mmics-footer-contact > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  margin-bottom: 14px;
+
+  color: #999999;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.mmics-footer-contact svg {
+  flex-shrink: 0;
+
+  margin-top: 2px;
+
+  color: #c89943;
+}
+
+/* =========================================================
+   BOTTOM
+========================================================= */
+
+.mmics-footer-bottom {
+  border-top: 1px solid #292929;
+}
+
+.mmics-footer-bottom .mmics-footer-container {
+  min-height: 65px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  color: #777777;
+
+  font-size: 11px;
+}
+
+.mmics-footer-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .mmics-footer-container {
+    grid-template-columns:
+      1.5fr
+      1fr
+      1fr;
+
+    gap: 40px;
+  }
+
+  .mmics-footer-contact {
+    grid-column: 1 / -1;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .mmics-footer-main {
+    padding: 55px 0 40px;
+  }
+
+  .mmics-footer-container {
+    width: calc(100% - 30px);
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 35px 25px;
+  }
+
+  .mmics-footer-brand {
+    grid-column: 1 / -1;
+  }
+
+  .mmics-footer-contact {
+    grid-column: 1 / -1;
+  }
+
+  .mmics-footer-bottom .mmics-footer-container {
+    min-height: auto;
+
+    padding-top: 18px;
+    padding-bottom: 18px;
+
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,1936 @@
+
+/* =========================================================
+   MMICS PRODUCTS
+   Premium Admin Product Management UI
+========================================================= */
+
+.mmics-products-page {
+  width: 100%;
+  min-height: 100%;
+  padding: 28px 30px 40px;
+  background: #f7f7f8;
+  color: #171717;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.mmics-products-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 26px;
+}
+
+.mmics-products-eyebrow {
+  margin-bottom: 7px;
+  color: #a11212;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mmics-products-header h1 {
+  margin: 0;
+  color: #161616;
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.mmics-products-header p {
+  margin: 7px 0 0;
+  color: #737373;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.mmics-products-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.mmics-products-refresh-btn,
+.mmics-products-add-btn {
+  height: 42px;
+  border: 1px solid #e4e4e4;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #343434;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mmics-products-refresh-btn {
+  width: 42px;
+}
+
+.mmics-products-refresh-btn:hover {
+  border-color: #d2d2d2;
+  background: #fafafa;
+  transform: translateY(-1px);
+}
+
+.mmics-products-add-btn {
+  padding: 0 17px;
+  gap: 8px;
+  border-color: #a50f0f;
+  background: #a50f0f;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 5px 16px rgba(165, 15, 15, 0.15);
+}
+
+.mmics-products-add-btn:hover {
+  border-color: #8e0c0c;
+  background: #8e0c0c;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 20px rgba(165, 15, 15, 0.2);
+}
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.mmics-products-alert {
+  min-height: 44px;
+  padding: 10px 13px;
+  margin-bottom: 18px;
+  border: 1px solid;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.mmics-products-alert.success {
+  border-color: #cce7d3;
+  background: #f1faf3;
+  color: #1d6b34;
+}
+
+.mmics-products-alert.error {
+  border-color: #f0cccc;
+  background: #fff5f5;
+  color: #a11212;
+}
+
+.mmics-products-alert span {
+  flex: 1;
+}
+
+.mmics-products-alert button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.mmics-products-alert button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.mmics-products-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.mmics-product-stat-card {
+  min-height: 94px;
+  padding: 17px 18px;
+  border: 1px solid #e9e9e9;
+  border-radius: 13px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-sizing: border-box;
+}
+
+.mmics-product-stat-icon {
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
+  border-radius: 11px;
+  background: #fdf0f0;
+  color: #a11212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mmics-product-stat-icon.active {
+  background: #edf8f0;
+  color: #24763b;
+}
+
+.mmics-product-stat-icon.inactive {
+  background: #f2f2f2;
+  color: #737373;
+}
+
+.mmics-product-stat-icon.images {
+  background: #f5f0fb;
+  color: #6d4297;
+}
+
+.mmics-product-stat-card div:last-child {
+  min-width: 0;
+}
+
+.mmics-product-stat-card span {
+  display: block;
+  margin-bottom: 5px;
+  color: #808080;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.mmics-product-stat-card strong {
+  display: block;
+  color: #171717;
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.mmics-products-toolbar {
+  min-height: 64px;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #e9e9e9;
+  border-radius: 13px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.mmics-products-search {
+  min-width: 260px;
+  max-width: 420px;
+  height: 42px;
+  padding: 0 10px 0 13px;
+  border: 1px solid #e4e4e4;
+  border-radius: 9px;
+  background: #fafafa;
+  color: #888888;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mmics-products-search:focus-within {
+  border-color: #c9a0a0;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(161, 18, 18, 0.06);
+}
+
+.mmics-products-search input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #252525;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.mmics-products-search input::placeholder {
+  color: #9b9b9b;
+}
+
+.mmics-products-search kbd {
+  padding: 3px 6px;
+  border: 1px solid #dedede;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #999999;
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mmics-products-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mmics-products-filter {
+  position: relative;
+  height: 42px;
+  min-width: 155px;
+  border: 1px solid #e4e4e4;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #737373;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 11px;
+  box-sizing: border-box;
+}
+
+.mmics-products-filter select {
+  width: 100%;
+  height: 100%;
+  padding: 0 20px 0 0;
+  border: 0;
+  outline: none;
+  appearance: none;
+  background: transparent;
+  color: #454545;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mmics-products-filter > svg:last-child {
+  position: absolute;
+  right: 9px;
+  pointer-events: none;
+}
+
+/* =========================================================
+   TABLE CARD
+========================================================= */
+
+.mmics-products-table-card {
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.025);
+}
+
+.mmics-products-table-top {
+  min-height: 69px;
+  padding: 15px 18px;
+  border-bottom: 1px solid #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.mmics-products-table-top h2 {
+  margin: 0 0 4px;
+  color: #202020;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.mmics-products-table-top span {
+  color: #909090;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.mmics-products-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.mmics-products-table {
+  width: 100%;
+  min-width: 1030px;
+  border-collapse: collapse;
+}
+
+.mmics-products-table thead {
+  background: #fafafa;
+}
+
+.mmics-products-table th {
+  height: 43px;
+  padding: 0 15px;
+  border-bottom: 1px solid #eeeeee;
+  color: #929292;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.mmics-products-table th:first-child,
+.mmics-products-table td:first-child {
+  padding-left: 19px;
+}
+
+.mmics-products-table th:last-child,
+.mmics-products-table td:last-child {
+  padding-right: 19px;
+}
+
+.mmics-products-table td {
+  height: 78px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.mmics-products-table tbody tr {
+  transition: background 0.18s ease;
+}
+
+.mmics-products-table tbody tr:hover {
+  background: #fdfafa;
+}
+
+.mmics-products-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* =========================================================
+   PRODUCT INFO
+========================================================= */
+
+.mmics-product-info {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 235px;
+}
+
+.mmics-product-thumb {
+  width: 49px;
+  height: 49px;
+  flex: 0 0 49px;
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  background: #f8f8f8;
+  color: #b1b1b1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mmics-product-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mmics-product-info > div:last-child {
+  min-width: 0;
+}
+
+.mmics-product-info strong {
+  display: block;
+  max-width: 220px;
+  overflow: hidden;
+  color: #252525;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mmics-product-info span {
+  display: block;
+  max-width: 220px;
+  margin-top: 4px;
+  overflow: hidden;
+  color: #999999;
+  font-size: 10px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+.mmics-product-category {
+  display: inline-flex;
+  align-items: center;
+  min-height: 27px;
+  padding: 0 9px;
+  border: 1px solid #eadada;
+  border-radius: 7px;
+  background: #fcf6f6;
+  color: #8d2929;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   SLUG
+========================================================= */
+
+.mmics-product-slug {
+  max-width: 175px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mmics-product-slug span {
+  max-width: 145px;
+  overflow: hidden;
+  color: #858585;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mmics-product-slug button {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+  padding: 0;
+  border: 1px solid #e7e7e7;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #8d8d8d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.mmics-product-slug button:hover {
+  border-color: #d6b5b5;
+  background: #fdf6f6;
+  color: #a11212;
+}
+
+/* =========================================================
+   IMAGE COUNT
+========================================================= */
+
+.mmics-product-image-count {
+  min-width: 47px;
+  height: 29px;
+  padding: 0 8px;
+  border: 1px solid #e7e7e7;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #777777;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.mmics-product-image-count:hover {
+  border-color: #d7b7b7;
+  background: #fff8f8;
+  color: #a11212;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.mmics-product-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 0 8px;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.mmics-product-status.active {
+  background: #edf8f0;
+  color: #28733d;
+}
+
+.mmics-product-status.inactive {
+  background: #f1f1f1;
+  color: #777777;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.mmics-product-date {
+  color: #858585;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.mmics-product-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.mmics-product-actions button {
+  width: 31px;
+  height: 31px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: #777777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.mmics-product-actions button:hover {
+  border-color: #e5e5e5;
+  background: #f7f7f7;
+  color: #252525;
+}
+
+.mmics-product-actions button.danger:hover {
+  border-color: #f0d4d4;
+  background: #fff5f5;
+  color: #b01818;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.mmics-products-loading {
+  min-height: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.mmics-products-loading p {
+  margin: 0;
+  color: #929292;
+  font-size: 12px;
+}
+
+.mmics-products-spinner,
+.button-spinner {
+  border: 2px solid #ead0d0;
+  border-top-color: #a11212;
+  border-radius: 50%;
+  animation: mmicsProductSpin 0.75s linear infinite;
+}
+
+.mmics-products-spinner {
+  width: 25px;
+  height: 25px;
+}
+
+.button-spinner {
+  width: 13px;
+  height: 13px;
+}
+
+@keyframes mmicsProductSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.mmics-products-empty {
+  min-height: 350px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.mmics-products-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  border-radius: 17px;
+  background: #fdf0f0;
+  color: #a11212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mmics-products-empty h3 {
+  margin: 0 0 6px;
+  color: #242424;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.mmics-products-empty p {
+  max-width: 330px;
+  margin: 0 0 18px;
+  color: #929292;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.mmics-products-empty-btn {
+  height: 37px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 8px;
+  background: #a11212;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* =========================================================
+   MODAL OVERLAY
+========================================================= */
+
+.mmics-products-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  padding: 25px;
+  background: rgba(15, 15, 15, 0.48);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   MAIN MODAL
+========================================================= */
+
+.mmics-products-modal {
+  width: min(620px, 100%);
+  max-height: calc(100vh - 50px);
+  overflow: auto;
+  border: 1px solid #e7e7e7;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.18);
+}
+
+.mmics-products-modal-header {
+  min-height: 76px;
+  padding: 17px 20px;
+  border-bottom: 1px solid #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-sizing: border-box;
+}
+
+.mmics-products-modal-header > div {
+  min-width: 0;
+}
+
+.mmics-products-modal-header span {
+  display: block;
+  margin-bottom: 5px;
+  color: #a11212;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.mmics-products-modal-header h2 {
+  margin: 0;
+  overflow: hidden;
+  color: #202020;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mmics-products-modal-header p {
+  margin: 4px 0 0;
+  color: #888888;
+  font-size: 11px;
+}
+
+.mmics-products-modal-header > button {
+  width: 35px;
+  height: 35px;
+  flex: 0 0 35px;
+  padding: 0;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #777777;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.mmics-products-modal-header > button:hover {
+  background: #f7f7f7;
+  color: #222222;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.mmics-products-form {
+  padding: 21px 20px 20px;
+}
+
+.mmics-products-form-error {
+  min-height: 40px;
+  padding: 9px 11px;
+  margin-bottom: 16px;
+  border: 1px solid #f0cccc;
+  border-radius: 8px;
+  background: #fff5f5;
+  color: #a11212;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.mmics-products-form-group {
+  margin-bottom: 17px;
+}
+
+.mmics-products-form-group > label {
+  display: block;
+  margin-bottom: 7px;
+  color: #444444;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.mmics-products-form-group > label span {
+  margin-left: 3px;
+  color: #b01818;
+}
+
+.mmics-products-form-group input,
+.mmics-products-form-group textarea {
+  width: 100%;
+  border: 1px solid #dddddd;
+  border-radius: 9px;
+  outline: none;
+  background: #ffffff;
+  color: #272727;
+  font-family: inherit;
+  font-size: 12px;
+  box-sizing: border-box;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.mmics-products-form-group input {
+  height: 42px;
+  padding: 0 12px;
+}
+
+.mmics-products-form-group textarea {
+  min-height: 110px;
+  padding: 11px 12px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.mmics-products-form-group input:focus,
+.mmics-products-form-group textarea:focus {
+  border-color: #b77b7b;
+  box-shadow: 0 0 0 3px rgba(161, 18, 18, 0.06);
+}
+
+.mmics-products-form-group input::placeholder,
+.mmics-products-form-group textarea::placeholder {
+  color: #aaa;
+}
+
+.mmics-products-form-group small {
+  display: block;
+  margin-top: 6px;
+  color: #999999;
+  font-size: 9px;
+}
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+.mmics-products-select-wrap {
+  position: relative;
+  height: 42px;
+  border: 1px solid #dddddd;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #858585;
+  display: flex;
+  align-items: center;
+  padding: 0 11px;
+  box-sizing: border-box;
+}
+
+.mmics-products-select-wrap select {
+  width: 100%;
+  height: 100%;
+  padding: 0 23px 0 9px;
+  border: 0;
+  outline: 0;
+  appearance: none;
+  background: transparent;
+  color: #272727;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.mmics-products-select-wrap > svg:last-child {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+}
+
+/* =========================================================
+   SLUG INPUT
+========================================================= */
+
+.mmics-products-slug-input {
+  height: 42px;
+  border: 1px solid #dddddd;
+  border-radius: 9px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.mmics-products-slug-input:focus-within {
+  border-color: #b77b7b;
+  box-shadow: 0 0 0 3px rgba(161, 18, 18, 0.06);
+}
+
+.mmics-products-slug-input > span {
+  height: 100%;
+  padding: 0 0 0 12px;
+  color: #9a9a9a;
+  display: flex;
+  align-items: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+}
+
+.mmics-products-slug-input input {
+  height: 100%;
+  padding-left: 4px;
+  border: 0;
+  box-shadow: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* =========================================================
+   STATUS OPTIONS
+========================================================= */
+
+.mmics-products-status-options {
+  display: flex;
+  gap: 8px;
+}
+
+.mmics-products-status-options button {
+  height: 38px;
+  padding: 0 13px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #777777;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.mmics-products-status-options button:hover {
+  border-color: #cfcfcf;
+}
+
+.mmics-products-status-options button.selected {
+  border-color: #d8aaaa;
+  background: #fff6f6;
+  color: #a11212;
+}
+
+/* =========================================================
+   MODAL FOOTER
+========================================================= */
+
+.mmics-products-modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid #eeeeee;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.mmics-products-modal-footer button {
+  height: 39px;
+  padding: 0 14px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.mmics-products-modal-footer button.secondary {
+  border: 1px solid #dddddd;
+  background: #ffffff;
+  color: #656565;
+}
+
+.mmics-products-modal-footer button.secondary:hover {
+  background: #f7f7f7;
+}
+
+.mmics-products-modal-footer button.primary {
+  border: 1px solid #a11212;
+  background: #a11212;
+  color: #ffffff;
+}
+
+.mmics-products-modal-footer button.primary:hover {
+  border-color: #8e0c0c;
+  background: #8e0c0c;
+}
+
+.mmics-products-modal-footer button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   VIEW MODAL
+========================================================= */
+
+.mmics-products-view-modal {
+  width: min(820px, 100%);
+  max-height: calc(100vh - 50px);
+  overflow: auto;
+  border: 1px solid #e7e7e7;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.18);
+}
+
+.mmics-products-view-content {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 22px;
+}
+
+.mmics-products-view-gallery {
+  min-height: 280px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 10px;
+}
+
+.mmics-products-view-image {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  border: 1px solid #e7e7e7;
+  border-radius: 11px;
+  background: #f7f7f7;
+}
+
+.mmics-products-view-image.primary {
+  border-color: #d7a5a5;
+}
+
+.mmics-products-view-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mmics-products-view-image > span {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 4px 7px;
+  border-radius: 5px;
+  background: rgba(161, 18, 18, 0.92);
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.mmics-products-no-image {
+  min-height: 280px;
+  border: 1px dashed #dedede;
+  border-radius: 11px;
+  background: #fafafa;
+  color: #a1a1a1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.mmics-products-view-details {
+  min-width: 0;
+}
+
+.mmics-products-detail-item {
+  min-height: 57px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eeeeee;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+
+.mmics-products-detail-item > span:first-child,
+.mmics-products-detail-description > span {
+  color: #989898;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.mmics-products-detail-item strong {
+  color: #292929;
+  font-size: 12px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.mmics-products-detail-description {
+  padding-top: 15px;
+}
+
+.mmics-products-detail-description p {
+  margin: 8px 0 0;
+  color: #666666;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   IMAGE MANAGEMENT MODAL
+========================================================= */
+
+.mmics-products-image-modal {
+  width: min(880px, 100%);
+  max-height: calc(100vh - 50px);
+  overflow: auto;
+  border: 1px solid #e7e7e7;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.18);
+}
+
+.mmics-products-image-content {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 22px;
+}
+
+.mmics-products-section-title {
+  min-height: 34px;
+  margin-bottom: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mmics-products-section-title strong {
+  color: #292929;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mmics-products-section-title span {
+  color: #999999;
+  font-size: 9px;
+}
+
+.mmics-products-image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mmics-products-image-card {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  background: #f6f6f6;
+}
+
+.mmics-products-image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.mmics-products-image-card .primary-badge {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  padding: 4px 6px;
+  border-radius: 5px;
+  background: rgba(161, 18, 18, 0.93);
+  color: #ffffff;
+  font-size: 7px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.image-delete-btn {
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  width: 29px;
+  height: 29px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #a11212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.image-delete-btn:hover {
+  background: #fff0f0;
+}
+
+.image-delete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mmics-products-no-images {
+  min-height: 220px;
+  border: 1px dashed #dddddd;
+  border-radius: 11px;
+  background: #fafafa;
+  color: #9a9a9a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 10px;
+}
+
+.mmics-products-add-image {
+  padding: 15px;
+  border: 1px solid #ededed;
+  border-radius: 11px;
+  background: #fafafa;
+}
+
+.mmics-products-image-url-input {
+  height: 42px;
+  padding: 0 11px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #999999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.mmics-products-image-url-input:focus-within {
+  border-color: #b77b7b;
+  box-shadow: 0 0 0 3px rgba(161, 18, 18, 0.06);
+}
+
+.mmics-products-image-url-input input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #303030;
+  font-family: inherit;
+  font-size: 10px;
+}
+
+.mmics-products-primary-checkbox {
+  position: relative;
+  min-height: 32px;
+  margin: 2px 0 13px;
+  color: #656565;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.mmics-products-primary-checkbox input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #d5d5d5;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mmics-products-primary-checkbox input:checked + .custom-checkbox {
+  border-color: #a11212;
+  background: #a11212;
+}
+
+.mmics-products-image-preview {
+  height: 130px;
+  overflow: hidden;
+  margin-bottom: 11px;
+  border: 1px solid #e4e4e4;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.mmics-products-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.mmics-products-add-image-btn {
+  width: 100%;
+  height: 39px;
+  border: 1px solid #a11212;
+  border-radius: 8px;
+  background: #a11212;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.mmics-products-add-image-btn:hover {
+  border-color: #8e0c0c;
+  background: #8e0c0c;
+}
+
+.mmics-products-add-image-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   DELETE MODAL
+========================================================= */
+
+.mmics-products-delete-modal {
+  width: min(430px, 100%);
+  padding: 25px;
+  border: 1px solid #e7e7e7;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
+}
+
+.mmics-products-delete-icon {
+  width: 47px;
+  height: 47px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  background: #fff0f0;
+  color: #ad1717;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mmics-products-delete-modal h2 {
+  margin: 0 0 7px;
+  color: #222222;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.mmics-products-delete-modal > p {
+  margin: 0;
+  color: #777777;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.mmics-products-delete-modal > p strong {
+  color: #333333;
+}
+
+.mmics-products-delete-warning {
+  margin: 17px 0;
+  padding: 11px;
+  border: 1px solid #f1dddd;
+  border-radius: 8px;
+  background: #fff8f8;
+  color: #9c4a4a;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.mmics-products-delete-warning svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.mmics-products-delete-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.mmics-products-delete-actions button {
+  height: 38px;
+  padding: 0 13px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.mmics-products-delete-actions button.secondary {
+  border: 1px solid #dddddd;
+  background: #ffffff;
+  color: #656565;
+}
+
+.mmics-products-delete-actions button.secondary:hover {
+  background: #f7f7f7;
+}
+
+.mmics-products-delete-actions button.danger {
+  border: 1px solid #ad1717;
+  background: #ad1717;
+  color: #ffffff;
+}
+
+.mmics-products-delete-actions button.danger:hover {
+  border-color: #8e0c0c;
+  background: #8e0c0c;
+}
+
+.mmics-products-delete-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   SCROLLBARS
+========================================================= */
+
+.mmics-products-modal::-webkit-scrollbar,
+.mmics-products-view-modal::-webkit-scrollbar,
+.mmics-products-image-modal::-webkit-scrollbar,
+.mmics-products-table-wrapper::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.mmics-products-modal::-webkit-scrollbar-thumb,
+.mmics-products-view-modal::-webkit-scrollbar-thumb,
+.mmics-products-image-modal::-webkit-scrollbar-thumb,
+.mmics-products-table-wrapper::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #d6d6d6;
+}
+
+.mmics-products-modal::-webkit-scrollbar-track,
+.mmics-products-view-modal::-webkit-scrollbar-track,
+.mmics-products-image-modal::-webkit-scrollbar-track,
+.mmics-products-table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+  .mmics-products-page {
+    padding: 24px 22px 35px;
+  }
+
+  .mmics-products-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mmics-products-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .mmics-products-search {
+    max-width: none;
+    width: 100%;
+  }
+
+  .mmics-products-filters {
+    width: 100%;
+  }
+
+  .mmics-products-filter {
+    flex: 1;
+  }
+
+  .mmics-products-image-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+  .mmics-products-page {
+    padding: 18px 14px 30px;
+  }
+
+  .mmics-products-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .mmics-products-header h1 {
+    font-size: 25px;
+  }
+
+  .mmics-products-header p {
+    max-width: 310px;
+    font-size: 11px;
+  }
+
+  .mmics-products-header-actions {
+    width: 100%;
+  }
+
+  .mmics-products-refresh-btn {
+    flex: 0 0 42px;
+  }
+
+  .mmics-products-add-btn {
+    flex: 1;
+  }
+
+  .mmics-products-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .mmics-product-stat-card {
+    min-height: 82px;
+    padding: 13px;
+    gap: 10px;
+  }
+
+  .mmics-product-stat-icon {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+    border-radius: 9px;
+  }
+
+  .mmics-product-stat-card strong {
+    font-size: 18px;
+  }
+
+  .mmics-product-stat-card span {
+    font-size: 9px;
+  }
+
+  .mmics-products-toolbar {
+    padding: 8px;
+  }
+
+  .mmics-products-filters {
+    flex-direction: column;
+  }
+
+  .mmics-products-filter {
+    width: 100%;
+  }
+
+  .mmics-products-search {
+    min-width: 0;
+  }
+
+  .mmics-products-search kbd {
+    display: none;
+  }
+
+  .mmics-products-table-top {
+    padding: 14px;
+  }
+
+  .mmics-products-modal-overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .mmics-products-modal,
+  .mmics-products-view-modal,
+  .mmics-products-image-modal {
+    width: 100%;
+    max-height: calc(100vh - 24px);
+    border-radius: 15px 15px 10px 10px;
+  }
+
+  .mmics-products-view-content {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+
+  .mmics-products-view-gallery {
+    min-height: auto;
+  }
+
+  .mmics-products-view-image {
+    height: 145px;
+  }
+
+  .mmics-products-form {
+    padding: 17px 15px;
+  }
+
+  .mmics-products-modal-header {
+    padding: 15px;
+  }
+
+  .mmics-products-modal-footer {
+    padding: 12px 15px;
+  }
+
+  .mmics-products-image-content {
+    padding: 15px;
+  }
+
+  .mmics-products-image-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mmics-products-image-card {
+    height: 135px;
+  }
+
+  .mmics-products-delete-modal {
+    width: 100%;
+    padding: 21px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+  .mmics-products-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .mmics-product-stat-card {
+    min-height: 72px;
+  }
+
+  .mmics-products-status-options {
+    flex-direction: column;
+  }
+
+  .mmics-products-status-options button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .mmics-products-delete-actions {
+    flex-direction: column-reverse;
+  }
+
+  .mmics-products-delete-actions button {
+    width: 100%;
+  }
+
+  .mmics-products-modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .mmics-products-modal-footer button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   PRODUCT PHOTO UPLOAD
+========================================================= */
+
+.mmics-products-photo-upload {
+  width: 100%;
+  min-height: 66px;
+  padding: 12px 13px;
+  border: 1px dashed #d5b0b0;
+  border-radius: 9px;
+  background: #fffafa;
+  color: #a11212;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+  box-sizing: border-box;
+}
+
+.mmics-products-photo-upload:hover {
+  border-color: #a11212;
+  background: #fff5f5;
+  transform: translateY(-1px);
+}
+
+.mmics-products-photo-upload > div {
+  min-width: 0;
+}
+
+.mmics-products-photo-upload strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #3b3b3b;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.mmics-products-photo-upload span {
+  display: block;
+  color: #999999;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.mmics-products-upload-preview {
+  position: relative;
+  width: 100%;
+  height: 175px;
+  overflow: hidden;
+  margin: 0 0 13px;
+  border: 1px solid #e4e4e4;
+  border-radius: 10px;
+  background: #f8f8f8;
+}
+
+.mmics-products-upload-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.mmics-products-upload-preview > button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 29px;
+  height: 29px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #a11212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mmics-products-upload-preview > button:hover {
+  background: #fff0f0;
+}
+
+/* =========================================================
+   IMAGE UPLOAD MODAL
+========================================================= */
+
+.mmics-products-add-image .mmics-products-photo-upload {
+  margin-bottom: 12px;
+}
+
+@media (max-width: 700px) {
+  .mmics-products-upload-preview {
+    height: 150px;
+  }
+}
+

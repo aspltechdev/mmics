@@ -1,0 +1,441 @@
+/* =========================================================
+   MMICS ADMIN LAYOUT
+========================================================= */
+
+.mmics-admin {
+  min-height: 100vh;
+
+  display: flex;
+
+  background: #f6f6f7;
+  color: #171717;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.mmics-admin-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+
+  width: 260px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #171717;
+  color: #ffffff;
+
+  z-index: 1100;
+}
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.mmics-admin-brand {
+  height: 82px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 0 22px;
+
+  border-bottom: 1px solid
+    rgba(255, 255, 255, 0.08);
+}
+
+.mmics-admin-brand-mark {
+  width: 39px;
+  height: 39px;
+
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  background: #8b1e2d;
+
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.mmics-admin-brand > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+}
+
+.mmics-admin-brand strong {
+  font-size: 17px;
+  letter-spacing: 0.05em;
+}
+
+.mmics-admin-brand span {
+  margin-top: 3px;
+
+  color: #858585;
+
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mmics-admin-mobile-close {
+  display: none;
+
+  margin-left: auto;
+
+  border: 0;
+  background: transparent;
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   NAV
+========================================================= */
+
+.mmics-admin-nav {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding: 24px 13px;
+}
+
+.mmics-admin-nav-label {
+  padding: 0 12px 11px;
+
+  color: #666666;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.mmics-admin-nav-item {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-height: 46px;
+
+  margin-bottom: 4px;
+  padding: 0 13px;
+
+  border-radius: 9px;
+
+  color: #9c9c9c;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.mmics-admin-nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.mmics-admin-nav-item.active {
+  background: #8b1e2d;
+  color: #ffffff;
+}
+
+.mmics-admin-nav-item svg:first-child {
+  flex-shrink: 0;
+}
+
+.mmics-admin-nav-arrow {
+  margin-left: auto;
+
+  opacity: 0;
+
+  transition: opacity 0.2s ease;
+}
+
+.mmics-admin-nav-item:hover
+  .mmics-admin-nav-arrow,
+.mmics-admin-nav-item.active
+  .mmics-admin-nav-arrow {
+  opacity: 0.7;
+}
+
+/* =========================================================
+   SIDEBAR FOOTER
+========================================================= */
+
+.mmics-admin-sidebar-footer {
+  padding: 17px;
+
+  border-top: 1px solid
+    rgba(255, 255, 255, 0.08);
+}
+
+.mmics-admin-user-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin-bottom: 13px;
+}
+
+.mmics-admin-avatar,
+.mmics-admin-topbar-avatar {
+  display: grid;
+  place-items: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #8b1e2d;
+
+  color: #ffffff;
+
+  font-weight: 700;
+}
+
+.mmics-admin-avatar {
+  width: 34px;
+  height: 34px;
+
+  font-size: 12px;
+}
+
+.mmics-admin-user-mini > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.mmics-admin-user-mini strong {
+  overflow: hidden;
+
+  color: #ffffff;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mmics-admin-user-mini span {
+  margin-top: 2px;
+
+  color: #777777;
+
+  font-size: 9px;
+}
+
+.mmics-admin-logout {
+  width: 100%;
+  min-height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+
+  background: transparent;
+  color: #aaaaaa;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.mmics-admin-logout:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.mmics-admin-main {
+  width: calc(100% - 260px);
+
+  margin-left: 260px;
+
+  min-height: 100vh;
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.mmics-admin-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 30px;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.mmics-admin-menu-button {
+  display: none;
+}
+
+.mmics-admin-topbar-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.mmics-admin-topbar-title span {
+  color: #999999;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mmics-admin-topbar-title strong {
+  margin-top: 2px;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.mmics-admin-topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.mmics-admin-topbar-avatar {
+  width: 34px;
+  height: 34px;
+
+  font-size: 12px;
+}
+
+.mmics-admin-topbar-user > div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.mmics-admin-topbar-user strong {
+  font-size: 11px;
+}
+
+.mmics-admin-topbar-user span {
+  margin-top: 1px;
+
+  color: #999999;
+
+  font-size: 9px;
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.mmics-admin-content {
+  padding: 30px;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+  .mmics-admin-sidebar {
+    transform: translateX(-100%);
+
+    transition:
+      transform 0.25s ease;
+  }
+
+  .mmics-admin-sidebar-open {
+    transform: translateX(0);
+  }
+
+  .mmics-admin-mobile-close {
+    display: flex;
+  }
+
+  .mmics-admin-main {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .mmics-admin-menu-button {
+    display: flex;
+
+    width: 40px;
+    height: 40px;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #e6e6e6;
+    border-radius: 9px;
+
+    background: #ffffff;
+    color: #222222;
+  }
+
+  .mmics-admin-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+
+    background: rgba(0, 0, 0, 0.45);
+  }
+}
+
+@media (max-width: 600px) {
+  .mmics-admin-topbar {
+    height: 64px;
+
+    padding: 0 15px;
+  }
+
+  .mmics-admin-topbar-user
+    > div:last-child {
+    display: none;
+  }
+
+  .mmics-admin-content {
+    padding: 20px 15px;
+  }
+}

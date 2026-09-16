@@ -1,0 +1,556 @@
+/* =========================================================
+   MMICS LOGIN
+========================================================= */
+
+.mmics-login-page {
+  min-height: 100vh;
+
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+
+  background: #ffffff;
+}
+
+/* =========================================================
+   VISUAL PANEL
+========================================================= */
+
+.mmics-login-visual {
+  position: relative;
+
+  min-height: 100vh;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #52101b,
+      #8b1e2d 55%,
+      #651521
+    );
+}
+
+.mmics-login-visual::before {
+  content: "";
+
+  position: absolute;
+
+  width: 520px;
+  height: 520px;
+
+  right: -190px;
+  top: -180px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.12);
+
+  border-radius: 50%;
+}
+
+.mmics-login-visual::after {
+  content: "";
+
+  position: absolute;
+
+  width: 380px;
+  height: 380px;
+
+  left: -180px;
+  bottom: -180px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.1);
+
+  border-radius: 50%;
+}
+
+.mmics-login-visual-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 70% 35%,
+      rgba(214, 168, 79, 0.18),
+      transparent 32%
+    );
+}
+
+.mmics-login-visual-content {
+  position: relative;
+  z-index: 2;
+
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 48px 8%;
+}
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.mmics-login-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  width: fit-content;
+
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.mmics-login-brand-mark {
+  width: 43px;
+  height: 43px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+  color: #8b1e2d;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.mmics-login-brand > div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.mmics-login-brand strong {
+  font-size: 19px;
+  letter-spacing: 0.06em;
+}
+
+.mmics-login-brand span {
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.mmics-login-message {
+  max-width: 560px;
+
+  margin: auto 0;
+}
+
+.mmics-login-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  color: #e2c475;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.mmics-login-eyebrow::before {
+  content: "";
+
+  width: 28px;
+  height: 2px;
+
+  background: #d6a84f;
+}
+
+.mmics-login-message h1 {
+  margin-top: 19px;
+
+  color: #ffffff;
+
+  font-size: clamp(
+    42px,
+    5vw,
+    68px
+  );
+
+  line-height: 1.02;
+
+  letter-spacing: -0.045em;
+}
+
+.mmics-login-message p {
+  max-width: 480px;
+
+  margin-top: 24px;
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+/* =========================================================
+   TRUST
+========================================================= */
+
+.mmics-login-trust {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-size: 11px;
+}
+
+.mmics-login-trust svg {
+  color: #d6a84f;
+}
+
+/* =========================================================
+   FORM PANEL
+========================================================= */
+
+.mmics-login-form-panel {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 50px;
+}
+
+.mmics-login-form-wrapper {
+  width: min(100%, 430px);
+}
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.mmics-login-heading > span {
+  color: #8b1e2d;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.mmics-login-heading h2 {
+  margin-top: 8px;
+
+  font-size: 36px;
+  line-height: 1.1;
+
+  letter-spacing: -0.035em;
+}
+
+.mmics-login-heading p {
+  margin-top: 10px;
+
+  color: #777777;
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.mmics-login-error {
+  margin-top: 24px;
+  padding: 12px 14px;
+
+  border: 1px solid #ead0d4;
+  border-radius: 8px;
+
+  background: #fff6f7;
+
+  color: #8b1e2d;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.mmics-login-form {
+  margin-top: 30px;
+}
+
+.mmics-login-field {
+  margin-bottom: 19px;
+}
+
+.mmics-login-field label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #333333;
+
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.mmics-login-input-wrapper {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+}
+
+.mmics-login-input-wrapper > svg {
+  position: absolute;
+  left: 15px;
+
+  color: #a2a2a2;
+
+  pointer-events: none;
+}
+
+.mmics-login-input-wrapper input {
+  width: 100%;
+  height: 52px;
+
+  padding: 0 46px;
+
+  border: 1px solid #dedede;
+  border-radius: 9px;
+
+  outline: none;
+
+  background: #ffffff;
+
+  color: #222222;
+
+  font-size: 13px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mmics-login-input-wrapper input::placeholder {
+  color: #b1b1b1;
+}
+
+.mmics-login-input-wrapper input:focus {
+  border-color: #8b1e2d;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(139, 30, 45, 0.08);
+}
+
+.mmics-login-input-wrapper input:disabled {
+  background: #f8f8f8;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   PASSWORD TOGGLE
+========================================================= */
+
+.mmics-password-toggle {
+  position: absolute;
+  right: 13px;
+
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  border: 0;
+
+  background: transparent;
+  color: #999999;
+}
+
+.mmics-password-toggle:hover {
+  color: #8b1e2d;
+}
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+.mmics-login-submit {
+  width: 100%;
+  height: 52px;
+
+  margin-top: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: #8b1e2d;
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.mmics-login-submit:hover:not(:disabled) {
+  background: #681520;
+
+  transform: translateY(-1px);
+}
+
+.mmics-login-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   SPINNER
+========================================================= */
+
+.mmics-login-spinner {
+  width: 16px;
+  height: 16px;
+
+  border: 2px solid
+    rgba(255, 255, 255, 0.35);
+
+  border-top-color: #ffffff;
+
+  border-radius: 50%;
+
+  animation:
+    mmicsLoginSpin 0.7s linear infinite;
+}
+
+@keyframes mmicsLoginSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.mmics-login-footer {
+  margin-top: 30px;
+  padding-top: 20px;
+
+  display: flex;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border-top: 1px solid #eeeeee;
+}
+
+.mmics-login-footer a {
+  color: #8b1e2d;
+
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.mmics-login-footer span {
+  color: #aaaaaa;
+
+  font-size: 10px;
+}
+
+/* =========================================================
+   MOBILE BRAND
+========================================================= */
+
+.mmics-login-mobile-brand {
+  display: none;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+  .mmics-login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .mmics-login-visual {
+    display: none;
+  }
+
+  .mmics-login-form-panel {
+    min-height: 100vh;
+
+    padding: 35px 25px;
+  }
+
+  .mmics-login-mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 55px;
+
+    color: #171717;
+
+    text-decoration: none;
+  }
+
+  .mmics-login-mobile-brand .mmics-login-brand-mark {
+    width: 39px;
+    height: 39px;
+
+    background: #8b1e2d;
+    color: #ffffff;
+
+    font-size: 18px;
+  }
+
+  .mmics-login-mobile-brand strong {
+    font-size: 18px;
+    letter-spacing: 0.05em;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+  .mmics-login-form-panel {
+    padding: 25px 18px;
+  }
+
+  .mmics-login-mobile-brand {
+    margin-bottom: 42px;
+  }
+
+  .mmics-login-heading h2 {
+    font-size: 30px;
+  }
+
+  .mmics-login-footer {
+    flex-direction: column;
+  }
+}
