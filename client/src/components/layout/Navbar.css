@@ -1,335 +1,107 @@
-/* =========================================================
-   MMICS NAVBAR
-========================================================= */
-
-.mmics-navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-
+/* client/src/components/layout/Navbar.css */
+.navbar-wrapper {
   width: 100%;
-
-  background: #ffffff;
-  border-bottom: 1px solid #eeeeee;
+  font-family: 'Inter', sans-serif;
 }
 
-/* =========================================================
-   NAVBAR CONTAINER
-========================================================= */
-
-.mmics-navbar-container {
-  width: min(1240px, calc(100% - 48px));
-  height: 78px;
-
-  margin: 0 auto;
-
+/* Top Bar */
+.top-bar {
+  background-color: #f97316; /* Orange */
+  color: white;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 30px;
+  align-items: center;
+  padding: 10px 5%;
+  font-size: 14px;
 }
 
-/* =========================================================
-   LOGO
-========================================================= */
+.top-bar-left {
+  display: flex;
+  gap: 20px;
+}
 
-.mmics-navbar-logo {
+.top-bar-left span {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 8px;
+}
 
-  flex-shrink: 0;
+.top-bar-right {
+  display: flex;
+  gap: 20px;
+}
 
+.top-bar-right a {
+  color: white;
   text-decoration: none;
-}
-
-.mmics-logo-mark {
-  width: 42px;
-  height: 42px;
-
   display: flex;
   align-items: center;
-  justify-content: center;
-
-  border-radius: 10px;
-
-  background: #8b1e2d;
-  color: #ffffff;
-
-  font-size: 20px;
-  font-weight: 800;
+  transition: opacity 0.2s;
 }
 
-.mmics-logo-content {
+.top-bar-right a:hover {
+  opacity: 0.8;
+}
+
+/* Main Navbar */
+.main-nav {
+  background-color: #f1f5f9; /* Light grey/blue */
   display: flex;
-  flex-direction: column;
-
-  line-height: 1;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 5%; /* Adjusted padding to match height */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.mmics-logo-name {
-  color: #181818;
-
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
+.nav-logo {
+  display: flex;
+  align-items: center;
 }
 
-.mmics-logo-tagline {
-  margin-top: 5px;
+.nav-logo img {
+  height: 90px; /* Set exact height to match Figma */
+  width: auto;
+  display: block;
+}
 
-  color: #8b8b8b;
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+}
 
-  font-size: 8px;
+.nav-links a {
+  text-decoration: none;
+  color: #1e293b;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: #f97316;
+}
+
+.nav-cta {
+  background-color: #1e3a8a; /* Dark Blue */
+  color: white;
+  padding: 12px 28px; /* Slightly larger button to match design */
+  border-radius: 6px;
+  text-decoration: none;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
 }
 
-/* =========================================================
-   DESKTOP NAV
-========================================================= */
-
-.mmics-desktop-nav {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-
-  margin-left: auto;
+.nav-cta:hover {
+  background-color: #152c6b;
 }
 
-.mmics-desktop-nav a {
-  position: relative;
-
-  padding: 29px 0 27px;
-
-  color: #555555;
-
-  font-size: 13px;
-  font-weight: 600;
-
-  text-decoration: none;
-
-  transition:
-    color 0.2s ease;
-}
-
-.mmics-desktop-nav a::after {
-  content: "";
-
-  position: absolute;
-
-  left: 0;
-  bottom: 20px;
-
-  width: 0;
-  height: 2px;
-
-  background: #8b1e2d;
-
-  transition:
-    width 0.2s ease;
-}
-
-.mmics-desktop-nav a:hover {
-  color: #8b1e2d;
-}
-
-.mmics-desktop-nav a:hover::after,
-.mmics-desktop-nav a.active::after {
-  width: 100%;
-}
-
-.mmics-desktop-nav a.active {
-  color: #8b1e2d;
-}
-
-/* =========================================================
-   MEMBER LOGIN
-========================================================= */
-
-.mmics-member-login {
-  flex-shrink: 0;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-
-  min-height: 42px;
-
-  padding: 0 17px;
-
-  border-radius: 999px;
-
-  background: #8b1e2d;
-  color: #ffffff;
-
-  font-size: 12px;
-  font-weight: 700;
-
-  text-decoration: none;
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
-}
-
-.mmics-member-login:hover {
-  background: #681520;
-  transform: translateY(-1px);
-}
-
-/* =========================================================
-   MOBILE TOGGLE
-========================================================= */
-
-.mmics-mobile-toggle {
-  display: none;
-
-  width: 42px;
-  height: 42px;
-
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid #e5e5e5;
-  border-radius: 10px;
-
-  background: #ffffff;
-  color: #222222;
-}
-
-/* =========================================================
-   MOBILE NAV
-========================================================= */
-
-.mmics-mobile-nav {
-  display: none;
-}
-
-/* =========================================================
-   TABLET
-========================================================= */
-
-@media (max-width: 1100px) {
-  .mmics-desktop-nav {
-    gap: 16px;
-  }
-
-  .mmics-desktop-nav a {
-    font-size: 12px;
-  }
-
-  .mmics-member-login {
-    padding: 0 14px;
-  }
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 900px) {
-  .mmics-navbar-container {
-    width: min(100% - 30px, 1240px);
-    height: 70px;
-  }
-
-  .mmics-desktop-nav,
-  .mmics-member-login {
+/* Responsive */
+@media (max-width: 1024px) {
+  .nav-links {
     display: none;
-  }
-
-  .mmics-mobile-toggle {
-    display: flex;
-  }
-
-  .mmics-mobile-nav {
-    display: flex;
-
-    max-height: 0;
-    overflow: hidden;
-
-    flex-direction: column;
-    gap: 0;
-
-    background: #ffffff;
-
-    border-top: 0 solid #eeeeee;
-
-    transition:
-      max-height 0.3s ease,
-      border-color 0.3s ease;
-  }
-
-  .mmics-mobile-nav-open {
-    max-height: 600px;
-
-    border-top: 1px solid #eeeeee;
-  }
-
-  .mmics-mobile-nav a {
-    display: flex;
-    align-items: center;
-
-    min-height: 48px;
-
-    padding: 0 20px;
-
-    color: #444444;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    text-decoration: none;
-
-    border-bottom: 1px solid #f1f1f1;
-  }
-
-  .mmics-mobile-nav a.active {
-    color: #8b1e2d;
-    background: #faf5f6;
-  }
-
-  .mmics-mobile-login {
-    justify-content: center;
-    gap: 8px;
-
-    margin: 14px 15px;
-
-    min-height: 46px !important;
-
-    border: 0 !important;
-    border-radius: 999px;
-
-    background: #8b1e2d;
-
-    color: #ffffff !important;
-  }
-}
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 480px) {
-  .mmics-navbar-container {
-    width: calc(100% - 24px);
-  }
-
-  .mmics-logo-mark {
-    width: 38px;
-    height: 38px;
-
-    font-size: 18px;
-  }
-
-  .mmics-logo-name {
-    font-size: 16px;
-  }
-
-  .mmics-logo-tagline {
-    font-size: 7px;
   }
 }

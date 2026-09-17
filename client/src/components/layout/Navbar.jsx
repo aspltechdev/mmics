@@ -1,162 +1,119 @@
-import { Link, NavLink } from "react-router-dom";
-import { Menu, X, UserRound } from "lucide-react";
-import { useState } from "react";
+// client/src/components/layout/Navbar.jsx
 
-import "./Navbar.css";
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Mail, Phone } from 'lucide-react';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faInstagram,
+  faFacebookF,
+  faYoutube,
+  faWhatsapp,
+  faLinkedinIn,
+} from '@fortawesome/free-brands-svg-icons';
+
+import logo from '../../assets/mmics-logo.png';
+import './Navbar.css';
 
 const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
+  const location = useLocation();
 
   return (
-    <header className="mmics-navbar">
-      <div className="mmics-navbar-container">
+    <div className="navbar-wrapper">
+      {/* Top Bar */}
+      <div className="top-bar">
+        <div className="top-bar-left">
+          <span>
+            <Mail size={16} />
+            mmmicslimited@gmail.com
+          </span>
 
-        {/* LOGO */}
-        <Link
-          to="/"
-          className="mmics-navbar-logo"
-          onClick={closeMenu}
-        >
-          <div className="mmics-logo-mark">
-            M
-          </div>
+          <span>
+            <Phone size={16} />
+            +91 98402 77476
+          </span>
+        </div>
 
-          <div className="mmics-logo-content">
-            <span className="mmics-logo-name">
-              MMICS
-            </span>
+        <div className="top-bar-right">
+          <a href="#" aria-label="Instagram">
+            <FontAwesomeIcon icon={faInstagram} />
+          </a>
 
-            <span className="mmics-logo-tagline">
-              Integrated Digital Portal
-            </span>
-          </div>
+          <a href="#" aria-label="Facebook">
+            <FontAwesomeIcon icon={faFacebookF} />
+          </a>
+
+          <a href="#" aria-label="YouTube">
+            <FontAwesomeIcon icon={faYoutube} />
+          </a>
+
+          <a href="#" aria-label="WhatsApp">
+            <FontAwesomeIcon icon={faWhatsapp} />
+          </a>
+
+          <a href="#" aria-label="LinkedIn">
+            <FontAwesomeIcon icon={faLinkedinIn} />
+          </a>
+        </div>
+      </div>
+
+      {/* Main Navigation */}
+      <nav className="main-nav">
+        {/* Logo contains the organization name, so no separate text is added */}
+        <Link to="/" className="nav-logo">
+          <img
+            src={logo}
+            alt="MMMICS Logo"
+          />
         </Link>
 
-        {/* DESKTOP NAVIGATION */}
-        <nav className="mmics-desktop-nav">
-          <NavLink to="/" end>
+        <div className="nav-links">
+          <Link
+            to="/"
+            className={location.pathname === '/' ? 'active' : ''}
+          >
             Home
-          </NavLink>
+          </Link>
 
-          <NavLink to="/about">
-            About
-          </NavLink>
+          <Link
+            to="/about"
+            className={location.pathname === '/about' ? 'active' : ''}
+          >
+            About Us
+          </Link>
 
-          <NavLink to="/organization">
-            Organization
-          </NavLink>
+          <Link
+            to="/products"
+            className={
+              location.pathname.startsWith('/products') ? 'active' : ''
+            }
+          >
+            Product
+          </Link>
 
-          <NavLink to="/members">
-            Members
-          </NavLink>
+          <Link
+            to="/membership"
+            className={
+              location.pathname === '/membership' ? 'active' : ''
+            }
+          >
+            Membership
+          </Link>
 
-          <NavLink to="/products">
-            Products
-          </NavLink>
-
-          <NavLink to="/gallery">
+          <Link
+            to="/gallery"
+            className={location.pathname === '/gallery' ? 'active' : ''}
+          >
             Gallery
-          </NavLink>
+          </Link>
+        </div>
 
-          <NavLink to="/contact">
-            Contact
-          </NavLink>
-        </nav>
-
-        {/* MEMBER LOGIN */}
-        <Link
-          to="/member-login"
-          className="mmics-member-login"
-        >
-          <UserRound size={16} />
-          <span>Member Login</span>
+        <Link to="/contact" className="nav-cta">
+          Contact Us
         </Link>
-
-        {/* MOBILE BUTTON */}
-        <button
-          type="button"
-          className="mmics-mobile-toggle"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
-        >
-          {menuOpen ? (
-            <X size={23} />
-          ) : (
-            <Menu size={23} />
-          )}
-        </button>
-      </div>
-
-      {/* MOBILE NAV */}
-      <div
-        className={`mmics-mobile-nav ${
-          menuOpen ? "mmics-mobile-nav-open" : ""
-        }`}
-      >
-        <NavLink
-          to="/"
-          end
-          onClick={closeMenu}
-        >
-          Home
-        </NavLink>
-
-        <NavLink
-          to="/about"
-          onClick={closeMenu}
-        >
-          About
-        </NavLink>
-
-        <NavLink
-          to="/organization"
-          onClick={closeMenu}
-        >
-          Organization
-        </NavLink>
-
-        <NavLink
-          to="/members"
-          onClick={closeMenu}
-        >
-          Members
-        </NavLink>
-
-        <NavLink
-          to="/products"
-          onClick={closeMenu}
-        >
-          Products
-        </NavLink>
-
-        <NavLink
-          to="/gallery"
-          onClick={closeMenu}
-        >
-          Gallery
-        </NavLink>
-
-        <NavLink
-          to="/contact"
-          onClick={closeMenu}
-        >
-          Contact
-        </NavLink>
-
-        <Link
-          to="/member-login"
-          className="mmics-mobile-login"
-          onClick={closeMenu}
-        >
-          <UserRound size={16} />
-          Member Login
-        </Link>
-      </div>
-    </header>
+      </nav>
+    </div>
   );
 };
 

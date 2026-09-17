@@ -1,0 +1,34 @@
+/* client/src/components/home/CertificationsSection.css */
+.certifications-section {
+  padding: 60px 5%;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.cert-logo {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.cert-logo:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .certifications-section {
+    gap: 20px;
+  }
+  .cert-logo {
+    height: 60px;
+  }
+}

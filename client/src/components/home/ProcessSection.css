@@ -1,0 +1,109 @@
+/* client/src/components/home/ProcessSection.css */
+.process-section {
+  padding: 80px 5%;
+  background-color: #e2e8f0; /* Light blue-grey */
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+.process-label {
+  color: #1e3a8a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.process-title {
+  font-size: 40px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 50px;
+}
+
+.process-title .highlight {
+  color: #f97316;
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto 50px;
+}
+
+.process-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+.process-card.highlight-card {
+  background: #f97316;
+  color: white;
+}
+
+.process-card.highlight-card .step-badge {
+  background: rgba(255,255,255,0.2);
+  color: white;
+}
+
+.process-card.highlight-card p {
+  color: rgba(255,255,255,0.9);
+}
+
+.process-icon {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  color: #1e3a8a;
+}
+
+.process-card.highlight-card .process-icon {
+  color: white;
+}
+
+.step-badge {
+  display: inline-block;
+  background: #f1f5f9;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 15px;
+}
+
+.process-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #0f172a;
+}
+
+.process-card.highlight-card h3 {
+  color: white;
+}
+
+.process-card p {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+  .process-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+}

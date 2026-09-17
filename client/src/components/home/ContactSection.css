@@ -1,0 +1,68 @@
+/* client/src/components/home/ContactSection.css */
+.contact-cta-section {
+  display: flex;
+  align-items: center;
+  padding: 80px 5%;
+  background-color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  gap: 60px;
+}
+
+.contact-cta-content {
+  flex: 1;
+}
+
+.contact-cta-label {
+  color: #1e3a8a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.contact-cta-title {
+  font-size: 40px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.contact-cta-title .highlight {
+  color: #f97316;
+}
+
+.contact-cta-desc {
+  font-size: 16px;
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  max-width: 500px;
+}
+
+.contact-cta-image {
+  flex: 1;
+  max-width: 600px;
+}
+
+.contact-cta-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+@media (max-width: 1024px) {
+  .contact-cta-section {
+    flex-direction: column;
+    padding: 60px 5%;
+    text-align: center;
+  }
+  .contact-cta-desc {
+    margin: 0 auto 30px;
+  }
+  .contact-cta-image {
+    max-width: 100%;
+  }
+}
