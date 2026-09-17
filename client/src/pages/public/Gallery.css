@@ -1,0 +1,1636 @@
+/* ============================================================
+   MMICS PUBLIC GALLERY
+   ALBUM BASED DESIGN
+   ============================================================ */
+
+.mmics-public-gallery-page {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #ffffff;
+
+  color: #111111;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.mmics-public-gallery-hero {
+  position: relative;
+
+  width: 100%;
+  min-height: 315px;
+
+  display: flex;
+  align-items: center;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      110deg,
+      #f3f6f9 0%,
+      #ffffff 55%,
+      #fff4eb 100%
+    );
+}
+
+.mmics-public-gallery-hero::before {
+  content: "";
+
+  position: absolute;
+
+  width: 440px;
+  height: 440px;
+
+  right: -170px;
+  top: -230px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      105,
+      0,
+      0.055
+    );
+}
+
+.mmics-public-gallery-hero::after {
+  content: "";
+
+  position: absolute;
+
+  width: 310px;
+  height: 310px;
+
+  left: -170px;
+  bottom: -210px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      49,
+      93,
+      148,
+      0.055
+    );
+}
+
+
+/* ============================================================
+   HERO CONTENT
+   ============================================================ */
+
+.mmics-public-gallery-hero-content {
+  position: relative;
+
+  z-index: 2;
+
+  width:
+    calc(100% - 60px);
+
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  padding:
+    58px 0;
+}
+
+
+/* ============================================================
+   HERO LABEL
+   ============================================================ */
+
+.mmics-public-gallery-hero-content > span {
+  display: inline-flex;
+
+  align-items: center;
+
+  min-height: 20px;
+
+  padding:
+    0 10px;
+
+  margin-bottom: 15px;
+
+  border:
+    1px solid #d6dadd;
+
+  border-radius: 20px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.72
+    );
+
+  color: #4d4d4d;
+
+  font-size: 7px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  letter-spacing: 0.45px;
+
+  text-transform: uppercase;
+}
+
+.mmics-public-gallery-hero-content > span::before {
+  content: "";
+
+  width: 5px;
+  height: 5px;
+
+  margin-right: 6px;
+
+  border-radius: 50%;
+
+  background: #ff6900;
+}
+
+
+/* ============================================================
+   HERO TITLE
+   ============================================================ */
+
+.mmics-public-gallery-hero-content h1 {
+  margin: 0;
+
+  color: #111111;
+
+  font-size: 46px;
+
+  line-height: 1.03;
+
+  font-weight: 500;
+
+  letter-spacing: -1.7px;
+}
+
+.mmics-public-gallery-hero-content h1 strong {
+  color: #ff6900;
+
+  font-weight: 500;
+}
+
+
+/* ============================================================
+   HERO DESCRIPTION
+   ============================================================ */
+
+.mmics-public-gallery-hero-content p {
+  max-width: 475px;
+
+  margin:
+    16px 0 0;
+
+  color: #707070;
+
+  font-size: 10px;
+
+  line-height: 1.6;
+}
+
+
+/* ============================================================
+   GALLERY SECTION
+   ============================================================ */
+
+.mmics-public-gallery-section {
+  width: 100%;
+
+  padding:
+    78px 0 95px;
+
+  background: #ffffff;
+}
+
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+
+.mmics-public-gallery-container {
+  width:
+    calc(100% - 60px);
+
+  max-width: 1180px;
+
+  margin: 0 auto;
+}
+
+
+/* ============================================================
+   SECTION HEADING
+   ============================================================ */
+
+.mmics-public-gallery-heading {
+  max-width: 650px;
+
+  margin:
+    0 auto 43px;
+
+  text-align: center;
+}
+
+.mmics-public-gallery-heading > span {
+  display: block;
+
+  margin-bottom: 11px;
+
+  color: #2f5d91;
+
+  font-size: 7px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  letter-spacing: 0.65px;
+}
+
+.mmics-public-gallery-heading h2 {
+  margin: 0;
+
+  color: #111111;
+
+  font-size: 30px;
+
+  line-height: 1.08;
+
+  font-weight: 500;
+
+  letter-spacing: -0.8px;
+}
+
+.mmics-public-gallery-heading h2 strong {
+  color: #ff6900;
+
+  font-weight: 500;
+}
+
+.mmics-public-gallery-heading p {
+  max-width: 520px;
+
+  margin:
+    12px auto 0;
+
+  color: #7b7b7b;
+
+  font-size: 9px;
+
+  line-height: 1.6;
+}
+
+
+/* ============================================================
+   ALBUM GRID
+   ============================================================ */
+
+.mmics-gallery-albums {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 22px;
+}
+
+
+/* ============================================================
+   ALBUM CARD
+   ============================================================ */
+
+.mmics-gallery-album-card {
+  position: relative;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  border:
+    1px solid #e9e9e9;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 22px
+    rgba(
+      25,
+      45,
+      65,
+      0.055
+    );
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.mmics-gallery-album-card:hover {
+  transform:
+    translateY(-6px);
+
+  border-color:
+    #dedede;
+
+  box-shadow:
+    0 18px 40px
+    rgba(
+      25,
+      45,
+      65,
+      0.11
+    );
+}
+
+
+/* ============================================================
+   ALBUM COVER
+   ============================================================ */
+
+.mmics-gallery-album-cover {
+  position: relative;
+
+  width: 100%;
+
+  height: 245px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #edf1f4,
+      #f8f9fa
+    );
+}
+
+.mmics-gallery-album-cover img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  transition:
+    transform 0.55s
+    cubic-bezier(
+      0.2,
+      0.7,
+      0.2,
+      1
+    );
+}
+
+.mmics-gallery-album-card:hover
+  .mmics-gallery-album-cover img {
+  transform:
+    scale(1.06);
+}
+
+
+/* ============================================================
+   ALBUM PLACEHOLDER
+   ============================================================ */
+
+.mmics-gallery-album-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #a2a9af;
+}
+
+.mmics-gallery-album-placeholder svg {
+  width: 45px;
+  height: 45px;
+}
+
+
+/* ============================================================
+   ALBUM HOVER
+   ============================================================ */
+
+.mmics-gallery-album-hover {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  background:
+    rgba(
+      32,
+      59,
+      88,
+      0.52
+    );
+
+  opacity: 0;
+
+  transition:
+    opacity 0.3s ease;
+}
+
+.mmics-gallery-album-card:hover
+  .mmics-gallery-album-hover {
+  opacity: 1;
+}
+
+
+/* ============================================================
+   HOVER ICON
+   ============================================================ */
+
+.mmics-gallery-album-hover > span {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: #2f5d91;
+
+  transform:
+    translateY(8px);
+
+  transition:
+    transform 0.3s ease;
+}
+
+.mmics-gallery-album-card:hover
+  .mmics-gallery-album-hover
+  > span {
+  transform:
+    translateY(0);
+}
+
+.mmics-gallery-album-hover svg {
+  width: 19px;
+  height: 19px;
+}
+
+
+/* ============================================================
+   HOVER TEXT
+   ============================================================ */
+
+.mmics-gallery-album-hover small {
+  color: #ffffff;
+
+  font-size: 8px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  letter-spacing: 0.25px;
+}
+
+
+/* ============================================================
+   ALBUM CONTENT
+   ============================================================ */
+
+.mmics-gallery-album-content {
+  padding:
+    18px 19px 19px;
+}
+
+
+/* ============================================================
+   ALBUM LABEL
+   ============================================================ */
+
+.mmics-gallery-album-content > span {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #ff6900;
+
+  font-size: 7px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  letter-spacing: 0.55px;
+
+  text-transform: uppercase;
+}
+
+
+/* ============================================================
+   ALBUM TITLE
+   ============================================================ */
+
+.mmics-gallery-album-content h3 {
+  margin: 0;
+
+  color: #202020;
+
+  font-size: 19px;
+
+  line-height: 1.2;
+
+  font-weight: 600;
+
+  letter-spacing: -0.25px;
+}
+
+
+/* ============================================================
+   ALBUM DESCRIPTION
+   ============================================================ */
+
+.mmics-gallery-album-content p {
+  display: -webkit-box;
+
+  overflow: hidden;
+
+  margin:
+    8px 0 0;
+
+  color: #777777;
+
+  font-size: 8.5px;
+
+  line-height: 1.55;
+
+  -webkit-line-clamp: 2;
+
+  -webkit-box-orient: vertical;
+}
+
+
+/* ============================================================
+   ALBUM LINK
+   ============================================================ */
+
+.mmics-gallery-album-link {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-top: 17px;
+
+  padding-top: 13px;
+
+  border-top:
+    1px solid #eeeeee;
+
+  color: #2f5d91;
+
+  font-size: 8px;
+
+  font-weight: 600;
+}
+
+.mmics-gallery-album-link svg {
+  width: 14px;
+  height: 14px;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.mmics-gallery-album-card:hover
+  .mmics-gallery-album-link svg {
+  transform:
+    translateX(4px);
+}
+
+
+/* ============================================================
+   PAGE STATE
+   ============================================================ */
+
+.mmics-public-gallery-state {
+  min-height: 420px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  text-align: center;
+
+  color: #888888;
+}
+
+.mmics-public-gallery-state > svg {
+  width: 40px;
+  height: 40px;
+
+  color: #2f5d91;
+}
+
+.mmics-public-gallery-state h3 {
+  margin: 4px 0 0;
+
+  color: #222222;
+
+  font-size: 19px;
+
+  font-weight: 500;
+}
+
+.mmics-public-gallery-state p {
+  margin: 0;
+
+  font-size: 9px;
+}
+
+.mmics-public-gallery-state button {
+  height: 34px;
+
+  padding:
+    0 17px;
+
+  border: 0;
+
+  border-radius: 5px;
+
+  background: #2f5d91;
+
+  color: #ffffff;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 8px;
+
+  cursor: pointer;
+}
+
+.mmics-public-gallery-spinner {
+  animation:
+    mmicsGallerySpin
+    0.8s linear infinite;
+}
+
+@keyframes mmicsGallerySpin {
+
+  from {
+    transform:
+      rotate(0deg);
+  }
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+
+}
+
+
+/* ============================================================
+   ALBUM POPUP
+   ============================================================ */
+
+.mmics-gallery-album-modal {
+  position: fixed;
+
+  z-index: 9998;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+
+  background:
+    rgba(
+      13,
+      23,
+      33,
+      0.72
+    );
+
+  backdrop-filter:
+    blur(7px);
+}
+
+
+/* ============================================================
+   ALBUM MODAL INNER
+   ============================================================ */
+
+.mmics-gallery-album-modal-inner {
+  width: 100%;
+
+  max-width: 1080px;
+
+  max-height: 88vh;
+
+  overflow-y: auto;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 35px 100px
+    rgba(
+      0,
+      0,
+      0,
+      0.25
+    );
+
+  scrollbar-width: thin;
+}
+
+
+/* ============================================================
+   MODAL HEADER
+   ============================================================ */
+
+.mmics-gallery-album-modal-header {
+  position: sticky;
+
+  z-index: 3;
+
+  top: 0;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding:
+    25px 28px 22px;
+
+  border-bottom:
+    1px solid #eeeeee;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.96
+    );
+
+  backdrop-filter:
+    blur(8px);
+}
+
+.mmics-gallery-album-modal-header span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #ff6900;
+
+  font-size: 7px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  letter-spacing: 0.55px;
+}
+
+.mmics-gallery-album-modal-header h2 {
+  margin: 0;
+
+  color: #222222;
+
+  font-size: 25px;
+
+  line-height: 1.1;
+
+  font-weight: 600;
+
+  letter-spacing: -0.45px;
+}
+
+.mmics-gallery-album-modal-header p {
+  max-width: 650px;
+
+  margin:
+    7px 0 0;
+
+  color: #777777;
+
+  font-size: 8.5px;
+
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   CLOSE ALBUM
+   ============================================================ */
+
+.mmics-gallery-album-close {
+  flex-shrink: 0;
+
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid #e2e2e2;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: #555555;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.mmics-gallery-album-close:hover {
+  background: #f3f3f3;
+
+  color: #2f5d91;
+
+  transform:
+    rotate(4deg);
+}
+
+.mmics-gallery-album-close svg {
+  width: 17px;
+  height: 17px;
+}
+
+
+/* ============================================================
+   ALBUM PHOTO GRID
+   ============================================================ */
+
+.mmics-gallery-album-modal-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 10px;
+
+  padding: 22px;
+}
+
+
+/* ============================================================
+   ALBUM PHOTO
+   ============================================================ */
+
+.mmics-gallery-album-modal-image {
+  position: relative;
+
+  width: 100%;
+
+  height: 205px;
+
+  overflow: hidden;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 7px;
+
+  background: #eef0f2;
+
+  cursor: pointer;
+}
+
+.mmics-gallery-album-modal-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition:
+    transform 0.45s
+    cubic-bezier(
+      0.2,
+      0.7,
+      0.2,
+      1
+    );
+}
+
+.mmics-gallery-album-modal-image:hover img {
+  transform:
+    scale(1.06);
+}
+
+
+/* ============================================================
+   MODAL IMAGE HOVER
+   ============================================================ */
+
+.mmics-gallery-album-modal-image-hover {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(
+      32,
+      59,
+      88,
+      0.45
+    );
+
+  opacity: 0;
+
+  transition:
+    opacity 0.25s ease;
+}
+
+.mmics-gallery-album-modal-image:hover
+  .mmics-gallery-album-modal-image-hover {
+  opacity: 1;
+}
+
+.mmics-gallery-album-modal-image-hover svg {
+  width: 30px;
+  height: 30px;
+
+  padding: 10px;
+
+  box-sizing: content-box;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: #2f5d91;
+}
+
+
+/* ============================================================
+   ALBUM PLACEHOLDER
+   ============================================================ */
+
+.mmics-gallery-album-modal-image
+  .mmics-gallery-album-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #a2a9af;
+}
+
+
+/* ============================================================
+   FULLSCREEN LIGHTBOX
+   ============================================================ */
+
+.mmics-gallery-lightbox {
+  position: fixed;
+
+  z-index: 10000;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding:
+    55px 80px 30px;
+
+  box-sizing: border-box;
+
+  background:
+    rgba(
+      8,
+      14,
+      20,
+      0.95
+    );
+
+  backdrop-filter:
+    blur(8px);
+}
+
+
+/* ============================================================
+   LIGHTBOX CONTENT
+   ============================================================ */
+
+.mmics-gallery-lightbox-content {
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.mmics-gallery-lightbox-content img {
+  max-width: 100%;
+
+  max-height:
+    calc(
+      100vh - 135px
+    );
+
+  display: block;
+
+  object-fit: contain;
+
+  border-radius: 5px;
+
+  box-shadow:
+    0 25px 80px
+    rgba(
+      0,
+      0,
+      0,
+      0.4
+    );
+}
+
+
+/* ============================================================
+   LIGHTBOX CLOSE
+   ============================================================ */
+
+.mmics-gallery-lightbox-close {
+  position: absolute;
+
+  z-index: 5;
+
+  top: 17px;
+  right: 20px;
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.2
+    );
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.mmics-gallery-lightbox-close:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.16
+    );
+
+  transform:
+    rotate(5deg);
+}
+
+.mmics-gallery-lightbox-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+
+/* ============================================================
+   PREVIOUS / NEXT
+   ============================================================ */
+
+.mmics-gallery-lightbox-prev,
+.mmics-gallery-lightbox-next {
+  position: absolute;
+
+  z-index: 5;
+
+  top: 50%;
+
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  transform:
+    translateY(-50%);
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.18
+    );
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.mmics-gallery-lightbox-prev {
+  left: 18px;
+}
+
+.mmics-gallery-lightbox-next {
+  right: 18px;
+}
+
+.mmics-gallery-lightbox-prev:hover,
+.mmics-gallery-lightbox-next:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.17
+    );
+}
+
+.mmics-gallery-lightbox-prev:hover {
+  transform:
+    translateY(-50%)
+    translateX(-2px);
+}
+
+.mmics-gallery-lightbox-next:hover {
+  transform:
+    translateY(-50%)
+    translateX(2px);
+}
+
+.mmics-gallery-lightbox-prev svg,
+.mmics-gallery-lightbox-next svg {
+  width: 20px;
+  height: 20px;
+}
+
+
+/* ============================================================
+   LIGHTBOX CAPTION
+   ============================================================ */
+
+.mmics-gallery-lightbox-caption {
+  max-width: 700px;
+
+  margin-top: 11px;
+
+  color: #ffffff;
+
+  font-size: 9px;
+
+  line-height: 1.4;
+
+  text-align: center;
+}
+
+
+/* ============================================================
+   LIGHTBOX COUNTER
+   ============================================================ */
+
+.mmics-gallery-lightbox-counter {
+  margin-top: 7px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.45
+    );
+
+  font-size: 7px;
+}
+
+
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 1400px) {
+
+  .mmics-public-gallery-container,
+  .mmics-public-gallery-hero-content {
+    max-width: 1240px;
+  }
+
+  .mmics-gallery-album-cover {
+    height: 270px;
+  }
+
+  .mmics-gallery-album-modal-image {
+    height: 225px;
+  }
+
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+  .mmics-public-gallery-container,
+  .mmics-public-gallery-hero-content {
+    width:
+      calc(100% - 44px);
+  }
+
+  .mmics-public-gallery-hero {
+    min-height: 285px;
+  }
+
+  .mmics-public-gallery-hero-content h1 {
+    font-size: 41px;
+  }
+
+  .mmics-gallery-albums {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .mmics-gallery-album-modal-inner {
+    max-width: 900px;
+  }
+
+  .mmics-gallery-album-modal-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+/* ============================================================
+   SMALL TABLET
+   ============================================================ */
+
+@media (max-width: 760px) {
+
+  .mmics-public-gallery-container,
+  .mmics-public-gallery-hero-content {
+    width:
+      calc(100% - 30px);
+  }
+
+  .mmics-public-gallery-heading {
+    margin-bottom: 35px;
+  }
+
+  .mmics-gallery-albums {
+    gap: 16px;
+  }
+
+  .mmics-gallery-album-cover {
+    height: 220px;
+  }
+
+  .mmics-gallery-album-modal {
+    padding: 20px;
+  }
+
+  .mmics-gallery-album-modal-inner {
+    max-height: 92vh;
+  }
+
+  .mmics-gallery-album-modal-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .mmics-gallery-album-modal-image {
+    height: 190px;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 560px) {
+
+  .mmics-public-gallery-container,
+  .mmics-public-gallery-hero-content {
+    width:
+      calc(100% - 24px);
+  }
+
+
+  /* HERO */
+
+  .mmics-public-gallery-hero {
+    min-height: 270px;
+  }
+
+  .mmics-public-gallery-hero-content {
+    padding:
+      48px 0;
+  }
+
+  .mmics-public-gallery-hero-content h1 {
+    font-size: 35px;
+
+    letter-spacing: -1.2px;
+  }
+
+  .mmics-public-gallery-hero-content p {
+    max-width: 390px;
+
+    font-size: 9px;
+  }
+
+
+  /* SECTION */
+
+  .mmics-public-gallery-section {
+    padding:
+      58px 0 70px;
+  }
+
+  .mmics-public-gallery-heading h2 {
+    font-size: 26px;
+  }
+
+  .mmics-public-gallery-heading p {
+    font-size: 8.5px;
+  }
+
+
+  /* ALBUMS */
+
+  .mmics-gallery-albums {
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+  }
+
+  .mmics-gallery-album-cover {
+    height: 255px;
+  }
+
+  .mmics-gallery-album-content {
+    padding:
+      17px 17px 18px;
+  }
+
+  .mmics-gallery-album-content h3 {
+    font-size: 18px;
+  }
+
+
+  /* ALBUM MODAL */
+
+  .mmics-gallery-album-modal {
+    padding: 10px;
+  }
+
+  .mmics-gallery-album-modal-inner {
+    border-radius: 10px;
+  }
+
+  .mmics-gallery-album-modal-header {
+    padding:
+      19px 17px 17px;
+  }
+
+  .mmics-gallery-album-modal-header h2 {
+    font-size: 21px;
+  }
+
+  .mmics-gallery-album-modal-header p {
+    font-size: 8px;
+  }
+
+  .mmics-gallery-album-close {
+    width: 32px;
+    height: 32px;
+  }
+
+  .mmics-gallery-album-modal-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 7px;
+
+    padding: 12px;
+  }
+
+  .mmics-gallery-album-modal-image {
+    height: 145px;
+
+    border-radius: 5px;
+  }
+
+
+  /* LIGHTBOX */
+
+  .mmics-gallery-lightbox {
+    padding:
+      55px 8px 25px;
+  }
+
+  .mmics-gallery-lightbox-close {
+    top: 11px;
+    right: 11px;
+
+    width: 35px;
+    height: 35px;
+  }
+
+  .mmics-gallery-lightbox-prev,
+  .mmics-gallery-lightbox-next {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mmics-gallery-lightbox-prev {
+    left: 5px;
+  }
+
+  .mmics-gallery-lightbox-next {
+    right: 5px;
+  }
+
+  .mmics-gallery-lightbox-content img {
+    max-height:
+      calc(
+        100vh - 150px
+      );
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 390px) {
+
+  .mmics-public-gallery-hero-content h1 {
+    font-size: 32px;
+  }
+
+  .mmics-gallery-album-cover {
+    height: 225px;
+  }
+
+  .mmics-gallery-album-modal-image {
+    height: 125px;
+  }
+
+}
+
+
+
+
+
