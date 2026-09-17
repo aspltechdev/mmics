@@ -1,5 +1,6 @@
 // client/src/components/home/ContactSection.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import './ContactSection.css';
 
@@ -14,10 +15,15 @@ const ContactSection = () => {
         <p className="contact-cta-desc">
           Whether you need standard packing or a customized solution, our team is ready to help your business grow.
         </p>
-        <button className="btn-primary">Contact Us <ArrowRight size={18} /></button>
+        <Link to="/contact" className="btn-primary">
+          Contact Us <ArrowRight size={18} />
+        </Link>
       </div>
       <div className="contact-cta-image">
-        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Contact MMMICS" />
+        <img
+          src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+          alt="Contact MMMICS"
+        />
       </div>
     </section>
   );

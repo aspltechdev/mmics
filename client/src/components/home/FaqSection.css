@@ -64,10 +64,5 @@
   line-height: 1.6;
 }
 
-.faq-icon {
-  transition: transform 0.3s;
-}
-
-.faq-item.active .faq-icon {
-  transform: rotate(180deg);
-}
+.faq-icon { transition: transform 0.3s; }
+.faq-item.active .faq-icon { transform: rotate(180deg); }

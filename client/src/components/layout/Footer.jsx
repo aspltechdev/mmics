@@ -1,7 +1,7 @@
 // client/src/components/layout/Footer.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../../assets/mmics-logo.png'; // <-- IMPORT YOUR LOGO HERE
+import logo from '../../assets/mmics-logo.png';
 import './Footer.css';
 
 const Footer = () => {
@@ -10,7 +10,6 @@ const Footer = () => {
       <div className="footer-container">
         <div className="footer-col brand">
           <div className="footer-brand-header">
-            {/* Using the imported logo */}
             <img src={logo} alt="MMMICS Logo" />
           </div>
           <p className="footer-desc">
@@ -49,12 +48,12 @@ const Footer = () => {
 
         <div className="footer-col footer-contact">
           <h4>Contact</h4>
-          <p>#211, Sri Ganapathi Nagar Colony,<br/>
-          Salarapattinam, Maramalai Nagar, Chengapattu,<br/>
-          Tamil Nadu - 603 209, India.</p>
-          <p>Phone: +91 98402 77476<br/>
-          +91 94435 54370<br/>
-          +91 88706 66471</p>
+          <p>#211, Sri Ganapathi Nagar Colony,<br />
+            Salarapattinam, Maramalai Nagar, Chengapattu,<br />
+            Tamil Nadu - 603 209, India.</p>
+          <p>Phone: +91 98402 77476<br />
+            +91 94435 54370<br />
+            +91 88706 66471</p>
           <p>Email: mmmicslimited@gmail.com</p>
         </div>
       </div>
@@ -62,8 +61,8 @@ const Footer = () => {
       <div className="footer-bottom">
         <div>© 2026 MMMICS Limited. All Rights Reserved.</div>
         <div className="footer-bottom-links">
-          <Link to="/privacy">Privacy Policy</Link>
-          <Link to="/terms">Terms & Conditions</Link>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
         </div>
       </div>
     </footer>

@@ -25,10 +25,6 @@
 }
 
 @media (max-width: 768px) {
-  .certifications-section {
-    gap: 20px;
-  }
-  .cert-logo {
-    height: 60px;
-  }
+  .certifications-section { gap: 20px; }
+  .cert-logo { height: 60px; }
 }

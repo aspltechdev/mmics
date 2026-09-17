@@ -1,31 +1,14 @@
 // client/src/components/home/CustomizationSection.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import './CustomizationSection.css';
 
 const CustomizationSection = () => {
   const customizations = [
-    {
-      id: 1,
-      tag: 'BRAND PRINTING',
-      title: 'Make Your Brand Stand Out',
-      desc: 'Add your logo, branding and artwork to selected packaging solutions.',
-      img: 'https://images.unsplash.com/photo-1595079676339-1534801ad6cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-    },
-    {
-      id: 2,
-      tag: 'BRAND PRINTING',
-      title: 'Make Your Brand Stand Out',
-      desc: 'Add your logo, branding and artwork to selected packaging solutions.',
-      img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-    },
-    {
-      id: 3,
-      tag: 'BULK REQUIREMENTS',
-      title: 'Built for Business Needs',
-      desc: 'Flexible supply options for recurring, bulk and business packaging requirements.',
-      img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
-    }
+    { id: 1, tag: 'BRAND PRINTING', title: 'Make Your Brand Stand Out', desc: 'Add your logo, branding and artwork to selected packaging solutions.', img: 'https://images.unsplash.com/photo-1595079676339-1534801ad6cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80' },
+    { id: 2, tag: 'BRAND PRINTING', title: 'Make Your Brand Stand Out', desc: 'Add your logo, branding and artwork to selected packaging solutions.', img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80' },
+    { id: 3, tag: 'BULK REQUIREMENTS', title: 'Built for Business Needs', desc: 'Flexible supply options for recurring, bulk and business packaging requirements.', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80' },
   ];
 
   return (
@@ -49,7 +32,9 @@ const CustomizationSection = () => {
           </div>
         ))}
       </div>
-      <button className="btn-primary">Request a Quote <ArrowRight size={18} /></button>
+      <Link to="/contact" className="btn-primary">
+        Request a Quote <ArrowRight size={18} />
+      </Link>
     </section>
   );
 };

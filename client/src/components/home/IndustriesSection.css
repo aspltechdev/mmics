@@ -8,9 +8,7 @@
   gap: 60px;
 }
 
-.industries-content {
-  flex: 1;
-}
+.industries-content { flex: 1; }
 
 .industries-label {
   color: #1e3a8a;
@@ -30,9 +28,7 @@
   margin-bottom: 20px;
 }
 
-.industries-title .highlight {
-  color: #f97316;
-}
+.industries-title .highlight { color: #f97316; }
 
 .industries-desc {
   font-size: 16px;
@@ -41,12 +37,29 @@
   margin-bottom: 30px;
 }
 
+.industries-content .btn-primary {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.industries-content .btn-primary:hover { background-color: #152c6b; }
+
 .industries-carousel {
   flex: 1;
   display: flex;
   gap: 20px;
   overflow-x: auto;
   padding-bottom: 10px;
+  position: relative;
 }
 
 .industry-card {
@@ -101,10 +114,6 @@
 .arrow-btn.right { right: 10px; }
 
 @media (max-width: 1024px) {
-  .industries-section {
-    flex-direction: column;
-  }
-  .industries-carousel {
-    width: 100%;
-  }
+  .industries-section { flex-direction: column; }
+  .industries-carousel { width: 100%; }
 }

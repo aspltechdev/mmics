@@ -1,5 +1,6 @@
 // client/src/components/home/ProductSection.jsx
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import productService from '../../services/productService';
 import './ProductSection.css';
@@ -9,13 +10,12 @@ const ProductSection = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('All');
 
-  // Base URL for images
-  const serverBaseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
+  const serverBaseUrl =
+    import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Only fetch ACTIVE products for the public site
         const data = await productService.getAll({ status: 'ACTIVE' });
         setProducts(data.products || []);
       } catch (error) {
@@ -27,17 +27,13 @@ const ProductSection = () => {
     fetchProducts();
   }, []);
 
-  // Filter logic
-  const displayedProducts = activeTab === 'All'
-    ? products
-    : products.filter(p => p.isBestSeller); // If you add a bestseller field later
+  const displayedProducts = activeTab === 'All' ? products : products;
 
-  // Helper to find primary image
   const getPrimaryImage = (product) => {
     if (!product.images || product.images.length === 0) {
       return 'https://via.placeholder.com/300x200?text=No+Image';
     }
-    const primary = product.images.find(img => img.isPrimary);
+    const primary = product.images.find((img) => img.isPrimary);
     return `${serverBaseUrl}${(primary || product.images[0]).imageUrl}`;
   };
 
@@ -55,11 +51,15 @@ const ProductSection = () => {
         <button
           className={`tab-btn ${activeTab === 'All' ? 'active' : ''}`}
           onClick={() => setActiveTab('All')}
-        >All</button>
+        >
+          All
+        </button>
         <button
           className={`tab-btn ${activeTab === 'Best Seller' ? 'active' : ''}`}
           onClick={() => setActiveTab('Best Seller')}
-        >Best Seller</button>
+        >
+          Best Seller
+        </button>
       </div>
 
       {loading ? (
@@ -71,10 +71,14 @@ const ProductSection = () => {
               <img src={getPrimaryImage(product)} alt={product.name} />
               <div className="product-card-content">
                 <h3>{product.name}</h3>
-                <p>{product.description ? product.description.substring(0, 90) + '...' : 'No description available.'}</p>
-                <a href={`/products/${product.slug}`} className="product-link">
+                <p>
+                  {product.description
+                    ? product.description.substring(0, 90) + '...'
+                    : 'No description available.'}
+                </p>
+                <Link to={`/products/${product.slug}`} className="product-link">
                   Explore {product.name} <ArrowRight size={14} />
-                </a>
+                </Link>
               </div>
             </div>
           ))}
@@ -87,7 +91,9 @@ const ProductSection = () => {
       )}
 
       <div className="products-cta">
-        <a href="/products" className="btn-primary">See All Products <ArrowRight size={18} /></a>
+        <Link to="/products" className="btn-primary">
+          See All Products <ArrowRight size={18} />
+        </Link>
       </div>
     </section>
   );

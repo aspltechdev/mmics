@@ -3,51 +3,50 @@
   background-color: #f97316; /* Orange */
   color: white;
   font-family: 'Inter', sans-serif;
-  padding-top: 60px;
+  padding-top: 70px;
 }
 
 .footer-container {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding: 0 5% 40px;
-  gap: 40px;
+  padding: 0 6% 60px;      /* increased bottom padding */
+  gap: 50px;               /* increased column gap */
 }
 
 .footer-col {
   flex: 1;
-  min-width: 200px;
+  min-width: 220px;        /* slightly wider min-width */
 }
 
 .footer-col.brand {
-  flex: 1.5;
+  flex: 1.6;               /* slightly wider brand column */
 }
 
 .footer-brand-header {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;     /* increased from 24px */
 }
 
 .footer-brand-header img {
-  height: 60px;
+  height: 110px;           /* increased from 70px — bigger logo */
   width: auto;
-  /* Removed background/border-radius if the new logo has its own background */
-  background: white; 
-  border-radius: 50%;
-  padding: 5px;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .footer-desc {
-  font-size: 14px;
-  line-height: 1.6;
-  opacity: 0.9;
+  font-size: 15px;         /* slightly bigger */
+  line-height: 1.7;
+  opacity: 0.95;
+  max-width: 420px;
 }
 
 .footer-col h4 {
-  font-size: 18px;
-  margin-bottom: 20px;
+  font-size: 20px;         /* bigger heading */
+  margin-bottom: 24px;     /* more spacing below heading */
   font-weight: 600;
 }
 
@@ -58,8 +57,8 @@
 }
 
 .footer-col ul li {
-  margin-bottom: 10px;
-  font-size: 14px;
+  margin-bottom: 12px;     /* more spacing between items */
+  font-size: 15px;         /* bigger list font */
 }
 
 .footer-col ul li a {
@@ -75,25 +74,42 @@
 }
 
 .footer-contact p {
-  font-size: 14px;
-  margin-bottom: 10px;
-  line-height: 1.5;
+  font-size: 15px;         /* bigger */
+  margin-bottom: 12px;
+  line-height: 1.6;
 }
 
 .footer-bottom {
-  background-color: #1e3a8a; /* Dark Blue */
-  padding: 15px 5%;
+  background-color: #1e3a8a;
+  padding: 18px 6%;        /* slightly taller bar */
   display: flex;
   justify-content: space-between;
-  font-size: 13px;
+  align-items: center;
+  font-size: 14px;         /* bigger footer-bottom text */
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .footer-bottom-links {
   display: flex;
-  gap: 20px;
+  gap: 25px;
 }
 
 .footer-bottom-links a {
   color: white;
   text-decoration: none;
+}
+
+.footer-bottom-links a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .footer-brand-header img {
+    height: 80px;          /* still big on mobile */
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
 }

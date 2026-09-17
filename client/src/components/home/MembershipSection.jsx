@@ -1,5 +1,6 @@
 // client/src/components/home/MembershipSection.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import './MembershipSection.css';
 
@@ -13,7 +14,9 @@ const MembershipSection = () => {
       <p className="membership-desc">
         Be part of a cooperative community working towards shared growth and opportunity.
       </p>
-      <button className="btn-white">Explore Membership <ArrowRight size={18} /></button>
+      <Link to="/about" className="btn-white">
+        Explore Membership <ArrowRight size={18} />
+      </Link>
     </section>
   );
 };

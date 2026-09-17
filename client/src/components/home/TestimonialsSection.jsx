@@ -5,30 +5,9 @@ import './TestimonialsSection.css';
 
 const TestimonialsSection = () => {
   const testimonials = [
-    {
-      id: 1,
-      name: 'Customer Name',
-      company: 'Company',
-      text: 'Knowledge becomes wisdom through experience. Small changes can lead to remarkable results. Every challenge presents an opportunity for growth. The sun cast long shadows across the quiet street. The best solutions often come from collaboration.',
-      img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80',
-      active: false
-    },
-    {
-      id: 2,
-      name: 'Customer Name',
-      company: 'Company',
-      text: 'Knowledge becomes wisdom through experience. Small changes can lead to remarkable results. Every challenge presents an opportunity for growth. The sun cast long shadows across the quiet street. The best solutions often come from collaboration.',
-      img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80',
-      active: true
-    },
-    {
-      id: 3,
-      name: 'Customer Name',
-      company: 'Company',
-      text: 'Knowledge becomes wisdom through experience. Small changes can lead to remarkable results. Every challenge presents an opportunity for growth. The sun cast long shadows across the quiet street. The best solutions often come from collaboration.',
-      img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80',
-      active: false
-    }
+    { id: 1, name: 'Customer Name', company: 'Company', text: 'Knowledge becomes wisdom through experience. Small changes can lead to remarkable results. Every challenge presents an opportunity for growth.', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80', active: false },
+    { id: 2, name: 'Customer Name', company: 'Company', text: 'Every challenge presents an opportunity for growth. The best solutions often come from collaboration. Small changes lead to remarkable results.', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80', active: true },
+    { id: 3, name: 'Customer Name', company: 'Company', text: 'The best solutions often come from collaboration. Knowledge becomes wisdom through experience. Small changes can lead to remarkable results.', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80', active: false },
   ];
 
   return (

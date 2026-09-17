@@ -23,9 +23,7 @@
   margin-bottom: 15px;
 }
 
-.custom-title .highlight {
-  color: #f97316;
-}
+.custom-title .highlight { color: #f97316; }
 
 .custom-subtitle {
   font-size: 16px;
@@ -58,9 +56,7 @@
   object-fit: cover;
 }
 
-.custom-card-content {
-  padding: 24px;
-}
+.custom-card-content { padding: 24px; }
 
 .custom-tag {
   display: inline-block;
@@ -87,13 +83,25 @@
   line-height: 1.5;
 }
 
+.custom-section .btn-primary {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.custom-section .btn-primary:hover { background-color: #152c6b; }
+
 @media (max-width: 1024px) {
-  .custom-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+  .custom-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 600px) {
-  .custom-grid {
-    grid-template-columns: 1fr;
-  }
+  .custom-grid { grid-template-columns: 1fr; }
 }

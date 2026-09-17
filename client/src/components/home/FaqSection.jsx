@@ -8,10 +8,10 @@ const FaqSection = () => {
 
   const faqs = [
     { q: 'What products does MMMICS offer?', a: 'MMMICS offers a diverse range of packaging, eco-friendly and industrial products, including corrugated boxes, PP woven sacks, paper cups, jute products, pallets, plastic crates and more.' },
-    { q: 'Do you handle bulk orders?', a: 'Yes, we specialize in handling bulk and recurring orders for businesses and industries. Please contact us for specific bulk pricing.' },
-    { q: 'Can I request a quotation?', a: 'Absolutely. You can request a quote by clicking the "Request a Quote" button or by contacting us directly via email or phone.' },
+    { q: 'Do you handle bulk orders?', a: 'Yes, we specialize in handling bulk and recurring orders for businesses and industries.' },
+    { q: 'Can I request a quotation?', a: 'Absolutely. You can request a quote by clicking the Request a Quote button or contacting us directly.' },
     { q: 'Do you offer eco-friendly products?', a: 'Yes, sustainability is a core focus. We offer a range of eco-friendly packaging alternatives including biodegradable and recyclable options.' },
-    { q: 'Can products be customized?', a: 'Yes, many of our products can be customized in terms of size, material, and branding. Please discuss your specific requirements with our team.' },
+    { q: 'Can products be customized?', a: 'Yes, many of our products can be customized in terms of size, material, and branding.' },
     { q: 'Which industries do you serve?', a: 'We serve a wide range of industries including Food & Beverage, Agriculture, Retail & E-Commerce, Manufacturing, and Logistics.' },
   ];
 
@@ -30,9 +30,7 @@ const FaqSection = () => {
               {faq.q}
               <ChevronDown size={20} className="faq-icon" />
             </div>
-            {openIndex === idx && (
-              <div className="faq-answer">{faq.a}</div>
-            )}
+            {openIndex === idx && <div className="faq-answer">{faq.a}</div>}
           </div>
         ))}
       </div>

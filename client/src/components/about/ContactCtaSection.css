@@ -1,0 +1,79 @@
+/* client/src/components/about/ContactCtaSection.css */
+.about-cta {
+  position: relative;
+  padding: 100px 5%;
+  background-size: cover;
+  background-position: center;
+  background-color: #1e3a8a;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  color: white;
+  overflow: hidden;
+}
+
+.about-cta-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.85) 0%, rgba(30, 58, 138, 0.7) 100%);
+  z-index: 1;
+}
+
+.about-cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.about-cta-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #e2e8f0;
+  margin-bottom: 16px;
+}
+
+.about-cta-title {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 18px 0;
+  letter-spacing: -0.5px;
+}
+
+.about-cta-title .highlight {
+  color: #f97316;
+}
+
+.about-cta-desc {
+  font-size: 16px;
+  line-height: 1.65;
+  color: #e2e8f0;
+  margin: 0 auto 30px;
+  max-width: 540px;
+}
+
+.btn-white {
+  background-color: white;
+  color: #0f172a;
+  padding: 14px 30px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.btn-white:hover {
+  background-color: #f1f5f9;
+}
+
+@media (max-width: 768px) {
+  .about-cta-title { font-size: 32px; }
+  .about-cta { padding: 70px 5%; }
+}

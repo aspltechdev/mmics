@@ -1,5 +1,6 @@
 // client/src/components/home/ProcessSection.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FileEdit, Lightbulb, CheckCircle, Truck, ArrowRight } from 'lucide-react';
 import './ProcessSection.css';
 
@@ -27,7 +28,9 @@ const ProcessSection = () => {
           </div>
         ))}
       </div>
-      <button className="btn-primary">Request a Quote <ArrowRight size={18} /></button>
+      <Link to="/contact" className="btn-primary">
+        Request a Quote <ArrowRight size={18} />
+      </Link>
     </section>
   );
 };

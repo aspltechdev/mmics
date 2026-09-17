@@ -1,5 +1,6 @@
 // client/src/components/home/IndustriesSection.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import './IndustriesSection.css';
 
@@ -20,7 +21,9 @@ const IndustriesSection = () => {
         <p className="industries-desc">
           Every industry has different requirements. Our product range helps businesses address their packaging, handling and operational needs.
         </p>
-        <button className="btn-primary">See All Products <ArrowRight size={18} /></button>
+        <Link to="/products" className="btn-primary">
+          See All Products <ArrowRight size={18} />
+        </Link>
       </div>
       <div className="industries-carousel">
         <button className="arrow-btn left"><ChevronLeft size={20} /></button>
