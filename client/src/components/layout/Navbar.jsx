@@ -93,9 +93,9 @@ const Navbar = () => {
           </Link>
 
           <Link
-            to="/membership"
+            to="/members"
             className={
-              location.pathname === '/membership' ? 'active' : ''
+              location.pathname === '/members' ? 'active' : ''
             }
           >
             Membership

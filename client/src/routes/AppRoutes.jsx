@@ -25,6 +25,8 @@ import Products from "../pages/public/Products";
 import ProductDetails from "../pages/public/ProductDetails";
 import Gallery from "../pages/public/Gallery";
 import Contact from "../pages/public/Contact";
+import MemberDashboard from "../pages/member/Dashboard";
+import Profile from "../pages/member/Profile";
 
 const AppRoutes = () => {
   return (
@@ -89,12 +91,12 @@ const AppRoutes = () => {
       >
         <Route
           path="/member"
-          element={<div>Member Dashboard</div>}
+          element={<MemberDashboard/>}
         />
 
         <Route
           path="/member/profile"
-          element={<div>Member Profile</div>}
+          element={<Profile/>}
         />
       </Route>
 

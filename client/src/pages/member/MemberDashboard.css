@@ -1,0 +1,877 @@
+/* =========================================================
+   MMICS MEMBER DASHBOARD
+   ========================================================= */
+
+.mmics-member-dashboard {
+  width: 100%;
+  min-height: 100vh;
+  padding: 34px;
+  box-sizing: border-box;
+  background: #f7f8fa;
+  color: #202020;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.mmics-member-dashboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 25px;
+}
+
+.mmics-member-dashboard-eyebrow {
+  display: block;
+  margin-bottom: 9px;
+  color: #2f5d91;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.mmics-member-dashboard-header h1 {
+  margin: 0;
+  color: #202020;
+  font-size: 31px;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+
+.mmics-member-dashboard-header h1 strong {
+  color: #ff6900;
+  font-weight: 500;
+}
+
+.mmics-member-dashboard-header p {
+  margin: 9px 0 0;
+  color: #7d7d7d;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.mmics-member-dashboard-edit-button {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 0 16px;
+  border: 1px solid #e4e6e8;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #2f5d91;
+  font-size: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.mmics-member-dashboard-edit-button:hover {
+  border-color: #2f5d91;
+  background: #2f5d91;
+  color: #ffffff;
+}
+
+/* =========================================================
+   PROFILE HERO CARD
+   ========================================================= */
+
+.mmics-member-dashboard-profile-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  min-height: 145px;
+  margin-bottom: 18px;
+  padding: 27px 30px;
+  overflow: hidden;
+  border: 1px solid #e7e8e9;
+  border-radius: 10px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.mmics-member-dashboard-profile-card::after {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  right: -95px;
+  top: -120px;
+  border-radius: 50%;
+  background: rgba(255, 105, 0, 0.055);
+  pointer-events: none;
+}
+
+.mmics-member-dashboard-profile-left {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.mmics-member-dashboard-avatar {
+  flex-shrink: 0;
+  width: 86px;
+  height: 86px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #f1f4f7;
+  border-radius: 50%;
+  background: #2f5d91;
+}
+
+.mmics-member-dashboard-avatar img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.mmics-member-dashboard-avatar span {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.mmics-member-dashboard-profile-info {
+  min-width: 0;
+}
+
+.mmics-member-dashboard-profile-info > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #ff6900;
+  font-size: 6px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.mmics-member-dashboard-profile-info h2 {
+  margin: 0;
+  overflow: hidden;
+  color: #202020;
+  font-size: 23px;
+  line-height: 1.2;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mmics-member-dashboard-profile-info p {
+  margin: 5px 0 0;
+  color: #777777;
+  font-size: 8px;
+}
+
+.mmics-member-dashboard-member-id {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+  color: #888888;
+  font-size: 7px;
+}
+
+.mmics-member-dashboard-member-id svg {
+  color: #2f5d91;
+}
+
+.mmics-member-dashboard-member-id strong {
+  color: #303030;
+  font-weight: 700;
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.mmics-member-dashboard-status {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.mmics-member-dashboard-status.active {
+  background: #edf8f1;
+  color: #21834a;
+}
+
+.mmics-member-dashboard-status.inactive {
+  background: #f5f5f5;
+  color: #777777;
+}
+
+.mmics-member-dashboard-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.mmics-member-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.mmics-member-dashboard-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 82px;
+  padding: 17px;
+  border: 1px solid #e7e8e9;
+  border-radius: 9px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.mmics-member-dashboard-stat-icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.mmics-member-dashboard-stat-icon.blue {
+  background: #edf4fb;
+  color: #2f5d91;
+}
+
+.mmics-member-dashboard-stat-icon.orange {
+  background: #fff2e8;
+  color: #ff6900;
+}
+
+.mmics-member-dashboard-stat-icon.green {
+  background: #edf8f1;
+  color: #21834a;
+}
+
+.mmics-member-dashboard-stat-card span {
+  display: block;
+  margin-bottom: 5px;
+  color: #8b8b8b;
+  font-size: 7px;
+  line-height: 1.2;
+}
+
+.mmics-member-dashboard-stat-card strong {
+  display: block;
+  overflow: hidden;
+  color: #282828;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   MAIN GRID
+   ========================================================= */
+
+.mmics-member-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(290px, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.mmics-member-dashboard-panel {
+  min-width: 0;
+  padding: 23px;
+  border: 1px solid #e7e8e9;
+  border-radius: 9px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.mmics-member-dashboard-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 21px;
+}
+
+.mmics-member-dashboard-panel-header span {
+  display: block;
+  margin-bottom: 6px;
+  color: #2f5d91;
+  font-size: 6px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.mmics-member-dashboard-panel-header h3 {
+  margin: 0;
+  color: #252525;
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.mmics-member-dashboard-panel-header > a {
+  width: 29px;
+  height: 29px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e7e7e7;
+  border-radius: 5px;
+  color: #2f5d91;
+  background: #ffffff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.mmics-member-dashboard-panel-header > a:hover {
+  border-color: #2f5d91;
+  background: #2f5d91;
+  color: #ffffff;
+}
+
+/* =========================================================
+   PERSONAL DETAILS
+   ========================================================= */
+
+.mmics-member-dashboard-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+}
+
+.mmics-member-dashboard-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  min-width: 0;
+  padding: 15px 10px;
+  border-top: 1px solid #eeeeee;
+}
+
+.mmics-member-dashboard-detail:nth-child(odd) {
+  padding-left: 0;
+  border-right: 1px solid #eeeeee;
+}
+
+.mmics-member-dashboard-detail:nth-child(even) {
+  padding-right: 0;
+  padding-left: 18px;
+}
+
+.mmics-member-dashboard-detail.full {
+  grid-column: 1 / -1;
+  padding-right: 0;
+  padding-left: 0;
+  border-right: 0;
+}
+
+.mmics-member-dashboard-detail .detail-icon {
+  width: 29px;
+  height: 29px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: #f2f5f8;
+  color: #2f5d91;
+}
+
+.mmics-member-dashboard-detail > div:last-child {
+  min-width: 0;
+}
+
+.mmics-member-dashboard-detail span {
+  display: block;
+  margin-bottom: 4px;
+  color: #929292;
+  font-size: 7px;
+}
+
+.mmics-member-dashboard-detail strong {
+  display: block;
+  overflow: hidden;
+  color: #333333;
+  font-size: 9px;
+  line-height: 1.4;
+  font-weight: 600;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   PROFILE COMPLETION
+   ========================================================= */
+
+.mmics-member-dashboard-completion {
+  display: flex;
+  flex-direction: column;
+}
+
+.mmics-member-dashboard-completion-percent {
+  color: #ff6900;
+  font-size: 21px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.mmics-member-dashboard-progress {
+  width: 100%;
+  height: 5px;
+  overflow: hidden;
+  margin-bottom: 23px;
+  border-radius: 10px;
+  background: #edf0f2;
+}
+
+.mmics-member-dashboard-progress span {
+  display: block;
+  height: 100%;
+  min-width: 4px;
+  border-radius: inherit;
+  background: #ff6900;
+  transition: width 0.5s ease;
+}
+
+.mmics-member-dashboard-completion-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 17px;
+  border-radius: 8px;
+  background: #f7f9fa;
+}
+
+.completion-check {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff0e6;
+  color: #ff6900;
+}
+
+.mmics-member-dashboard-completion-content strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #303030;
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+.mmics-member-dashboard-completion-content p {
+  margin: 0;
+  color: #808080;
+  font-size: 7.5px;
+  line-height: 1.55;
+}
+
+.mmics-member-dashboard-completion-content a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  color: #2f5d91;
+  font-size: 7px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.mmics-member-dashboard-completion-content a:hover {
+  color: #ff6900;
+}
+
+/* =========================================================
+   QUICK SECTION
+   ========================================================= */
+
+.mmics-member-dashboard-quick-section {
+  padding: 23px;
+  border: 1px solid #e7e8e9;
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+.mmics-member-dashboard-section-heading {
+  margin-bottom: 19px;
+}
+
+.mmics-member-dashboard-section-heading span {
+  display: block;
+  margin-bottom: 6px;
+  color: #2f5d91;
+  font-size: 6px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.mmics-member-dashboard-section-heading h3 {
+  margin: 0;
+  color: #252525;
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.mmics-member-dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mmics-member-dashboard-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid #eeeeee;
+  border-radius: 7px;
+  background: #ffffff;
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.mmics-member-dashboard-action:hover {
+  transform: translateY(-2px);
+  border-color: #d9dfe5;
+  box-shadow: 0 8px 25px rgba(20, 40, 60, 0.07);
+}
+
+.mmics-member-dashboard-action .action-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+}
+
+.mmics-member-dashboard-action .action-icon.blue {
+  background: #edf4fb;
+  color: #2f5d91;
+}
+
+.mmics-member-dashboard-action .action-icon.orange {
+  background: #fff2e8;
+  color: #ff6900;
+}
+
+.mmics-member-dashboard-action > div:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
+
+.mmics-member-dashboard-action strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #303030;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.mmics-member-dashboard-action span {
+  display: block;
+  overflow: hidden;
+  color: #898989;
+  font-size: 7px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mmics-member-dashboard-action > svg {
+  flex-shrink: 0;
+  color: #a0a0a0;
+  transition: transform 0.2s ease;
+}
+
+.mmics-member-dashboard-action:hover > svg {
+  color: #ff6900;
+  transform: translateX(3px);
+}
+
+/* =========================================================
+   LOADING / ERROR
+   ========================================================= */
+
+.mmics-member-dashboard-state {
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 40px;
+  box-sizing: border-box;
+  background: #f7f8fa;
+  color: #888888;
+  text-align: center;
+}
+
+.mmics-member-dashboard-state h3 {
+  margin: 3px 0 0;
+  color: #333333;
+  font-size: 15px;
+}
+
+.mmics-member-dashboard-state p {
+  max-width: 350px;
+  margin: 0;
+  color: #888888;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.mmics-member-dashboard-spinner {
+  color: #2f5d91;
+  animation: mmicsMemberSpin 0.8s linear infinite;
+}
+
+@keyframes mmicsMemberSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mmics-member-dashboard-error-icon {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff1e8;
+  color: #ff6900;
+}
+
+.mmics-member-dashboard-retry {
+  min-height: 32px;
+  margin-top: 7px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 5px;
+  background: #2f5d91;
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* =========================================================
+   1200
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .mmics-member-dashboard {
+    padding: 28px;
+  }
+
+  .mmics-member-dashboard-grid {
+    grid-template-columns: minmax(0, 1.4fr) minmax(270px, 1fr);
+  }
+}
+
+/* =========================================================
+   900
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .mmics-member-dashboard {
+    padding: 22px;
+  }
+
+  .mmics-member-dashboard-header h1 {
+    font-size: 28px;
+  }
+
+  .mmics-member-dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .mmics-member-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   700
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .mmics-member-dashboard {
+    padding: 18px;
+  }
+
+  .mmics-member-dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .mmics-member-dashboard-edit-button {
+    width: 100%;
+  }
+
+  .mmics-member-dashboard-profile-card {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 22px;
+  }
+
+  .mmics-member-dashboard-profile-left {
+    width: 100%;
+  }
+
+  .mmics-member-dashboard-status {
+    align-self: flex-start;
+  }
+
+  .mmics-member-dashboard-details {
+    grid-template-columns: 1fr;
+  }
+
+  .mmics-member-dashboard-detail {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-right: 0 !important;
+  }
+
+  .mmics-member-dashboard-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   500
+   ========================================================= */
+
+@media (max-width: 500px) {
+  .mmics-member-dashboard {
+    padding: 14px;
+  }
+
+  .mmics-member-dashboard-header h1 {
+    font-size: 25px;
+  }
+
+  .mmics-member-dashboard-header p {
+    font-size: 8.5px;
+  }
+
+  .mmics-member-dashboard-profile-card {
+    padding: 19px;
+  }
+
+  .mmics-member-dashboard-profile-left {
+    align-items: flex-start;
+  }
+
+  .mmics-member-dashboard-avatar {
+    width: 70px;
+    height: 70px;
+  }
+
+  .mmics-member-dashboard-avatar span {
+    font-size: 20px;
+  }
+
+  .mmics-member-dashboard-profile-info h2 {
+    font-size: 19px;
+  }
+
+  .mmics-member-dashboard-panel,
+  .mmics-member-dashboard-quick-section {
+    padding: 18px;
+  }
+
+  .mmics-member-dashboard-stat-card {
+    min-height: 75px;
+  }
+
+  .mmics-member-dashboard-action {
+    padding: 13px;
+  }
+}
+
+/* =========================================================
+   380
+   ========================================================= */
+
+@media (max-width: 380px) {
+  .mmics-member-dashboard {
+    padding: 11px;
+  }
+
+  .mmics-member-dashboard-header h1 {
+    font-size: 23px;
+  }
+
+  .mmics-member-dashboard-profile-left {
+    gap: 12px;
+  }
+
+  .mmics-member-dashboard-avatar {
+    width: 62px;
+    height: 62px;
+  }
+
+  .mmics-member-dashboard-profile-info h2 {
+    font-size: 17px;
+  }
+
+  .mmics-member-dashboard-member-id {
+    font-size: 6.5px;
+  }
+}

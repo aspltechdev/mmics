@@ -1,0 +1,1433 @@
+/* ============================================================
+   MMICS MEMBERS PAGE
+   ============================================================ */
+
+.mmics-members-page {
+  width: 100%;
+
+  min-height: 100vh;
+
+  background: #ffffff;
+
+  color: #111111;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+
+/* ============================================================
+   CONTAINER
+   ============================================================ */
+
+.mmics-members-container {
+  width:
+    calc(100% - 60px);
+
+  max-width: 1180px;
+
+  margin: 0 auto;
+}
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.mmics-members-hero {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 315px;
+
+  overflow: hidden;
+
+  display: flex;
+
+  align-items: center;
+
+  background:
+    linear-gradient(
+      110deg,
+      #f4f7fa 0%,
+      #ffffff 55%,
+      #fff4eb 100%
+    );
+}
+
+
+/* subtle background shapes */
+
+.mmics-members-hero::before {
+  content: "";
+
+  position: absolute;
+
+  width: 400px;
+  height: 400px;
+
+  right: -120px;
+  top: -160px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      105,
+      0,
+      0.06
+    );
+}
+
+.mmics-members-hero::after {
+  content: "";
+
+  position: absolute;
+
+  width: 280px;
+  height: 280px;
+
+  left: -130px;
+  bottom: -160px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      49,
+      93,
+      148,
+      0.06
+    );
+}
+
+
+/* ============================================================
+   HERO CONTENT
+   ============================================================ */
+
+.mmics-members-hero-content {
+  position: relative;
+
+  z-index: 2;
+
+  width:
+    calc(100% - 60px);
+
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  padding:
+    55px 0;
+}
+
+
+/* ============================================================
+   HERO KICKER
+   ============================================================ */
+
+.mmics-members-hero-kicker {
+  display: block;
+
+  margin-bottom: 13px;
+
+  color: #2f5d91;
+
+  font-size: 8px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  letter-spacing: 0.7px;
+}
+
+
+/* ============================================================
+   HERO TITLE
+   ============================================================ */
+
+.mmics-members-hero-content h1 {
+  margin: 0;
+
+  color: #111111;
+
+  font-size: 46px;
+
+  line-height: 1.03;
+
+  font-weight: 500;
+
+  letter-spacing: -1.6px;
+}
+
+.mmics-members-hero-content h1 strong {
+  color: #ff6900;
+
+  font-weight: 500;
+}
+
+
+/* ============================================================
+   HERO DESCRIPTION
+   ============================================================ */
+
+.mmics-members-hero-content p {
+  max-width: 470px;
+
+  margin:
+    17px 0 0;
+
+  color: #6d6d6d;
+
+  font-size: 10px;
+
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   MEMBERS SECTION
+   ============================================================ */
+
+.mmics-members-section {
+  width: 100%;
+
+  padding:
+    76px 0 88px;
+
+  background: #ffffff;
+}
+
+
+/* ============================================================
+   HEADING
+   ============================================================ */
+
+.mmics-members-heading {
+  max-width: 700px;
+
+  margin:
+    0 auto 32px;
+
+  text-align: center;
+}
+
+.mmics-members-heading > span {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: #2f5d91;
+
+  font-size: 7px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  letter-spacing: 0.6px;
+}
+
+.mmics-members-heading h2 {
+  margin: 0;
+
+  color: #111111;
+
+  font-size: 28px;
+
+  line-height: 1.1;
+
+  font-weight: 500;
+
+  letter-spacing: -0.7px;
+}
+
+.mmics-members-heading h2 strong {
+  color: #ff6900;
+
+  font-weight: 500;
+}
+
+.mmics-members-heading p {
+  max-width: 540px;
+
+  margin:
+    11px auto 0;
+
+  color: #7a7a7a;
+
+  font-size: 9px;
+
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   TOOLBAR
+   ============================================================ */
+
+.mmics-members-toolbar {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 13px;
+}
+
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+.mmics-members-search {
+  position: relative;
+
+  flex: 1;
+
+  max-width: 430px;
+}
+
+.mmics-members-search > svg {
+  position: absolute;
+
+  left: 14px;
+
+  top: 50%;
+
+  width: 16px;
+  height: 16px;
+
+  transform:
+    translateY(-50%);
+
+  color: #929292;
+
+  pointer-events: none;
+}
+
+.mmics-members-search input {
+  width: 100%;
+
+  height: 42px;
+
+  box-sizing: border-box;
+
+  padding:
+    0 42px;
+
+  border:
+    1px solid #e0e3e6;
+
+  border-radius: 7px;
+
+  outline: none;
+
+  background: #fafafa;
+
+  color: #222222;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 10px;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.mmics-members-search input:focus {
+  border-color: #2f5d91;
+
+  background: #ffffff;
+}
+
+.mmics-members-search input::placeholder {
+  color: #aaaaaa;
+}
+
+
+/* ============================================================
+   CLEAR SEARCH
+   ============================================================ */
+
+.mmics-members-search button {
+  position: absolute;
+
+  right: 9px;
+
+  top: 50%;
+
+  width: 24px;
+  height: 24px;
+
+  transform:
+    translateY(-50%);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #888888;
+
+  cursor: pointer;
+}
+
+.mmics-members-search button:hover {
+  background: #eeeeee;
+}
+
+.mmics-members-search button svg {
+  width: 13px;
+  height: 13px;
+}
+
+
+/* ============================================================
+   FILTER
+   ============================================================ */
+
+.mmics-members-filter {
+  width: 190px;
+
+  height: 42px;
+
+  padding:
+    0 13px;
+
+  border:
+    1px solid #e0e3e6;
+
+  border-radius: 7px;
+
+  outline: none;
+
+  background: #fafafa;
+
+  color: #555555;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.mmics-members-filter:focus {
+  border-color: #2f5d91;
+}
+
+
+/* ============================================================
+   RESULT COUNT
+   ============================================================ */
+
+.mmics-members-result-count {
+  margin-bottom: 17px;
+
+  color: #929292;
+
+  font-size: 8px;
+}
+
+.mmics-members-result-count strong {
+  color: #2f5d91;
+
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   MEMBERS GRID
+   ============================================================ */
+
+.mmics-members-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap: 20px;
+
+  align-items: stretch;
+}
+
+
+/* ============================================================
+   MEMBER CARD
+   ============================================================ */
+
+.mmics-member-card {
+  overflow: hidden;
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 0;
+
+  border:
+    1px solid #ececec;
+
+  border-radius: 15px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 20px
+    rgba(
+      30,
+      50,
+      70,
+      0.055
+    );
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.mmics-member-card:hover {
+  transform:
+    translateY(-5px);
+
+  box-shadow:
+    0 18px 38px
+    rgba(
+      30,
+      50,
+      70,
+      0.10
+    );
+}
+
+
+/* ============================================================
+   MEMBER IMAGE
+   ============================================================ */
+
+.mmics-member-image {
+  width: 100%;
+
+  height: 270px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #edf1f4,
+      #f7f8f9
+    );
+}
+
+.mmics-member-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  transition:
+    transform 0.45s ease;
+}
+
+.mmics-member-card:hover
+  .mmics-member-image img {
+  transform:
+    scale(1.035);
+}
+
+
+/* ============================================================
+   PLACEHOLDER
+   ============================================================ */
+
+.mmics-member-placeholder {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #9ca5ad;
+}
+
+.mmics-member-placeholder svg {
+  width: 55px;
+  height: 55px;
+}
+
+
+/* ============================================================
+   MEMBER CONTENT
+   ============================================================ */
+
+.mmics-member-content {
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding:
+    18px 18px 16px;
+}
+
+
+/* ============================================================
+   MEMBERSHIP NUMBER
+   ============================================================ */
+
+.mmics-member-number {
+  margin-bottom: 9px;
+
+  color: #2f5d91;
+
+  font-size: 7px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* ============================================================
+   NAME
+   ============================================================ */
+
+.mmics-member-content h3 {
+  margin: 0;
+
+  color: #171717;
+
+  font-size: 20px;
+
+  line-height: 1.15;
+
+  font-weight: 600;
+
+  letter-spacing: -0.4px;
+}
+
+
+/* ============================================================
+   DESIGNATION
+   ============================================================ */
+
+.mmics-member-designation {
+  margin:
+    7px 0 0;
+
+  color: #ff6900;
+
+  font-size: 10px;
+
+  line-height: 1.35;
+
+  font-weight: 500;
+}
+
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+
+.mmics-member-divider {
+  width: 100%;
+
+  height: 1px;
+
+  margin:
+    17px 0 13px;
+
+  background: #eeeeee;
+}
+
+
+/* ============================================================
+   VIEW PROFILE
+   ============================================================ */
+
+.mmics-member-view {
+  margin-top: auto;
+
+  padding: 0;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #2f5d91;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 9px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.mmics-member-view svg {
+  width: 14px;
+  height: 14px;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.mmics-member-view:hover svg {
+  transform:
+    translateX(4px);
+}
+
+
+/* ============================================================
+   STATES
+   ============================================================ */
+
+.mmics-members-state {
+  min-height: 320px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  text-align: center;
+
+  color: #888888;
+}
+
+.mmics-members-state > svg {
+  width: 38px;
+  height: 38px;
+
+  color: #2f5d91;
+}
+
+.mmics-members-state h3 {
+  margin: 3px 0 0;
+
+  color: #222222;
+
+  font-size: 18px;
+
+  font-weight: 500;
+}
+
+.mmics-members-state p {
+  margin: 0;
+
+  font-size: 9px;
+}
+
+.mmics-members-state button {
+  min-height: 34px;
+
+  padding:
+    0 15px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  border: 0;
+
+  border-radius: 5px;
+
+  background: #2f5d91;
+
+  color: #ffffff;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 8px;
+
+  cursor: pointer;
+}
+
+.mmics-members-state button svg {
+  width: 13px;
+  height: 13px;
+}
+
+.mmics-members-spinner {
+  animation:
+    mmicsMembersSpin
+    0.8s linear infinite;
+}
+
+@keyframes mmicsMembersSpin {
+
+  from {
+    transform:
+      rotate(0deg);
+  }
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+
+}
+
+
+/* ============================================================
+   CTA
+   ============================================================ */
+
+.mmics-members-cta {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 285px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      120deg,
+      #244f7e,
+      #315d94
+    );
+}
+
+
+/* subtle CTA pattern */
+
+.mmics-members-cta::before {
+  content: "";
+
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  right: -130px;
+  top: -200px;
+
+  border:
+    70px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.035
+    );
+
+  border-radius: 50%;
+}
+
+
+/* ============================================================
+   CTA OVERLAY
+   ============================================================ */
+
+.mmics-members-cta-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(
+        25,
+        65,
+        105,
+        0.35
+      ),
+      rgba(
+        49,
+        93,
+        148,
+        0.05
+      )
+    );
+}
+
+
+/* ============================================================
+   CTA CONTENT
+   ============================================================ */
+
+.mmics-members-cta-content {
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+  min-height: 285px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  padding:
+    40px 20px;
+
+  text-align: center;
+
+  color: #ffffff;
+}
+
+.mmics-members-cta-content > span {
+  margin-bottom: 12px;
+
+  font-size: 7px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  letter-spacing: 0.6px;
+}
+
+.mmics-members-cta-content h2 {
+  margin: 0;
+
+  font-size: 29px;
+
+  line-height: 1.1;
+
+  font-weight: 500;
+
+  letter-spacing: -0.7px;
+}
+
+.mmics-members-cta-content h2 strong {
+  color: #ff6900;
+
+  font-weight: 500;
+}
+
+.mmics-members-cta-content p {
+  max-width: 480px;
+
+  margin:
+    11px 0 20px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.82
+    );
+
+  font-size: 8.5px;
+
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   CTA BUTTON
+   ============================================================ */
+
+.mmics-members-cta-button {
+  height: 35px;
+
+  padding:
+    0 18px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border-radius: 5px;
+
+  background: #ffffff;
+
+  color: #222222;
+
+  text-decoration: none;
+
+  font-size: 8px;
+
+  font-weight: 600;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.mmics-members-cta-button:hover {
+  background: #f2f2f2;
+
+  transform:
+    translateY(-1px);
+}
+
+.mmics-members-cta-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+
+/* ============================================================
+   MEMBER MODAL BACKDROP
+   ============================================================ */
+
+.mmics-member-modal-backdrop {
+  position: fixed;
+
+  z-index: 9999;
+
+  inset: 0;
+
+  padding: 20px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  background:
+    rgba(
+      15,
+      25,
+      35,
+      0.58
+    );
+
+  backdrop-filter:
+    blur(5px);
+}
+
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+
+.mmics-member-modal {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 700px;
+
+  max-height: 90vh;
+
+  overflow: hidden;
+
+  display: grid;
+
+  grid-template-columns:
+    270px
+    1fr;
+
+  border-radius: 13px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 30px 80px
+    rgba(
+      0,
+      0,
+      0,
+      0.25
+    );
+}
+
+
+/* ============================================================
+   MODAL CLOSE
+   ============================================================ */
+
+.mmics-member-modal-close {
+  position: absolute;
+
+  z-index: 3;
+
+  top: 12px;
+  right: 12px;
+
+  width: 31px;
+  height: 31px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.92
+    );
+
+  color: #333333;
+
+  cursor: pointer;
+}
+
+.mmics-member-modal-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+
+/* ============================================================
+   MODAL IMAGE
+   ============================================================ */
+
+.mmics-member-modal-image {
+  min-height: 390px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #edf1f4,
+      #f7f8f9
+    );
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.mmics-member-modal-image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.mmics-member-modal-image > svg {
+  width: 60px;
+  height: 60px;
+
+  color: #9ba5ad;
+}
+
+
+/* ============================================================
+   MODAL CONTENT
+   ============================================================ */
+
+.mmics-member-modal-content {
+  padding:
+    45px 32px 32px;
+}
+
+.mmics-member-modal-content > span {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: #2f5d91;
+
+  font-size: 7px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.6px;
+}
+
+.mmics-member-modal-content h2 {
+  margin: 0;
+
+  color: #171717;
+
+  font-size: 27px;
+
+  line-height: 1.1;
+
+  font-weight: 600;
+}
+
+.mmics-member-modal-designation {
+  margin:
+    8px 0 25px;
+
+  color: #ff6900;
+
+  font-size: 11px;
+
+  font-weight: 500;
+}
+
+.mmics-member-modal-content > div {
+  padding:
+    12px 0;
+
+  border-top:
+    1px solid #eeeeee;
+}
+
+.mmics-member-modal-content small {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #929292;
+
+  font-size: 7px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.4px;
+}
+
+.mmics-member-modal-content div p {
+  margin: 0;
+
+  color: #555555;
+
+  font-size: 9px;
+
+  line-height: 1.45;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+  .mmics-members-container,
+  .mmics-members-hero-content {
+    width:
+      calc(100% - 44px);
+  }
+
+  .mmics-members-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+  .mmics-member-image {
+    height: 250px;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+  .mmics-members-container,
+  .mmics-members-hero-content {
+    width:
+      calc(100% - 30px);
+  }
+
+
+  /* HERO */
+
+  .mmics-members-hero {
+    min-height: 280px;
+  }
+
+  .mmics-members-hero-content {
+    padding:
+      50px 0;
+  }
+
+  .mmics-members-hero-content h1 {
+    font-size: 38px;
+  }
+
+  .mmics-members-hero-content p {
+    max-width: 390px;
+
+    font-size: 9px;
+  }
+
+
+  /* SECTION */
+
+  .mmics-members-section {
+    padding:
+      58px 0 65px;
+  }
+
+  .mmics-members-heading h2 {
+    font-size: 24px;
+  }
+
+
+  /* TOOLBAR */
+
+  .mmics-members-toolbar {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .mmics-members-search {
+    max-width: none;
+  }
+
+  .mmics-members-filter {
+    width: 100%;
+  }
+
+
+  /* GRID */
+
+  .mmics-members-grid {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+  .mmics-member-image {
+    height: 300px;
+  }
+
+
+  /* MODAL */
+
+  .mmics-member-modal {
+    max-width: 430px;
+
+    max-height: 92vh;
+
+    overflow-y: auto;
+
+    grid-template-columns: 1fr;
+  }
+
+  .mmics-member-modal-image {
+    height: 280px;
+
+    min-height: 280px;
+  }
+
+  .mmics-member-modal-content {
+    padding:
+      28px 24px;
+  }
+
+
+  /* CTA */
+
+  .mmics-members-cta {
+    min-height: 260px;
+  }
+
+  .mmics-members-cta-content {
+    min-height: 260px;
+  }
+
+  .mmics-members-cta-content h2 {
+    font-size: 24px;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 420px) {
+
+  .mmics-members-container,
+  .mmics-members-hero-content {
+    width:
+      calc(100% - 24px);
+  }
+
+  .mmics-members-hero-content h1 {
+    font-size: 34px;
+  }
+
+  .mmics-member-image {
+    height: 270px;
+  }
+
+  .mmics-member-content h3 {
+    font-size: 19px;
+  }
+
+}
