@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import heroSlideService from '../../services/heroSlideService';
-import defaultHeroImage from '../../assets/hero-bags.png';
 import './Hero.css';
 
 const DEFAULT_SLIDES = [
@@ -13,9 +12,34 @@ const DEFAULT_SLIDES = [
     subtitle: 'SUSTAINABLE PACKAGING & INDUSTRIAL SOLUTIONS',
     description:
       'Reliable, practical and sustainable packaging solutions designed to meet the evolving needs of businesses, industries and organizations.',
-    imageUrl: defaultHeroImage,
+    imageUrl:
+      'https://images.unsplash.com/photo-1595079676339-1534801ad6cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
     buttonText: 'Request a Quote',
     buttonUrl: '/contact',
+    isDefault: true,
+  },
+  {
+    id: 'default-2',
+    title: 'Industrial Packaging Built to Last',
+    subtitle: 'STRENGTH · DURABILITY · RELIABILITY',
+    description:
+      'Heavy-duty corrugated boxes, wooden pallets and industrial-grade solutions designed for safe transport and long-term storage.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    buttonText: 'Explore Products',
+    buttonUrl: '/products',
+    isDefault: true,
+  },
+  {
+    id: 'default-3',
+    title: 'Eco-Friendly Packaging for a Better Tomorrow',
+    subtitle: 'SUSTAINABLE · RECYCLABLE · RESPONSIBLE',
+    description:
+      'Biodegradable and recyclable packaging alternatives that help your business reduce its environmental footprint without compromising quality.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1610348725531-843dff563e2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    buttonText: 'Learn More',
+    buttonUrl: '/about',
     isDefault: true,
   },
 ];
@@ -44,11 +68,12 @@ const Hero = () => {
     fetchSlides();
   }, []);
 
+  // Auto-advance every 5 seconds
   useEffect(() => {
     if (slides.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [slides]);
 
@@ -63,6 +88,7 @@ const Hero = () => {
     ? slide.imageUrl
     : `${serverBaseUrl}${slide.imageUrl}`;
 
+  // Split "Solutions" for orange highlight
   const renderTitle = (title) => {
     if (!title) return null;
     const parts = title.split('Solutions');
