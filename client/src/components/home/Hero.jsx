@@ -45,9 +45,9 @@ const DEFAULT_SLIDES = [
 ];
 
 const Hero = () => {
-  const [slides, setSlides] = useState([]);
+  const [slides, setSlides] = useState(DEFAULT_SLIDES); // start with defaults so UI never breaks
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const serverBaseUrl =
     import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
@@ -56,13 +56,14 @@ const Hero = () => {
     const fetchSlides = async () => {
       try {
         const data = await heroSlideService.getAll();
-        const fetched = data.slides || [];
-        setSlides(fetched.length > 0 ? fetched : DEFAULT_SLIDES);
+        const fetched = Array.isArray(data?.slides) ? data.slides : [];
+
+        // Use API slides only if there are 2 or more; otherwise keep defaults
+        if (fetched.length >= 2) {
+          setSlides(fetched);
+        }
       } catch (error) {
-        console.error('Failed to load hero slides:', error);
-        setSlides(DEFAULT_SLIDES);
-      } finally {
-        setLoading(false);
+        console.error('Failed to load hero slides, using defaults:', error);
       }
     };
     fetchSlides();
@@ -88,7 +89,6 @@ const Hero = () => {
     ? slide.imageUrl
     : `${serverBaseUrl}${slide.imageUrl}`;
 
-  // Split "Solutions" for orange highlight
   const renderTitle = (title) => {
     if (!title) return null;
     const parts = title.split('Solutions');
@@ -102,7 +102,7 @@ const Hero = () => {
 
   return (
     <section className="hero-section">
-      <div className="hero-content">
+      <div className="hero-content" key={slide.id}>
         <div className="hero-badge">
           <CheckCircle size={14} />{' '}
           {slide.subtitle || 'SUSTAINABLE PACKAGING & INDUSTRIAL SOLUTIONS'}
@@ -122,21 +122,21 @@ const Hero = () => {
         </div>
       </div>
 
-      <div className="hero-image">
+      <div className="hero-image" key={`img-${slide.id}`}>
         <img src={imageSrc} alt={slide.title} />
       </div>
 
-      {slides.length > 1 && (
-        <div className="hero-dots">
-          {slides.map((_, idx) => (
-            <div
-              key={idx}
-              className={`dot ${idx === currentSlide ? 'active' : ''}`}
-              onClick={() => setCurrentSlide(idx)}
-            />
-          ))}
-        </div>
-      )}
+      {/* DOTS — always show since we always have >= 3 slides */}
+      <div className="hero-dots">
+        {slides.map((_, idx) => (
+          <div
+            key={idx}
+            className={`dot ${idx === currentSlide ? 'active' : ''}`}
+            onClick={() => setCurrentSlide(idx)}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
+      </div>
     </section>
   );
 };

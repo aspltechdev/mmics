@@ -5,7 +5,7 @@ import WhoWeAreSection from '../../components/about/WhoWeAreSection';
 import OurStorySection from '../../components/about/OurStorySection';
 import MissionVisionSection from '../../components/about/MissionVisionSection';
 import CoreValuesSection from '../../components/about/CoreValuesSection';
-import LeadershipSection from '../../components/about/LeadershipSection';
+//import LeadershipSection from '../../components/about/LeadershipSection';
 import ContactCtaSection from '../../components/about/ContactCtaSection';
 
 const About = () => {
@@ -16,7 +16,7 @@ const About = () => {
       <OurStorySection />
       <MissionVisionSection />
       <CoreValuesSection />
-      <LeadershipSection />
+      {/* <LeadershipSection /> */}
       <ContactCtaSection />
     </main>
   );
