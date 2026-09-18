@@ -25,8 +25,11 @@ const CoreValuesSection = () => {
 
       <div className="values-grid">
         {values.map((v, idx) => (
-          <div className="value-card" key={idx}>
-            <img src={v.img} alt={v.tag} className="value-bg" />
+          <div
+            className="value-card"
+            key={idx}
+            style={{ backgroundImage: `url(${v.img})` }}
+          >
             <div className="value-overlay" />
             <div className="value-content">
               <span className="value-tag">{v.tag}</span>
