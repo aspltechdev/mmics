@@ -1,12 +1,9 @@
-
 const express = require("express");
-const path = require("path");
-const fs = require("fs");
 const multer = require("multer");
 
 const {
   getHeroSlides,
-  getAllHeroSlides,
+  getAllAdminHeroSlides,
   getHeroSlide,
   createHeroSlide,
   updateHeroSlide,
@@ -15,133 +12,60 @@ const {
   deleteHeroSlide,
 } = require("../controllers/heroSlideController");
 
-const authMiddleware = require("../middleware/authMiddleware");
-const roleMiddleware = require("../middleware/roleMiddleware");
+const authMiddleware = require(
+  "../middleware/authMiddleware"
+);
+
+const roleMiddleware = require(
+  "../middleware/roleMiddleware"
+);
+
+const upload = require(
+  "../middleware/uploadMiddleware"
+);
 
 const router = express.Router();
 
-/* =========================================================
-   HERO SLIDE UPLOAD DIRECTORY
-   ========================================================= */
-
-const uploadDir = path.resolve(
-  __dirname,
-  "../../uploads/hero-slides"
-);
-
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, {
-    recursive: true,
-  });
-}
-
-/* =========================================================
-   MULTER STORAGE
-   ========================================================= */
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-
-  filename: function (req, file, cb) {
-    const extension = path.extname(
-      file.originalname
-    );
-
-    const baseName = path.basename(
-      file.originalname,
-      extension
-    );
-
-    const cleanName = baseName
-      .replace(/[^a-zA-Z0-9-_]/g, "-")
-      .replace(/-+/g, "-")
-      .toLowerCase();
-
-    const fileName =
-      Date.now() +
-      "-" +
-      cleanName +
-      extension.toLowerCase();
-
-    cb(null, fileName);
-  },
-});
-
-/* =========================================================
-   FILE FILTER
-   ========================================================= */
-
-const fileFilter = function (req, file, cb) {
-  const allowedMimeTypes = [
-    "image/jpeg",
-    "image/jpg",
-    "image/png",
-    "image/webp",
-  ];
-
-  if (
-    allowedMimeTypes.includes(
-      file.mimetype
-    )
-  ) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error(
-        "Only JPG, JPEG, PNG and WEBP images are allowed."
-      ),
-      false
-    );
-  }
-};
-
-/* =========================================================
-   MULTER
-   ========================================================= */
-
-const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter,
-  limits: {
-    fileSize: 5 * 1024 * 1024,
-  },
-});
 
 /* =========================================================
    PUBLIC HERO SLIDES
-   ========================================================= */
+   GET /api/hero-slides
+========================================================= */
 
 router.get(
   "/",
   getHeroSlides
 );
 
+
 /* =========================================================
    ADMIN - ALL HERO SLIDES
-   IMPORTANT: Keep this BEFORE /:id
-   ========================================================= */
+   IMPORTANT: KEEP BEFORE /:id
+========================================================= */
 
 router.get(
   "/admin/all",
   authMiddleware,
   roleMiddleware("ADMIN"),
-  getAllHeroSlides
+  getAllAdminHeroSlides
 );
+
 
 /* =========================================================
    GET SINGLE HERO SLIDE
-   ========================================================= */
+   GET /api/hero-slides/:id
+========================================================= */
 
 router.get(
   "/:id",
   getHeroSlide
 );
 
+
 /* =========================================================
    CREATE HERO SLIDE
-   ========================================================= */
+   POST /api/hero-slides
+========================================================= */
 
 router.post(
   "/",
@@ -151,9 +75,11 @@ router.post(
   createHeroSlide
 );
 
+
 /* =========================================================
    UPDATE HERO SLIDE
-   ========================================================= */
+   PUT /api/hero-slides/:id
+========================================================= */
 
 router.put(
   "/:id",
@@ -163,9 +89,11 @@ router.put(
   updateHeroSlide
 );
 
+
 /* =========================================================
-   CHANGE STATUS
-   ========================================================= */
+   CHANGE HERO SLIDE STATUS
+   PATCH /api/hero-slides/:id/status
+========================================================= */
 
 router.patch(
   "/:id/status",
@@ -174,9 +102,11 @@ router.patch(
   changeHeroSlideStatus
 );
 
+
 /* =========================================================
    REORDER HERO SLIDES
-   ========================================================= */
+   PATCH /api/hero-slides/reorder
+========================================================= */
 
 router.patch(
   "/reorder",
@@ -185,9 +115,11 @@ router.patch(
   reorderHeroSlides
 );
 
+
 /* =========================================================
    DELETE HERO SLIDE
-   ========================================================= */
+   DELETE /api/hero-slides/:id
+========================================================= */
 
 router.delete(
   "/:id",
@@ -196,54 +128,74 @@ router.delete(
   deleteHeroSlide
 );
 
+
 /* =========================================================
    MULTER ERROR HANDLER
-   ========================================================= */
+========================================================= */
 
-router.use(function (error, req, res, next) {
-  if (
-    error instanceof multer.MulterError
-  ) {
-    console.error(
-      "MULTER ERROR:",
-      error
-    );
+router.use(
+  (
+    error,
+    req,
+    res,
+    next
+  ) => {
 
     if (
-      error.code ===
-      "LIMIT_FILE_SIZE"
+      error instanceof
+      multer.MulterError
     ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Hero image must be less than 5MB.",
-      });
+
+      console.error(
+        "HERO MULTER ERROR:",
+        error
+      );
+
+      if (
+        error.code ===
+        "LIMIT_FILE_SIZE"
+      ) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message:
+              "Hero image must be less than 4MB.",
+          });
+      }
+
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message:
+            error.message ||
+            "Hero image upload failed.",
+        });
     }
 
-    return res.status(400).json({
-      success: false,
-      message:
-        error.message ||
-        "Image upload failed.",
-    });
+
+    if (error) {
+
+      console.error(
+        "HERO UPLOAD ERROR:",
+        error
+      );
+
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message:
+            error.message ||
+            "Hero image upload failed.",
+        });
+    }
+
+
+    next();
   }
+);
 
-  if (error) {
-    console.error(
-      "HERO UPLOAD ERROR:",
-      error
-    );
-
-    return res.status(400).json({
-      success: false,
-      message:
-        error.message ||
-        "Hero image upload failed.",
-    });
-  }
-
-  next();
-});
 
 module.exports = router;
-
