@@ -2,10 +2,15 @@ import api from "./api";
 
 const dashboardService = {
   getAnalytics: async () => {
-    const response =
-      await api.get("/dashboard/analytics");
+    const { data } = await api.get("/dashboard/analytics");
 
-    return response.data;
+    // Map the backend response to the structure Dashboard.jsx expects.
+    return {
+      ...(data?.analytics || {}),
+      recentMembers: data?.recent?.members || [],
+      recentProducts: data?.recent?.products || [],
+      recentEnquiries: data?.recent?.enquiries || [],
+    };
   },
 };
 

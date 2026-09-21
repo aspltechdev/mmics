@@ -11,12 +11,14 @@
   color: #171717;
 }
 
+
 /* =========================================================
    SIDEBAR
 ========================================================= */
 
 .mmics-admin-sidebar {
   position: fixed;
+
   inset: 0 auto 0 0;
 
   width: 260px;
@@ -29,6 +31,7 @@
 
   z-index: 1100;
 }
+
 
 /* =========================================================
    BRAND
@@ -45,8 +48,14 @@
   padding: 0 22px;
 
   border-bottom: 1px solid
-    rgba(255, 255, 255, 0.08);
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
 }
+
 
 .mmics-admin-brand-mark {
   width: 39px;
@@ -65,15 +74,20 @@
   font-weight: 800;
 }
 
-.mmics-admin-brand > div:nth-child(2) {
+
+.mmics-admin-brand
+  > div:nth-child(2) {
   display: flex;
   flex-direction: column;
 }
 
+
 .mmics-admin-brand strong {
   font-size: 17px;
+
   letter-spacing: 0.05em;
 }
+
 
 .mmics-admin-brand span {
   margin-top: 3px;
@@ -81,9 +95,12 @@
   color: #858585;
 
   font-size: 9px;
+
   letter-spacing: 0.08em;
+
   text-transform: uppercase;
 }
+
 
 .mmics-admin-mobile-close {
   display: none;
@@ -91,13 +108,15 @@
   margin-left: auto;
 
   border: 0;
+
   background: transparent;
 
   color: #ffffff;
 }
 
+
 /* =========================================================
-   NAV
+   NAVIGATION
 ========================================================= */
 
 .mmics-admin-nav {
@@ -108,6 +127,7 @@
   padding: 24px 13px;
 }
 
+
 .mmics-admin-nav-label {
   padding: 0 12px 11px;
 
@@ -115,19 +135,24 @@
 
   font-size: 9px;
   font-weight: 700;
+
   letter-spacing: 0.14em;
 }
+
 
 .mmics-admin-nav-item {
   position: relative;
 
   display: flex;
+
   align-items: center;
+
   gap: 12px;
 
   min-height: 46px;
 
   margin-bottom: 4px;
+
   padding: 0 13px;
 
   border-radius: 9px;
@@ -144,27 +169,42 @@
     color 0.2s ease;
 }
 
+
 .mmics-admin-nav-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.05
+    );
+
   color: #ffffff;
 }
+
 
 .mmics-admin-nav-item.active {
   background: #8b1e2d;
+
   color: #ffffff;
 }
 
-.mmics-admin-nav-item svg:first-child {
+
+.mmics-admin-nav-item
+  svg:first-child {
   flex-shrink: 0;
 }
+
 
 .mmics-admin-nav-arrow {
   margin-left: auto;
 
   opacity: 0;
 
-  transition: opacity 0.2s ease;
+  transition:
+    opacity 0.2s ease;
 }
+
 
 .mmics-admin-nav-item:hover
   .mmics-admin-nav-arrow,
@@ -172,6 +212,7 @@
   .mmics-admin-nav-arrow {
   opacity: 0.7;
 }
+
 
 /* =========================================================
    SIDEBAR FOOTER
@@ -181,20 +222,30 @@
   padding: 17px;
 
   border-top: 1px solid
-    rgba(255, 255, 255, 0.08);
+    rgba(
+      255,
+      255,
+      255,
+      0.08
+    );
 }
+
 
 .mmics-admin-user-mini {
   display: flex;
+
   align-items: center;
+
   gap: 10px;
 
   margin-bottom: 13px;
 }
 
+
 .mmics-admin-avatar,
 .mmics-admin-topbar-avatar {
   display: grid;
+
   place-items: center;
 
   flex-shrink: 0;
@@ -208,6 +259,7 @@
   font-weight: 700;
 }
 
+
 .mmics-admin-avatar {
   width: 34px;
   height: 34px;
@@ -215,12 +267,16 @@
   font-size: 12px;
 }
 
-.mmics-admin-user-mini > div:last-child {
+
+.mmics-admin-user-mini
+  > div:last-child {
   min-width: 0;
 
   display: flex;
+
   flex-direction: column;
 }
+
 
 .mmics-admin-user-mini strong {
   overflow: hidden;
@@ -231,8 +287,10 @@
   font-weight: 600;
 
   white-space: nowrap;
+
   text-overflow: ellipsis;
 }
+
 
 .mmics-admin-user-mini span {
   margin-top: 2px;
@@ -242,46 +300,73 @@
   font-size: 9px;
 }
 
+
 .mmics-admin-logout {
   width: 100%;
+
   min-height: 40px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 8px;
 
   border: 1px solid
-    rgba(255, 255, 255, 0.09);
+    rgba(
+      255,
+      255,
+      255,
+      0.09
+    );
+
   border-radius: 8px;
 
   background: transparent;
+
   color: #aaaaaa;
 
   font-size: 11px;
   font-weight: 600;
+
+  cursor: pointer;
 
   transition:
     background 0.2s ease,
     color 0.2s ease;
 }
 
+
 .mmics-admin-logout:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.06
+    );
+
   color: #ffffff;
 }
+
 
 /* =========================================================
    MAIN
 ========================================================= */
 
 .mmics-admin-main {
-  width: calc(100% - 260px);
+  width:
+    calc(
+      100% - 260px
+    );
 
   margin-left: 260px;
 
   min-height: 100vh;
 }
+
 
 /* =========================================================
    TOPBAR
@@ -289,39 +374,52 @@
 
 .mmics-admin-topbar {
   position: sticky;
+
   top: 0;
+
   z-index: 900;
 
   height: 72px;
 
   display: flex;
+
   align-items: center;
-  justify-content: space-between;
+
+  justify-content:
+    space-between;
 
   padding: 0 30px;
 
   background: #ffffff;
 
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom:
+    1px solid #e8e8e8;
 }
+
 
 .mmics-admin-menu-button {
   display: none;
 }
 
+
 .mmics-admin-topbar-title {
   display: flex;
+
   flex-direction: column;
 }
+
 
 .mmics-admin-topbar-title span {
   color: #999999;
 
   font-size: 9px;
   font-weight: 700;
+
   letter-spacing: 0.12em;
+
   text-transform: uppercase;
 }
+
 
 .mmics-admin-topbar-title strong {
   margin-top: 2px;
@@ -330,11 +428,15 @@
   font-weight: 700;
 }
 
+
 .mmics-admin-topbar-user {
   display: flex;
+
   align-items: center;
+
   gap: 9px;
 }
+
 
 .mmics-admin-topbar-avatar {
   width: 34px;
@@ -343,14 +445,19 @@
   font-size: 12px;
 }
 
-.mmics-admin-topbar-user > div:last-child {
+
+.mmics-admin-topbar-user
+  > div:last-child {
   display: flex;
+
   flex-direction: column;
 }
+
 
 .mmics-admin-topbar-user strong {
   font-size: 11px;
 }
+
 
 .mmics-admin-topbar-user span {
   margin-top: 1px;
@@ -360,6 +467,7 @@
   font-size: 9px;
 }
 
+
 /* =========================================================
    CONTENT
 ========================================================= */
@@ -368,30 +476,39 @@
   padding: 30px;
 }
 
+
 /* =========================================================
-   MOBILE
+   MOBILE SIDEBAR
 ========================================================= */
 
 @media (max-width: 900px) {
+
   .mmics-admin-sidebar {
-    transform: translateX(-100%);
+    transform:
+      translateX(-100%);
 
     transition:
       transform 0.25s ease;
   }
 
+
   .mmics-admin-sidebar-open {
-    transform: translateX(0);
+    transform:
+      translateX(0);
   }
+
 
   .mmics-admin-mobile-close {
     display: flex;
   }
 
+
   .mmics-admin-main {
     width: 100%;
+
     margin-left: 0;
   }
+
 
   .mmics-admin-menu-button {
     display: flex;
@@ -400,18 +517,25 @@
     height: 40px;
 
     align-items: center;
+
     justify-content: center;
 
-    border: 1px solid #e6e6e6;
+    border:
+      1px solid #e6e6e6;
+
     border-radius: 9px;
 
     background: #ffffff;
+
     color: #222222;
   }
 
+
   .mmics-admin-overlay {
     position: fixed;
+
     inset: 0;
+
     z-index: 1050;
 
     width: 100%;
@@ -419,23 +543,169 @@
 
     border: 0;
 
-    background: rgba(0, 0, 0, 0.45);
+    background:
+      rgba(
+        0,
+        0,
+        0,
+        0.45
+      );
   }
 }
 
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
 @media (max-width: 600px) {
+
   .mmics-admin-topbar {
     height: 64px;
 
     padding: 0 15px;
   }
 
+
   .mmics-admin-topbar-user
     > div:last-child {
     display: none;
   }
 
+
   .mmics-admin-content {
     padding: 20px 15px;
+  }
+}
+
+
+/* =========================================================
+   GLOBAL ADMIN MODAL FIX
+
+   THIS FIXES:
+   - MEMBERS
+   - CATEGORIES
+   - PRODUCTS
+   - HERO SLIDES
+   - GALLERY
+   - ENQUIRIES
+
+   Modal must cover:
+   - Sidebar
+   - Header
+   - Main content
+
+   And remain centered in browser viewport.
+========================================================= */
+
+.mmics-members-modal-backdrop,
+.mmics-categories-modal-backdrop,
+.mmics-products-modal-overlay,
+.mmics-hero-modal-overlay,
+.mmics-hero-preview-overlay,
+.mmics-gallery-modal-overlay,
+.mmics-enquiries-modal-backdrop {
+
+  position: fixed !important;
+
+  inset: 0 !important;
+
+  width: 100% !important;
+
+  height: 100dvh !important;
+
+  min-height: 100dvh !important;
+
+  margin: 0 !important;
+
+  padding: 24px !important;
+
+  box-sizing: border-box !important;
+
+  /*
+   * Sidebar = 1100
+   * Topbar = 900
+   *
+   * Modal must always be above both.
+   */
+  z-index: 10000 !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: center !important;
+
+  overflow-x: hidden !important;
+
+  overflow-y: auto !important;
+
+  overscroll-behavior: contain;
+
+  background:
+    rgba(
+      15,
+      18,
+      25,
+      0.58
+    ) !important;
+
+  backdrop-filter:
+    blur(6px) !important;
+
+  -webkit-backdrop-filter:
+    blur(6px) !important;
+}
+
+
+/* =========================================================
+   KEEP MODAL CONTENT CENTERED
+========================================================= */
+
+.mmics-members-modal-backdrop
+  > *,
+.mmics-categories-modal-backdrop
+  > *,
+.mmics-products-modal-overlay
+  > *,
+.mmics-hero-modal-overlay
+  > *,
+.mmics-hero-preview-overlay
+  > *,
+.mmics-gallery-modal-overlay
+  > *,
+.mmics-enquiries-modal-backdrop
+  > * {
+
+  margin: auto !important;
+}
+
+
+/* =========================================================
+   MOBILE MODAL FIX
+
+   Existing page CSS moves some modals to:
+   align-items: flex-end
+   or
+   align-items: flex-start.
+
+   Override those rules and always center them.
+========================================================= */
+
+@media (max-width: 760px) {
+
+  .mmics-members-modal-backdrop,
+  .mmics-categories-modal-backdrop,
+  .mmics-products-modal-overlay,
+  .mmics-hero-modal-overlay,
+  .mmics-hero-preview-overlay,
+  .mmics-gallery-modal-overlay,
+  .mmics-enquiries-modal-backdrop {
+
+    padding: 12px !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
   }
 }
