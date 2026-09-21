@@ -1,1438 +1,1793 @@
-// const prisma = require("../config/database");
+const fs = require("fs/promises");
+const path = require("path");
 
-// // GET ALL PRODUCTS
-// const getProducts = async (req, res) => {
-//   try {
-//     const { category, status } = req.query;
+const prisma =
+  require("../config/database");
 
-//     const products = await prisma.product.findMany({
-//       where: {
-//         ...(category && {
-//           category: {
-//             slug: category,
-//           },
-//         }),
 
-//         ...(status && {
-//           status,
-//         }),
-//       },
+/* ============================================================
+   VERCEL BLOB
+============================================================ */
 
-//       include: {
-//         category: true,
-//         images: {
-//           orderBy: {
-//             createdAt: "asc",
-//           },
-//         },
-//       },
+const getBlobSdk = () =>
+  import("@vercel/blob");
 
-//       orderBy: {
-//         createdAt: "desc",
-//       },
-//     });
 
-//     res.json({
-//       success: true,
-//       count: products.length,
-//       products,
-//     });
-//   } catch (error) {
-//     console.error("Get products error:", error);
+/* ============================================================
+   PRODUCT INCLUDE
+============================================================ */
 
-//     res.status(500).json({
-//       success: false,
-//       message: "Unable to fetch products",
-//     });
-//   }
-// };
-
-// // GET SINGLE PRODUCT BY ID
-// const getProduct = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     const product = await prisma.product.findUnique({
-//       where: {
-//         id,
-//       },
-
-//       include: {
-//         category: true,
-//         images: {
-//           orderBy: {
-//             createdAt: "asc",
-//           },
-//         },
-//       },
-//     });
-
-//     if (!product) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Product not found",
-//       });
-//     }
-
-//     res.json({
-//       success: true,
-//       product,
-//     });
-//   } catch (error) {
-//     console.error("Get product error:", error);
-
-//     res.status(500).json({
-//       success: false,
-//       message: "Unable to fetch product",
-//     });
-//   }
-// };
-
-// // GET PRODUCT BY SLUG
-// const getProductBySlug = async (req, res) => {
-//   try {
-//     const { slug } = req.params;
-
-//     const product = await prisma.product.findUnique({
-//       where: {
-//         slug,
-//       },
-
-//       include: {
-//         category: true,
-//         images: {
-//           orderBy: {
-//             createdAt: "asc",
-//           },
-//         },
-//       },
-//     });
-
-//     if (!product) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Product not found",
-//       });
-//     }
-
-//     res.json({
-//       success: true,
-//       product,
-//     });
-//   } catch (error) {
-//     console.error("Get product by slug error:", error);
-
-//     res.status(500).json({
-//       success: false,
-//       message: "Unable to fetch product",
-//     });
-//   }
-// };
-
-// // CREATE PRODUCT
-// const createProduct = async (req, res) => {
-//   try {
-//     const {
-//       categoryId,
-//       name,
-//       slug,
-//       description,
-//       status,
-//       images,
-//     } = req.body;
-
-//     if (!categoryId || !name || !slug) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Category, name and slug are required",
-//       });
-//     }
-
-//     const category =
-//       await prisma.productCategory.findUnique({
-//         where: {
-//           id: categoryId,
-//         },
-//       });
-
-//     if (!category) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Category not found",
-//       });
-//     }
-
-//     if (!category.isActive) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Cannot add product to an inactive category",
-//       });
-//     }
-
-//     const existingProduct =
-//       await prisma.product.findUnique({
-//         where: {
-//           slug,
-//         },
-//       });
-
-//     if (existingProduct) {
-//       return res.status(409).json({
-//         success: false,
-//         message: "Product slug already exists",
-//       });
-//     }
-
-//     const product = await prisma.product.create({
-//       data: {
-//         categoryId,
-//         name,
-//         slug,
-//         description: description || null,
-//         status: status || "ACTIVE",
-
-//         images:
-//           Array.isArray(images) && images.length > 0
-//             ? {
-//                 create: images.map((image, index) => ({
-//                   imageUrl: image.imageUrl || image,
-//                   isPrimary:
-//                     image.isPrimary !== undefined
-//                       ? image.isPrimary
-//                       : index === 0,
-//                 })),
-//               }
-//             : undefined,
-//       },
-
-//       include: {
-//         category: true,
-//         images: true,
-//       },
-//     });
-
-//     res.status(201).json({
-//       success: true,
-//       message: "Product created successfully",
-//       product,
-//     });
-//   } catch (error) {
-//     console.error("Create product error:", error);
-
-//     res.status(500).json({
-//       success: false,
-//       message: "Unable to create product",
-//     });
-//   }
-// };
-
-// // UPDATE PRODUCT
-// const updateProduct = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     const {
-//       categoryId,
-//       name,
-//       slug,
-//       description,
-//       status,
-//     } = req.body;
-
-//     const existingProduct =
-//       await prisma.product.findUnique({
-//         where: {
-//           id,
-//         },
-//       });
-
-//     if (!existingProduct) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Product not found",
-//       });
-//     }
-
-//     if (categoryId) {
-//       const category =
-//         await prisma.productCategory.findUnique({
-//           where: {
-//             id: categoryId,
-//           },
-//         });
-
-//       if (!category) {
-//         return res.status(404).json({
-//           success: false,
-//           message: "Category not found",
-//         });
-//       }
-//     }
-
-//     if (slug && slug !== existingProduct.slug) {
-//       const duplicate =
-//         await prisma.product.findUnique({
-//           where: {
-//             slug,
-//           },
-//         });
-
-//       if (duplicate && duplicate.id !== id) {
-//         return res.status(409).json({
-//           success: false,
-//           message: "Product slug already exists",
-//         });
-//       }
-//     }
-
-//     const product = await prisma.product.update({
-//       where: {
-//         id,
-//       },
-
-//       data: {
-//         ...(categoryId !== undefined && {
-//           categoryId,
-//         }),
-
-//         ...(name !== undefined && {
-//           name,
-//         }),
-
-//         ...(slug !== undefined && {
-//           slug,
-//         }),
-
-//         ...(description !== undefined && {
-//           description,
-//         }),
-
-//         ...(status !== undefined && {
-//           status,
-//         }),
-//       },
-
-//       include: {
-//         category: true,
-//         images: true,
-//       },
-//     });
-
-//     res.json({
-//       success: true,
-//       message: "Product updated successfully",
-//       product,
-//     });
-//   } catch (error) {
-//     console.error("Update product error:", error);
-
-//     res.status(500).json({
-//       success: false,
-//       message: "Unable to update product",
-//     });
-//   }
-// };
-
-// // CHANGE PRODUCT STATUS
-// const changeProductStatus = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { status } = req.body;
-
-//     if (!["ACTIVE", "INACTIVE"].includes(status)) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Status must be ACTIVE or INACTIVE",
-//       });
-//     }
-
-//     const product = await prisma.product.update({
-//       where: {
-//         id,
-//       },
-
-//       data: {
-//         status,
-//       },
-//     });
-
-//     res.json({
-//       success: true,
-//       message: `Product ${
-//         status === "ACTIVE"
-//           ? "activated"
-//           : "deactivated"
-//       } successfully`,
-//       product,
-//     });
-//   } catch (error) {
-//     console.error(
-//       "Change product status error:",
-//       error
-//     );
-
-//     res.status(500).json({
-//       success: false,
-//       message: "Unable to change product status",
-//     });
-//   }
-// };
-
-// // ADD PRODUCT IMAGE
-// const addProductImage = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { imageUrl, isPrimary } = req.body;
-
-//     if (!imageUrl) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "imageUrl is required",
-//       });
-//     }
-
-//     const product = await prisma.product.findUnique({
-//       where: {
-//         id,
-//       },
-//     });
-
-//     if (!product) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Product not found",
-//       });
-//     }
-
-//     if (isPrimary === true) {
-//       await prisma.productImage.updateMany({
-//         where: {
-//           productId: id,
-//         },
-//         data: {
-//           isPrimary: false,
-//         },
-//       });
-//     }
-
-//     const image = await prisma.productImage.create({
-//       data: {
-//         productId: id,
-//         imageUrl,
-//         isPrimary: isPrimary === true,
-//       },
-//     });
-
-//     res.status(201).json({
-//       success: true,
-//       message: "Product image added successfully",
-//       image,
-//     });
-//   } catch (error) {
-//     console.error(
-//       "Add product image error:",
-//       error
-//     );
-
-//     res.status(500).json({
-//       success: false,
-//       message: "Unable to add product image",
-//     });
-//   }
-// };
-
-// // DELETE PRODUCT IMAGE
-// const deleteProductImage = async (req, res) => {
-//   try {
-//     const { imageId } = req.params;
-
-//     const image = await prisma.productImage.findUnique({
-//       where: {
-//         id: imageId,
-//       },
-//     });
-
-//     if (!image) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Product image not found",
-//       });
-//     }
-
-//     await prisma.productImage.delete({
-//       where: {
-//         id: imageId,
-//       },
-//     });
-
-//     res.json({
-//       success: true,
-//       message: "Product image deleted successfully",
-//     });
-//   } catch (error) {
-//     console.error(
-//       "Delete product image error:",
-//       error
-//     );
-
-//     res.status(500).json({
-//       success: false,
-//       message: "Unable to delete product image",
-//     });
-//   }
-// };
-
-// // DELETE PRODUCT
-// const deleteProduct = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     const product = await prisma.product.findUnique({
-//       where: {
-//         id,
-//       },
-//     });
-
-//     if (!product) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Product not found",
-//       });
-//     }
-
-//     await prisma.product.delete({
-//       where: {
-//         id,
-//       },
-//     });
-
-//     res.json({
-//       success: true,
-//       message: "Product deleted successfully",
-//     });
-//   } catch (error) {
-//     console.error("Delete product error:", error);
-
-//     res.status(500).json({
-//       success: false,
-//       message: "Unable to delete product",
-//     });
-//   }
-// };
-
-// module.exports = {
-//   getProducts,
-//   getProduct,
-//   getProductBySlug,
-//   createProduct,
-//   updateProduct,
-//   changeProductStatus,
-//   addProductImage,
-//   deleteProductImage,
-//   deleteProduct,
-// };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const prisma = require("../config/database");
-
-// =========================================================
-// GET ALL PRODUCTS
-// =========================================================
-
-const getProducts = async (req, res) => {
-  try {
-    const { category, status } = req.query;
-
-    const products = await prisma.product.findMany({
-      where: {
-        ...(category && {
-          category: {
-            slug: category,
-          },
-        }),
-
-        ...(status && {
-          status,
-        }),
-      },
-
-      include: {
-        category: true,
-
-        images: {
-          orderBy: {
-            createdAt: "asc",
-          },
-        },
-      },
-
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    res.json({
-      success: true,
-      count: products.length,
-      products,
-    });
-  } catch (error) {
-    console.error(
-      "Get products error:",
-      error
-    );
-
-    res.status(500).json({
-      success: false,
-      message: "Unable to fetch products",
-    });
-  }
+const PRODUCT_INCLUDE = {
+  category: true,
+  images: true,
 };
 
-// =========================================================
-// GET SINGLE PRODUCT BY ID
-// =========================================================
 
-const getProduct = async (req, res) => {
-  try {
-    const { id } = req.params;
+/* ============================================================
+   SAFE FILE NAME
+============================================================ */
 
-    const product =
-      await prisma.product.findUnique({
-        where: {
-          id,
-        },
+const createSafeFilename = (
+  originalName = "image.jpg"
+) => {
+  const cleaned =
+    String(originalName)
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(
+        /[^a-z0-9._-]/g,
+        "-"
+      )
+      .replace(/-+/g, "-");
 
-        include: {
-          category: true,
-
-          images: {
-            orderBy: {
-              createdAt: "asc",
-            },
-          },
-        },
-      });
-
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      product,
-    });
-  } catch (error) {
-    console.error(
-      "Get product error:",
-      error
-    );
-
-    res.status(500).json({
-      success: false,
-      message: "Unable to fetch product",
-    });
-  }
+  return (
+    cleaned ||
+    "image.jpg"
+  );
 };
 
-// =========================================================
-// GET PRODUCT BY SLUG
-// =========================================================
 
-const getProductBySlug = async (req, res) => {
-  try {
-    const { slug } = req.params;
+/* ============================================================
+   BOOLEAN HELPER
+============================================================ */
 
-    const product =
-      await prisma.product.findUnique({
-        where: {
-          slug,
-        },
-
-        include: {
-          category: true,
-
-          images: {
-            orderBy: {
-              createdAt: "asc",
-            },
-          },
-        },
-      });
-
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      product,
-    });
-  } catch (error) {
-    console.error(
-      "Get product by slug error:",
-      error
-    );
-
-    res.status(500).json({
-      success: false,
-      message:
-        "Unable to fetch product",
-    });
+const parseBoolean = (
+  value,
+  fallback = false
+) => {
+  if (
+    value === true ||
+    value === "true" ||
+    value === "1" ||
+    value === 1
+  ) {
+    return true;
   }
+
+  if (
+    value === false ||
+    value === "false" ||
+    value === "0" ||
+    value === 0
+  ) {
+    return false;
+  }
+
+  return fallback;
 };
 
-// =========================================================
-// CREATE PRODUCT
-// =========================================================
 
-const createProduct = async (req, res) => {
-  try {
-    const {
-      categoryId,
-      name,
-      slug,
-      description,
-      status,
-      images,
-    } = req.body;
+/* ============================================================
+   STORAGE MODE
 
-    // -----------------------------------------
-    // VALIDATION
-    // -----------------------------------------
+   LOCAL:
+   saves inside /uploads/products
 
-    if (!categoryId || !name || !slug) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Category, name and slug are required",
-      });
+   VERCEL:
+   saves to Vercel Blob
+============================================================ */
+
+const shouldUseBlob = () => {
+  return Boolean(
+    process.env.VERCEL ||
+    process.env.BLOB_READ_WRITE_TOKEN ||
+    process.env.VERCEL_OIDC_TOKEN
+  );
+};
+
+
+/* ============================================================
+   UPLOAD PRODUCT IMAGE
+============================================================ */
+
+const uploadProductImage =
+  async (file) => {
+    if (!file) {
+      throw new Error(
+        "Product image is required."
+      );
     }
 
-    // -----------------------------------------
-    // CHECK CATEGORY
-    // -----------------------------------------
 
-    const category =
-      await prisma.productCategory.findUnique({
-        where: {
-          id: categoryId,
-        },
-      });
+    const safeFilename =
+      createSafeFilename(
+        file.originalname
+      );
 
-    if (!category) {
-      return res.status(404).json({
-        success: false,
-        message: "Category not found",
-      });
+
+    /* ========================================================
+       VERCEL BLOB
+    ======================================================== */
+
+    if (shouldUseBlob()) {
+      const {
+        put,
+      } = await getBlobSdk();
+
+
+      const pathname =
+        `products/${Date.now()}-${safeFilename}`;
+
+
+      const blob =
+        await put(
+          pathname,
+          file.buffer,
+          {
+            access: "public",
+
+            addRandomSuffix: true,
+
+            contentType:
+              file.mimetype,
+          }
+        );
+
+
+      return blob.url;
     }
 
-    if (!category.isActive) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Cannot add product to an inactive category",
-      });
+
+    /* ========================================================
+       LOCAL STORAGE
+    ======================================================== */
+
+    const uploadDirectory =
+      path.join(
+        process.cwd(),
+        "uploads",
+        "products"
+      );
+
+
+    await fs.mkdir(
+      uploadDirectory,
+      {
+        recursive: true,
+      }
+    );
+
+
+    const filename =
+      `${Date.now()}-${safeFilename}`;
+
+
+    const filePath =
+      path.join(
+        uploadDirectory,
+        filename
+      );
+
+
+    await fs.writeFile(
+      filePath,
+      file.buffer
+    );
+
+
+    return (
+      `/uploads/products/${filename}`
+    );
+  };
+
+
+/* ============================================================
+   DELETE STORED IMAGE
+============================================================ */
+
+const deleteStoredImage =
+  async (imageUrl) => {
+    if (!imageUrl) {
+      return;
     }
 
-    // -----------------------------------------
-    // CHECK DUPLICATE SLUG
-    // -----------------------------------------
 
-    const existingProduct =
-      await prisma.product.findUnique({
-        where: {
-          slug,
-        },
-      });
+    try {
 
-    if (existingProduct) {
-      return res.status(409).json({
-        success: false,
-        message:
-          "Product slug already exists",
-      });
-    }
+      /* ======================================================
+         VERCEL BLOB
+      ====================================================== */
 
-    // -----------------------------------------
-    // NORMALIZE STATUS
-    // -----------------------------------------
+      if (
+        imageUrl.includes(
+          "vercel-storage.com"
+        )
+      ) {
+        const {
+          del,
+        } = await getBlobSdk();
 
-    const productStatus =
-      status === "INACTIVE"
-        ? "INACTIVE"
-        : "ACTIVE";
 
-    // -----------------------------------------
-    // CREATE PRODUCT
-    // -----------------------------------------
+        await del(
+          imageUrl
+        );
 
-    const product =
-      await prisma.product.create({
-        data: {
-          categoryId,
+        return;
+      }
 
-          name: name.trim(),
 
-          slug: slug.trim(),
+      /* ======================================================
+         LOCAL IMAGE
+      ====================================================== */
 
-          description:
-            description &&
-            description.trim()
-              ? description.trim()
-              : null,
+      if (
+        imageUrl.startsWith(
+          "/uploads/"
+        )
+      ) {
+        const relativePath =
+          imageUrl.replace(
+            /^\/+/,
+            ""
+          );
 
-          status: productStatus,
 
+        const filePath =
+          path.join(
+            process.cwd(),
+            relativePath
+          );
+
+
+        try {
+          await fs.unlink(
+            filePath
+          );
+        } catch {
           /*
-           * Backward compatibility:
-           * If images are supplied as image URLs
-           * in JSON, they will still be supported.
+           * File may already be removed.
+           * Do not stop DB operation.
            */
-          images:
-            Array.isArray(images) &&
-            images.length > 0
-              ? {
-                  create: images.map(
-                    (image, index) => ({
-                      imageUrl:
-                        typeof image ===
-                        "string"
-                          ? image
-                          : image.imageUrl,
+        }
+      }
 
-                      isPrimary:
-                        typeof image ===
-                        "object" &&
-                        image.isPrimary !==
-                          undefined
-                          ? image.isPrimary
-                          : index === 0,
-                    })
-                  ),
-                }
-              : undefined,
-        },
+    } catch (error) {
 
-        include: {
-          category: true,
+      console.error(
+        "Delete stored product image error:",
+        error
+      );
 
-          images: {
-            orderBy: {
-              createdAt: "asc",
-            },
-          },
-        },
-      });
+    }
+  };
 
-    res.status(201).json({
-      success: true,
-      message:
-        "Product created successfully",
-      product,
-    });
-  } catch (error) {
-    console.error(
-      "Create product error:",
-      error
-    );
 
-    res.status(500).json({
-      success: false,
-      message:
-        "Unable to create product",
-    });
-  }
+/* ============================================================
+   GET PRODUCT ID
+============================================================ */
+
+const getProductId = (
+  req
+) => {
+  return (
+    req.params.productId ||
+    req.params.id ||
+    ""
+  );
 };
 
-// =========================================================
-// UPDATE PRODUCT
-// =========================================================
 
-const updateProduct = async (req, res) => {
-  try {
-    const { id } = req.params;
+/* ============================================================
+   GET IMAGE ID
+============================================================ */
 
-    const {
-      categoryId,
-      name,
-      slug,
-      description,
-      status,
-    } = req.body;
+const getImageId = (
+  req
+) => {
+  return (
+    req.params.imageId ||
+    req.params.id ||
+    ""
+  );
+};
 
-    // -----------------------------------------
-    // FIND PRODUCT
-    // -----------------------------------------
 
-    const existingProduct =
-      await prisma.product.findUnique({
-        where: {
-          id,
-        },
-      });
+/* ============================================================
+   GET ALL PRODUCTS
 
-    if (!existingProduct) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
+   GET /api/products
+============================================================ */
 
-    // -----------------------------------------
-    // CHECK CATEGORY
-    // -----------------------------------------
+const getProducts =
+  async (
+    req,
+    res
+  ) => {
+    try {
 
-    if (categoryId) {
-      const category =
-        await prisma.productCategory.findUnique({
-          where: {
-            id: categoryId,
+      const products =
+        await prisma.product.findMany({
+          include:
+            PRODUCT_INCLUDE,
+
+          orderBy: {
+            createdAt:
+              "desc",
           },
         });
 
-      if (!category) {
-        return res.status(404).json({
-          success: false,
-          message: "Category not found",
-        });
-      }
 
-      if (!category.isActive) {
-        return res.status(400).json({
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          count:
+            products.length,
+
+          products,
+
+          data:
+            products,
+        });
+
+    } catch (error) {
+
+      console.error(
+        "Get products error:",
+        error
+      );
+
+
+      return res
+        .status(500)
+        .json({
           success: false,
+
           message:
-            "Cannot move product to an inactive category",
+            "Unable to fetch products.",
         });
-      }
     }
+  };
 
-    // -----------------------------------------
-    // CHECK DUPLICATE SLUG
-    // -----------------------------------------
 
-    if (
-      slug &&
-      slug !== existingProduct.slug
-    ) {
-      const duplicate =
+/* ============================================================
+   GET ACTIVE PRODUCTS
+============================================================ */
+
+const getActiveProducts =
+  async (
+    req,
+    res
+  ) => {
+    try {
+
+      const products =
+        await prisma.product.findMany({
+          where: {
+            status:
+              "ACTIVE",
+          },
+
+          include:
+            PRODUCT_INCLUDE,
+
+          orderBy: {
+            createdAt:
+              "desc",
+          },
+        });
+
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          count:
+            products.length,
+
+          products,
+
+          data:
+            products,
+        });
+
+    } catch (error) {
+
+      console.error(
+        "Get active products error:",
+        error
+      );
+
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            "Unable to fetch products.",
+        });
+    }
+  };
+
+
+/* ============================================================
+   GET PRODUCT BY ID
+
+   GET /api/products/:id
+============================================================ */
+
+const getProduct =
+  async (
+    req,
+    res
+  ) => {
+    try {
+
+      const id =
+        getProductId(
+          req
+        );
+
+
+      if (!id) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Product ID is required.",
+          });
+      }
+
+
+      const product =
         await prisma.product.findUnique({
+          where: {
+            id,
+          },
+
+          include:
+            PRODUCT_INCLUDE,
+        });
+
+
+      if (!product) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Product not found.",
+          });
+      }
+
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          product,
+
+          data:
+            product,
+        });
+
+    } catch (error) {
+
+      console.error(
+        "Get product error:",
+        error
+      );
+
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            "Unable to fetch product.",
+        });
+    }
+  };
+
+
+/* ============================================================
+   GET PRODUCT BY SLUG
+
+   GET /api/products/slug/:slug
+============================================================ */
+
+const getProductBySlug =
+  async (
+    req,
+    res
+  ) => {
+    try {
+
+      const slug =
+        String(
+          req.params.slug ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+
+      if (!slug) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Product slug is required.",
+          });
+      }
+
+
+      /*
+       * findFirst works even if slug is
+       * not marked @unique in Prisma.
+       */
+      const product =
+        await prisma.product.findFirst({
           where: {
             slug,
           },
+
+          include:
+            PRODUCT_INCLUDE,
         });
 
-      if (
-        duplicate &&
-        duplicate.id !== id
-      ) {
-        return res.status(409).json({
-          success: false,
-          message:
-            "Product slug already exists",
-        });
+
+      if (!product) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Product not found.",
+          });
       }
+
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          product,
+
+          data:
+            product,
+        });
+
+    } catch (error) {
+
+      console.error(
+        "Get product by slug error:",
+        error
+      );
+
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            "Unable to fetch product.",
+        });
     }
+  };
 
-    // -----------------------------------------
-    // PREPARE UPDATE
-    // -----------------------------------------
 
-    const updateData = {};
+/* ============================================================
+   CREATE PRODUCT
 
-    if (categoryId !== undefined) {
-      updateData.categoryId =
-        categoryId;
-    }
+   POST /api/products
+============================================================ */
 
-    if (name !== undefined) {
-      updateData.name =
-        name.trim();
-    }
+const createProduct =
+  async (
+    req,
+    res
+  ) => {
+    try {
 
-    if (slug !== undefined) {
-      updateData.slug =
-        slug.trim();
-    }
+      const {
+        categoryId,
+        name,
+        slug,
+        description,
+        status,
+      } = req.body;
 
-    if (description !== undefined) {
-      updateData.description =
-        description &&
-        description.trim()
-          ? description.trim()
-          : null;
-    }
 
-    if (status !== undefined) {
+      /* ======================================================
+         VALIDATION
+      ====================================================== */
+
+      if (!categoryId) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Category is required.",
+          });
+      }
+
+
       if (
-        !["ACTIVE", "INACTIVE"].includes(
+        !name ||
+        !String(name).trim()
+      ) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Product name is required.",
+          });
+      }
+
+
+      if (
+        !slug ||
+        !String(slug).trim()
+      ) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Product slug is required.",
+          });
+      }
+
+
+      const normalizedSlug =
+        String(slug)
+          .trim()
+          .toLowerCase();
+
+
+      /* ======================================================
+         CATEGORY CHECK
+      ====================================================== */
+
+      const category =
+        await prisma.productCategory.findUnique({
+          where: {
+            id:
+              categoryId,
+          },
+        });
+
+
+      if (!category) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Selected category was not found.",
+          });
+      }
+
+
+      /* ======================================================
+         SLUG CHECK
+      ====================================================== */
+
+      const existingProduct =
+        await prisma.product.findFirst({
+          where: {
+            slug:
+              normalizedSlug,
+          },
+        });
+
+
+      if (
+        existingProduct
+      ) {
+        return res
+          .status(409)
+          .json({
+            success: false,
+
+            message:
+              "A product with this slug already exists.",
+          });
+      }
+
+
+      /* ======================================================
+         CREATE PRODUCT
+      ====================================================== */
+
+      const product =
+        await prisma.product.create({
+          data: {
+            categoryId,
+
+            name:
+              String(name)
+                .trim(),
+
+            slug:
+              normalizedSlug,
+
+            description:
+              description
+                ? String(
+                    description
+                  ).trim()
+                : null,
+
+            status:
+              status ||
+              "ACTIVE",
+          },
+
+          include:
+            PRODUCT_INCLUDE,
+        });
+
+
+      return res
+        .status(201)
+        .json({
+          success: true,
+
+          message:
+            "Product created successfully.",
+
+          product,
+
+          data:
+            product,
+        });
+
+    } catch (error) {
+
+      console.error(
+        "Create product error:",
+        error
+      );
+
+
+      if (
+        error?.code ===
+        "P2002"
+      ) {
+        return res
+          .status(409)
+          .json({
+            success: false,
+
+            message:
+              "A product with this slug already exists.",
+          });
+      }
+
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            error?.message ||
+            "Unable to create product.",
+        });
+    }
+  };
+
+
+/* ============================================================
+   UPDATE PRODUCT
+
+   PUT /api/products/:id
+============================================================ */
+
+const updateProduct =
+  async (
+    req,
+    res
+  ) => {
+    try {
+
+      const id =
+        getProductId(
+          req
+        );
+
+
+      if (!id) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Product ID is required.",
+          });
+      }
+
+
+      const existingProduct =
+        await prisma.product.findUnique({
+          where: {
+            id,
+          },
+        });
+
+
+      if (
+        !existingProduct
+      ) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Product not found.",
+          });
+      }
+
+
+      const {
+        categoryId,
+        name,
+        slug,
+        description,
+        status,
+      } = req.body;
+
+
+      const updateData =
+        {};
+
+
+      /* ======================================================
+         CATEGORY
+      ====================================================== */
+
+      if (
+        categoryId !==
+        undefined
+      ) {
+        const category =
+          await prisma.productCategory.findUnique({
+            where: {
+              id:
+                categoryId,
+            },
+          });
+
+
+        if (!category) {
+          return res
+            .status(404)
+            .json({
+              success: false,
+
+              message:
+                "Selected category was not found.",
+            });
+        }
+
+
+        updateData.categoryId =
+          categoryId;
+      }
+
+
+      /* ======================================================
+         NAME
+      ====================================================== */
+
+      if (
+        name !==
+        undefined
+      ) {
+        const cleanName =
+          String(name)
+            .trim();
+
+
+        if (!cleanName) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+
+              message:
+                "Product name cannot be empty.",
+            });
+        }
+
+
+        updateData.name =
+          cleanName;
+      }
+
+
+      /* ======================================================
+         SLUG
+      ====================================================== */
+
+      if (
+        slug !==
+        undefined
+      ) {
+        const cleanSlug =
+          String(slug)
+            .trim()
+            .toLowerCase();
+
+
+        if (!cleanSlug) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+
+              message:
+                "Product slug cannot be empty.",
+            });
+        }
+
+
+        const existingSlug =
+          await prisma.product.findFirst({
+            where: {
+              slug:
+                cleanSlug,
+
+              NOT: {
+                id,
+              },
+            },
+          });
+
+
+        if (
+          existingSlug
+        ) {
+          return res
+            .status(409)
+            .json({
+              success: false,
+
+              message:
+                "A product with this slug already exists.",
+            });
+        }
+
+
+        updateData.slug =
+          cleanSlug;
+      }
+
+
+      /* ======================================================
+         DESCRIPTION
+      ====================================================== */
+
+      if (
+        description !==
+        undefined
+      ) {
+        updateData.description =
+          description
+            ? String(
+                description
+              ).trim()
+            : null;
+      }
+
+
+      /* ======================================================
+         STATUS
+      ====================================================== */
+
+      if (
+        status !==
+        undefined
+      ) {
+        updateData.status =
+          status;
+      }
+
+
+      /* ======================================================
+         UPDATE
+      ====================================================== */
+
+      const product =
+        await prisma.product.update({
+          where: {
+            id,
+          },
+
+          data:
+            updateData,
+
+          include:
+            PRODUCT_INCLUDE,
+        });
+
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          message:
+            "Product updated successfully.",
+
+          product,
+
+          data:
+            product,
+        });
+
+    } catch (error) {
+
+      console.error(
+        "Update product error:",
+        error
+      );
+
+
+      if (
+        error?.code ===
+        "P2002"
+      ) {
+        return res
+          .status(409)
+          .json({
+            success: false,
+
+            message:
+              "A product with this slug already exists.",
+          });
+      }
+
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            error?.message ||
+            "Unable to update product.",
+        });
+    }
+  };
+
+
+/* ============================================================
+   UPDATE PRODUCT STATUS
+
+   PATCH /api/products/:id/status
+============================================================ */
+
+const updateProductStatus =
+  async (
+    req,
+    res
+  ) => {
+    try {
+
+      const id =
+        getProductId(
+          req
+        );
+
+
+      const {
+        status,
+      } = req.body;
+
+
+      if (
+        ![
+          "ACTIVE",
+          "INACTIVE",
+        ].includes(
           status
         )
       ) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Status must be ACTIVE or INACTIVE",
-        });
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Status must be ACTIVE or INACTIVE.",
+          });
       }
 
-      updateData.status = status;
-    }
 
-    // -----------------------------------------
-    // UPDATE
-    // -----------------------------------------
-
-    const product =
-      await prisma.product.update({
-        where: {
-          id,
-        },
-
-        data: updateData,
-
-        include: {
-          category: true,
-
-          images: {
-            orderBy: {
-              createdAt: "asc",
-            },
-          },
-        },
-      });
-
-    res.json({
-      success: true,
-      message:
-        "Product updated successfully",
-      product,
-    });
-  } catch (error) {
-    console.error(
-      "Update product error:",
-      error
-    );
-
-    res.status(500).json({
-      success: false,
-      message:
-        "Unable to update product",
-    });
-  }
-};
-
-// =========================================================
-// CHANGE PRODUCT STATUS
-// =========================================================
-
-const changeProductStatus = async (
-  req,
-  res
-) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    // -----------------------------------------
-    // VALIDATE STATUS
-    // -----------------------------------------
-
-    if (
-      !["ACTIVE", "INACTIVE"].includes(
-        status
-      )
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Status must be ACTIVE or INACTIVE",
-      });
-    }
-
-    // -----------------------------------------
-    // CHECK PRODUCT
-    // -----------------------------------------
-
-    const existingProduct =
-      await prisma.product.findUnique({
-        where: {
-          id,
-        },
-      });
-
-    if (!existingProduct) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
-
-    // -----------------------------------------
-    // UPDATE STATUS
-    // -----------------------------------------
-
-    const product =
-      await prisma.product.update({
-        where: {
-          id,
-        },
-
-        data: {
-          status,
-        },
-
-        include: {
-          category: true,
-
-          images: {
-            orderBy: {
-              createdAt: "asc",
-            },
-          },
-        },
-      });
-
-    res.json({
-      success: true,
-      message: `Product ${
-        status === "ACTIVE"
-          ? "activated"
-          : "deactivated"
-      } successfully`,
-      product,
-    });
-  } catch (error) {
-    console.error(
-      "Change product status error:",
-      error
-    );
-
-    res.status(500).json({
-      success: false,
-      message:
-        "Unable to change product status",
-    });
-  }
-};
-
-// =========================================================
-// ADD PRODUCT IMAGE
-// LOCAL FILE UPLOAD
-// =========================================================
-
-const addProductImage = async (
-  req,
-  res
-) => {
-  try {
-    const { id } = req.params;
-
-    // -----------------------------------------
-    // PRODUCT
-    // -----------------------------------------
-
-    const product =
-      await prisma.product.findUnique({
-        where: {
-          id,
-        },
-      });
-
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
-
-    // -----------------------------------------
-    // CHECK UPLOADED FILE
-    // -----------------------------------------
-
-    if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Product image file is required",
-      });
-    }
-
-    // -----------------------------------------
-    // PRIMARY VALUE
-    // -----------------------------------------
-
-    const isPrimary =
-      req.body.isPrimary === true ||
-      req.body.isPrimary === "true";
-
-    // -----------------------------------------
-    // GENERATED IMAGE URL
-    // -----------------------------------------
-
-    const imageUrl =
-      `/uploads/products/${req.file.filename}`;
-
-    // -----------------------------------------
-    // IF PRIMARY
-    // REMOVE PRIMARY FROM OTHER IMAGES
-    // -----------------------------------------
-
-    if (isPrimary) {
-      await prisma.productImage.updateMany({
-        where: {
-          productId: id,
-        },
-
-        data: {
-          isPrimary: false,
-        },
-      });
-    }
-
-    // -----------------------------------------
-    // IF THIS IS THE FIRST IMAGE
-    // MAKE IT PRIMARY AUTOMATICALLY
-    // -----------------------------------------
-
-    const imageCount =
-      await prisma.productImage.count({
-        where: {
-          productId: id,
-        },
-      });
-
-    const finalIsPrimary =
-      imageCount === 0
-        ? true
-        : isPrimary;
-
-    // -----------------------------------------
-    // CREATE IMAGE RECORD
-    // -----------------------------------------
-
-    const image =
-      await prisma.productImage.create({
-        data: {
-          productId: id,
-
-          imageUrl,
-
-          isPrimary: finalIsPrimary,
-        },
-      });
-
-    res.status(201).json({
-      success: true,
-      message:
-        "Product image uploaded successfully",
-
-      image,
-    });
-  } catch (error) {
-    console.error(
-      "Add product image error:",
-      error
-    );
-
-    res.status(500).json({
-      success: false,
-      message:
-        "Unable to upload product image",
-    });
-  }
-};
-
-// =========================================================
-// DELETE PRODUCT IMAGE
-// =========================================================
-
-const deleteProductImage = async (
-  req,
-  res
-) => {
-  try {
-    const { imageId } = req.params;
-
-    // -----------------------------------------
-    // FIND IMAGE
-    // -----------------------------------------
-
-    const image =
-      await prisma.productImage.findUnique({
-        where: {
-          id: imageId,
-        },
-      });
-
-    if (!image) {
-      return res.status(404).json({
-        success: false,
-        message:
-          "Product image not found",
-      });
-    }
-
-    // -----------------------------------------
-    // DELETE IMAGE
-    // -----------------------------------------
-
-    await prisma.productImage.delete({
-      where: {
-        id: imageId,
-      },
-    });
-
-    // -----------------------------------------
-    // ENSURE PRODUCT STILL HAS PRIMARY IMAGE
-    // -----------------------------------------
-
-    if (image.isPrimary) {
-      const nextImage =
-        await prisma.productImage.findFirst({
+      const existingProduct =
+        await prisma.product.findUnique({
           where: {
-            productId:
-              image.productId,
-          },
-
-          orderBy: {
-            createdAt: "asc",
+            id,
           },
         });
 
-      if (nextImage) {
-        await prisma.productImage.update({
+
+      if (
+        !existingProduct
+      ) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Product not found.",
+          });
+      }
+
+
+      const product =
+        await prisma.product.update({
           where: {
-            id: nextImage.id,
+            id,
           },
 
           data: {
-            isPrimary: true,
+            status,
+          },
+
+          include:
+            PRODUCT_INCLUDE,
+        });
+
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          message:
+            "Product status updated successfully.",
+
+          product,
+
+          data:
+            product,
+        });
+
+    } catch (error) {
+
+      console.error(
+        "Product status error:",
+        error
+      );
+
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            error?.message ||
+            "Unable to update product status.",
+        });
+    }
+  };
+
+
+/* ============================================================
+   ADD PRODUCT IMAGE
+
+   POST /api/products/:id/images
+============================================================ */
+
+const addProductImage =
+  async (
+    req,
+    res
+  ) => {
+    let uploadedImageUrl =
+      null;
+
+
+    try {
+
+      const productId =
+        getProductId(
+          req
+        );
+
+
+      if (!productId) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Product ID is required.",
+          });
+      }
+
+
+      if (!req.file) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Please select a product image.",
+          });
+      }
+
+
+      const product =
+        await prisma.product.findUnique({
+          where: {
+            id:
+              productId,
+          },
+
+          include: {
+            images: true,
+          },
+        });
+
+
+      if (!product) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Product not found.",
+          });
+      }
+
+
+      /* ======================================================
+         PRIMARY IMAGE
+      ====================================================== */
+
+      const requestedPrimary =
+        parseBoolean(
+          req.body
+            ?.isPrimary,
+          false
+        );
+
+
+      /*
+       * First uploaded image automatically
+       * becomes primary.
+       */
+      const isPrimary =
+        requestedPrimary ||
+        product.images.length ===
+          0;
+
+
+      /* ======================================================
+         STORE IMAGE
+      ====================================================== */
+
+      uploadedImageUrl =
+        await uploadProductImage(
+          req.file
+        );
+
+
+      /* ======================================================
+         REMOVE OLD PRIMARY FLAG
+      ====================================================== */
+
+      if (isPrimary) {
+        await prisma.productImage.updateMany({
+          where: {
+            productId,
+          },
+
+          data: {
+            isPrimary:
+              false,
           },
         });
       }
+
+
+      /* ======================================================
+         CREATE IMAGE RECORD
+      ====================================================== */
+
+      const image =
+        await prisma.productImage.create({
+          data: {
+            productId,
+
+            imageUrl:
+              uploadedImageUrl,
+
+            isPrimary,
+          },
+        });
+
+
+      /* ======================================================
+         RETURN UPDATED PRODUCT
+      ====================================================== */
+
+      const updatedProduct =
+        await prisma.product.findUnique({
+          where: {
+            id:
+              productId,
+          },
+
+          include:
+            PRODUCT_INCLUDE,
+        });
+
+
+      return res
+        .status(201)
+        .json({
+          success: true,
+
+          message:
+            "Product image uploaded successfully.",
+
+          image,
+
+          product:
+            updatedProduct,
+
+          data:
+            image,
+        });
+
+    } catch (error) {
+
+      console.error(
+        "Add product image error:",
+        error
+      );
+
+
+      /*
+       * Blob/local image may have uploaded
+       * before Prisma failed.
+       */
+      if (
+        uploadedImageUrl
+      ) {
+        await deleteStoredImage(
+          uploadedImageUrl
+        );
+      }
+
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            error?.message ||
+            "Unable to upload product image.",
+        });
     }
+  };
 
-    res.json({
-      success: true,
-      message:
-        "Product image deleted successfully",
-    });
-  } catch (error) {
-    console.error(
-      "Delete product image error:",
-      error
-    );
 
-    res.status(500).json({
-      success: false,
-      message:
-        "Unable to delete product image",
-    });
-  }
-};
+/* ============================================================
+   DELETE PRODUCT IMAGE
+============================================================ */
 
-// =========================================================
-// DELETE PRODUCT
-// =========================================================
+const deleteProductImage =
+  async (
+    req,
+    res
+  ) => {
+    try {
 
-const deleteProduct = async (
-  req,
-  res
-) => {
-  try {
-    const { id } = req.params;
+      const imageId =
+        getImageId(
+          req
+        );
 
-    // -----------------------------------------
-    // FIND PRODUCT
-    // -----------------------------------------
 
-    const product =
-      await prisma.product.findUnique({
+      if (!imageId) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Image ID is required.",
+          });
+      }
+
+
+      const image =
+        await prisma.productImage.findUnique({
+          where: {
+            id:
+              imageId,
+          },
+        });
+
+
+      if (!image) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Product image not found.",
+          });
+      }
+
+
+      const {
+        productId,
+        imageUrl,
+        isPrimary,
+      } = image;
+
+
+      /* ======================================================
+         DELETE DB IMAGE
+      ====================================================== */
+
+      await prisma.productImage.delete({
         where: {
-          id,
-        },
-
-        include: {
-          images: true,
+          id:
+            imageId,
         },
       });
 
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
+
+      /* ======================================================
+         ASSIGN NEW PRIMARY
+      ====================================================== */
+
+      if (isPrimary) {
+
+        const nextImage =
+          await prisma.productImage.findFirst({
+            where: {
+              productId,
+            },
+
+            orderBy: {
+              createdAt:
+                "asc",
+            },
+          });
+
+
+        if (nextImage) {
+          await prisma.productImage.update({
+            where: {
+              id:
+                nextImage.id,
+            },
+
+            data: {
+              isPrimary:
+                true,
+            },
+          });
+        }
+      }
+
+
+      /* ======================================================
+         DELETE PHYSICAL/BLOB FILE
+      ====================================================== */
+
+      await deleteStoredImage(
+        imageUrl
+      );
+
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          message:
+            "Product image deleted successfully.",
+        });
+
+    } catch (error) {
+
+      console.error(
+        "Delete product image error:",
+        error
+      );
+
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            error?.message ||
+            "Unable to delete product image.",
+        });
     }
+  };
 
-    // -----------------------------------------
-    // DELETE PRODUCT
-    // -----------------------------------------
-    //
-    // ProductImage relation should use
-    // onDelete: Cascade in Prisma.
-    //
 
-    await prisma.product.delete({
-      where: {
-        id,
-      },
-    });
+/* ============================================================
+   DELETE PRODUCT
 
-    res.json({
-      success: true,
-      message:
-        "Product deleted successfully",
-    });
-  } catch (error) {
-    console.error(
-      "Delete product error:",
-      error
-    );
+   DELETE /api/products/:id
+============================================================ */
 
-    res.status(500).json({
-      success: false,
-      message:
-        "Unable to delete product",
-    });
-  }
-};
+const deleteProduct =
+  async (
+    req,
+    res
+  ) => {
+    try {
 
-// =========================================================
-// EXPORTS
-// =========================================================
+      const id =
+        getProductId(
+          req
+        );
+
+
+      if (!id) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Product ID is required.",
+          });
+      }
+
+
+      const product =
+        await prisma.product.findUnique({
+          where: {
+            id,
+          },
+
+          include: {
+            images: true,
+          },
+        });
+
+
+      if (!product) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Product not found.",
+          });
+      }
+
+
+      const imageUrls =
+        product.images.map(
+          (
+            image
+          ) =>
+            image.imageUrl
+        );
+
+
+      /* ======================================================
+         DELETE DB RECORDS
+      ====================================================== */
+
+      await prisma.$transaction([
+
+        prisma.productImage.deleteMany({
+          where: {
+            productId:
+              id,
+          },
+        }),
+
+        prisma.product.delete({
+          where: {
+            id,
+          },
+        }),
+
+      ]);
+
+
+      /* ======================================================
+         DELETE STORED FILES
+      ====================================================== */
+
+      for (
+        const imageUrl
+        of imageUrls
+      ) {
+        await deleteStoredImage(
+          imageUrl
+        );
+      }
+
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          message:
+            "Product deleted successfully.",
+        });
+
+    } catch (error) {
+
+      console.error(
+        "Delete product error:",
+        error
+      );
+
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            error?.message ||
+            "Unable to delete product.",
+        });
+    }
+  };
+
+
+/* ============================================================
+   EXPORTS
+
+   These names cover the names already used by
+   productRoutes.js and the frontend.
+============================================================ */
 
 module.exports = {
-  getProducts,
-  getProduct,
-  getProductBySlug,
-  createProduct,
-  updateProduct,
-  changeProductStatus,
-  addProductImage,
-  deleteProductImage,
-  deleteProduct,
-};
 
+  /* GET ALL */
+
+  getProducts,
+
+  getAllProducts:
+    getProducts,
+
+  getAll:
+    getProducts,
+
+  getAdminProducts:
+    getProducts,
+
+
+  /* ACTIVE */
+
+  getActiveProducts,
+
+  getPublicProducts:
+    getActiveProducts,
+
+
+  /* GET BY ID */
+
+  getProduct,
+
+  getProductById:
+    getProduct,
+
+  getById:
+    getProduct,
+
+
+  /* GET BY SLUG */
+
+  getProductBySlug,
+
+
+  /* CREATE */
+
+  createProduct,
+
+  create:
+    createProduct,
+
+
+  /* UPDATE */
+
+  updateProduct,
+
+  update:
+    updateProduct,
+
+
+  /* STATUS */
+
+  updateProductStatus,
+
+  changeProductStatus:
+    updateProductStatus,
+
+  updateStatus:
+    updateProductStatus,
+
+  changeStatus:
+    updateProductStatus,
+
+
+  /* ADD IMAGE */
+
+  addProductImage,
+
+  addImage:
+    addProductImage,
+
+
+  /* DELETE IMAGE */
+
+  deleteProductImage,
+
+  deleteImage:
+    deleteProductImage,
+
+
+  /* DELETE PRODUCT */
+
+  deleteProduct,
+
+  remove:
+    deleteProduct,
+
+};

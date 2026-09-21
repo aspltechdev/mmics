@@ -1953,8 +1953,6 @@
 
 // export default Products;
 
-
-
 import React, {
   useEffect,
   useMemo,
@@ -1986,397 +1984,873 @@ import categoryService from "../../services/categoryService";
 
 import "./Products.css";
 
+
+/* ============================================================
+   IMAGE LIMIT
+
+   Keep below Vercel's 4.5 MB function payload limit.
+============================================================ */
+
+const MAX_IMAGE_SIZE =
+  4 * 1024 * 1024;
+
+
+const ALLOWED_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
+
+const INITIAL_FORM = {
+  categoryId: "",
+  name: "",
+  slug: "",
+  description: "",
+  status: "ACTIVE",
+};
+
+
+/* ============================================================
+   PRODUCTS
+============================================================ */
+
 const Products = () => {
-  // =====================================================
-  // STATE
-  // =====================================================
 
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  /* ========================================================
+     DATA
+  ======================================================== */
 
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [
+    products,
+    setProducts,
+  ] = useState([]);
 
-  const [searchTerm, setSearchTerm] = useState("");
 
-  const [statusFilter, setStatusFilter] =
-    useState("ALL");
+  const [
+    categories,
+    setCategories,
+  ] = useState([]);
 
-  const [categoryFilter, setCategoryFilter] =
-    useState("ALL");
 
-  const [showModal, setShowModal] =
-    useState(false);
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
 
-  const [showViewModal, setShowViewModal] =
-    useState(false);
 
-  const [showDeleteModal, setShowDeleteModal] =
-    useState(false);
+  const [
+    saving,
+    setSaving,
+  ] = useState(false);
 
-  const [showImageModal, setShowImageModal] =
-    useState(false);
 
-  const [editingProduct, setEditingProduct] =
-    useState(null);
+  /* ========================================================
+     FILTERS
+  ======================================================== */
 
-  const [viewingProduct, setViewingProduct] =
-    useState(null);
+  const [
+    searchTerm,
+    setSearchTerm,
+  ] = useState("");
 
-  const [deletingProduct, setDeletingProduct] =
-    useState(null);
 
-  const [selectedProduct, setSelectedProduct] =
-    useState(null);
+  const [
+    statusFilter,
+    setStatusFilter,
+  ] = useState(
+    "ALL"
+  );
 
-  const [form, setForm] = useState({
-    categoryId: "",
-    name: "",
-    slug: "",
-    description: "",
-    status: "ACTIVE",
+
+  const [
+    categoryFilter,
+    setCategoryFilter,
+  ] = useState(
+    "ALL"
+  );
+
+
+  /* ========================================================
+     MODALS
+  ======================================================== */
+
+  const [
+    showModal,
+    setShowModal,
+  ] = useState(false);
+
+
+  const [
+    showViewModal,
+    setShowViewModal,
+  ] = useState(false);
+
+
+  const [
+    showDeleteModal,
+    setShowDeleteModal,
+  ] = useState(false);
+
+
+  const [
+    showImageModal,
+    setShowImageModal,
+  ] = useState(false);
+
+
+  /* ========================================================
+     SELECTED PRODUCTS
+  ======================================================== */
+
+  const [
+    editingProduct,
+    setEditingProduct,
+  ] = useState(null);
+
+
+  const [
+    viewingProduct,
+    setViewingProduct,
+  ] = useState(null);
+
+
+  const [
+    deletingProduct,
+    setDeletingProduct,
+  ] = useState(null);
+
+
+  const [
+    selectedProduct,
+    setSelectedProduct,
+  ] = useState(null);
+
+
+  /* ========================================================
+     PRODUCT FORM
+  ======================================================== */
+
+  const [
+    form,
+    setForm,
+  ] = useState({
+    ...INITIAL_FORM,
   });
 
-  // =====================================================
-  // PRODUCT IMAGE UPLOAD STATE
-  // =====================================================
 
-  const [imageFile, setImageFile] =
-    useState(null);
+  /* ========================================================
+     IMAGE
+  ======================================================== */
 
-  const [imagePreview, setImagePreview] =
-    useState("");
+  const [
+    imageFile,
+    setImageFile,
+  ] = useState(null);
 
-  const [imagePrimary, setImagePrimary] =
-    useState(false);
+
+  const [
+    imagePreview,
+    setImagePreview,
+  ] = useState("");
+
+
+  const [
+    imagePrimary,
+    setImagePrimary,
+  ] = useState(false);
+
 
   const productImageInputRef =
     useRef(null);
 
+
   const searchInputRef =
     useRef(null);
 
-  const [error, setError] =
-    useState("");
 
-  const [successMessage, setSuccessMessage] =
-    useState("");
+  /* ========================================================
+     ALERTS
+  ======================================================== */
 
-  // =====================================================
-  // FETCH PRODUCTS
-  // =====================================================
+  const [
+    error,
+    setError,
+  ] = useState("");
 
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      setError("");
 
-      const response =
-        await productService.getAll();
+  const [
+    successMessage,
+    setSuccessMessage,
+  ] = useState("");
 
-      setProducts(
-        response?.products || []
-      );
-    } catch (err) {
-      console.error(
-        "Fetch products error:",
-        err
-      );
 
-      setError(
-        err?.response?.data?.message ||
+  /* ========================================================
+     FETCH PRODUCTS
+  ======================================================== */
+
+  const fetchProducts =
+    async () => {
+      try {
+
+        setLoading(
+          true
+        );
+
+
+        const response =
+          await productService.getAll();
+
+
+        const data =
+          Array.isArray(
+            response
+          )
+            ? response
+            : response?.products ||
+              response?.data ||
+              [];
+
+
+        setProducts(
+          Array.isArray(data)
+            ? data
+            : []
+        );
+
+      } catch (err) {
+
+        console.error(
+          "Fetch products error:",
+          err
+        );
+
+
+        setError(
+          err?.response?.data
+            ?.message ||
           "Unable to fetch products."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+        );
 
-  // =====================================================
-  // FETCH CATEGORIES
-  // =====================================================
+      } finally {
 
-  const fetchCategories = async () => {
-    try {
-      const response =
-        await categoryService.getAll();
+        setLoading(
+          false
+        );
 
-      setCategories(
-        response?.categories || []
-      );
-    } catch (err) {
-      console.error(
-        "Fetch categories error:",
-        err
-      );
-    }
-  };
+      }
+    };
 
-  // =====================================================
-  // INITIAL LOAD
-  // =====================================================
+
+  /* ========================================================
+     FETCH CATEGORIES
+  ======================================================== */
+
+  const fetchCategories =
+    async () => {
+      try {
+
+        const response =
+          await categoryService.getAll();
+
+
+        const data =
+          Array.isArray(
+            response
+          )
+            ? response
+            : response?.categories ||
+              response?.data ||
+              [];
+
+
+        setCategories(
+          Array.isArray(data)
+            ? data
+            : []
+        );
+
+      } catch (err) {
+
+        console.error(
+          "Fetch categories error:",
+          err
+        );
+
+      }
+    };
+
+
+  /* ========================================================
+     INITIAL LOAD
+  ======================================================== */
 
   useEffect(() => {
+
     fetchProducts();
+
     fetchCategories();
+
   }, []);
 
-  // =====================================================
-  // CLEANUP IMAGE PREVIEW
-  // =====================================================
+
+  /* ========================================================
+     BODY SCROLL
+  ======================================================== */
 
   useEffect(() => {
+
+    const modalOpen =
+      showModal ||
+      showViewModal ||
+      showDeleteModal ||
+      showImageModal;
+
+
+    if (!modalOpen) {
+      return undefined;
+    }
+
+
+    const previous =
+      document.body.style
+        .overflow;
+
+
+    document.body.style
+      .overflow =
+      "hidden";
+
+
     return () => {
-      if (imagePreview) {
+
+      document.body.style
+        .overflow =
+        previous;
+
+    };
+
+  }, [
+    showModal,
+    showViewModal,
+    showDeleteModal,
+    showImageModal,
+  ]);
+
+
+  /* ========================================================
+     PREVIEW CLEANUP
+  ======================================================== */
+
+  useEffect(() => {
+
+    return () => {
+
+      if (
+        imagePreview &&
+        imagePreview.startsWith(
+          "blob:"
+        )
+      ) {
         URL.revokeObjectURL(
           imagePreview
         );
       }
+
     };
-  }, [imagePreview]);
 
-  // =====================================================
-  // GENERATE SLUG
-  // =====================================================
-
-  const generateSlug = (value) => {
-    return value
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-");
-  };
-
-  // =====================================================
-  // NAME CHANGE
-  // =====================================================
-
-  const handleNameChange = (value) => {
-    setForm((previous) => ({
-      ...previous,
-
-      name: value,
-
-      ...(editingProduct
-        ? {}
-        : {
-            slug: generateSlug(
-              value
-            ),
-          }),
-    }));
-  };
-
-  // =====================================================
-  // FILTER PRODUCTS
-  // =====================================================
-
-  const filteredProducts = useMemo(() => {
-    return products.filter(
-      (product) => {
-        const search =
-          searchTerm
-            .toLowerCase()
-            .trim();
-
-        const matchesSearch =
-          !search ||
-          product.name
-            ?.toLowerCase()
-            .includes(search) ||
-          product.slug
-            ?.toLowerCase()
-            .includes(search) ||
-          product.category?.name
-            ?.toLowerCase()
-            .includes(search);
-
-        const matchesStatus =
-          statusFilter === "ALL" ||
-          product.status ===
-            statusFilter;
-
-        const matchesCategory =
-          categoryFilter === "ALL" ||
-          product.categoryId ===
-            categoryFilter;
-
-        return (
-          matchesSearch &&
-          matchesStatus &&
-          matchesCategory
-        );
-      }
-    );
   }, [
-    products,
-    searchTerm,
-    statusFilter,
-    categoryFilter,
+    imagePreview,
   ]);
 
-  // =====================================================
-  // STATS
-  // =====================================================
+
+  /* ========================================================
+     AUTO SLUG
+  ======================================================== */
+
+  const generateSlug = (
+    value
+  ) => {
+    return String(value)
+      .toLowerCase()
+      .trim()
+      .replace(
+        /[^a-z0-9\s-]/g,
+        ""
+      )
+      .replace(
+        /\s+/g,
+        "-"
+      )
+      .replace(
+        /-+/g,
+        "-"
+      );
+  };
+
+
+  const handleNameChange = (
+    value
+  ) => {
+    setForm(
+      (
+        previous
+      ) => ({
+        ...previous,
+
+        name:
+          value,
+
+        ...(
+          editingProduct
+            ? {}
+            : {
+                slug:
+                  generateSlug(
+                    value
+                  ),
+              }
+        ),
+      })
+    );
+  };
+
+
+  /* ========================================================
+     FILTERED PRODUCTS
+  ======================================================== */
+
+  const filteredProducts =
+    useMemo(() => {
+
+      const query =
+        searchTerm
+          .trim()
+          .toLowerCase();
+
+
+      return products.filter(
+        (
+          product
+        ) => {
+
+          const matchesSearch =
+            !query ||
+            product.name
+              ?.toLowerCase()
+              .includes(
+                query
+              ) ||
+            product.slug
+              ?.toLowerCase()
+              .includes(
+                query
+              ) ||
+            product.category
+              ?.name
+              ?.toLowerCase()
+              .includes(
+                query
+              );
+
+
+          const matchesStatus =
+            statusFilter ===
+              "ALL" ||
+            product.status ===
+              statusFilter;
+
+
+          const matchesCategory =
+            categoryFilter ===
+              "ALL" ||
+            product.categoryId ===
+              categoryFilter;
+
+
+          return (
+            matchesSearch &&
+            matchesStatus &&
+            matchesCategory
+          );
+
+        }
+      );
+
+    }, [
+      products,
+      searchTerm,
+      statusFilter,
+      categoryFilter,
+    ]);
+
+
+  /* ========================================================
+     STATS
+  ======================================================== */
 
   const totalProducts =
     products.length;
 
+
   const activeProducts =
     products.filter(
-      (product) =>
+      (
+        product
+      ) =>
         product.status ===
         "ACTIVE"
     ).length;
 
+
   const inactiveProducts =
     products.filter(
-      (product) =>
+      (
+        product
+      ) =>
         product.status ===
         "INACTIVE"
     ).length;
 
+
   const totalImages =
     products.reduce(
-      (total, product) =>
+      (
+        total,
+        product
+      ) =>
         total +
-        (product.images
-          ?.length || 0),
+        (
+          product.images
+            ?.length ||
+          0
+        ),
       0
     );
 
-  // =====================================================
-  // RESET FORM
-  // =====================================================
+
+  /* ========================================================
+     RESET FORM
+  ======================================================== */
 
   const resetForm = () => {
+
     setForm({
-      categoryId: "",
-      name: "",
-      slug: "",
-      description: "",
-      status: "ACTIVE",
+      ...INITIAL_FORM,
     });
 
-    setEditingProduct(null);
-    setError("");
+
+    setEditingProduct(
+      null
+    );
+
+
+    setError(
+      ""
+    );
+
   };
 
-  // =====================================================
-  // RESET IMAGE UPLOAD
-  // =====================================================
 
-  const resetImageUpload = () => {
-    if (imagePreview) {
-      URL.revokeObjectURL(
-        imagePreview
+  /* ========================================================
+     RESET IMAGE
+  ======================================================== */
+
+  const resetImageUpload =
+    () => {
+
+      if (
+        imagePreview &&
+        imagePreview.startsWith(
+          "blob:"
+        )
+      ) {
+        URL.revokeObjectURL(
+          imagePreview
+        );
+      }
+
+
+      setImageFile(
+        null
       );
-    }
 
-    setImageFile(null);
-    setImagePreview("");
-    setImagePrimary(false);
 
-    if (
-      productImageInputRef.current
-    ) {
-      productImageInputRef.current.value =
-        "";
-    }
-  };
+      setImagePreview(
+        ""
+      );
 
-  // =====================================================
-  // ADD PRODUCT
-  // =====================================================
 
-  const handleAddProduct = () => {
-    resetForm();
-    setShowModal(true);
-  };
+      setImagePrimary(
+        false
+      );
 
-  // =====================================================
-  // EDIT PRODUCT
-  // =====================================================
+
+      if (
+        productImageInputRef
+          .current
+      ) {
+        productImageInputRef
+          .current.value =
+          "";
+      }
+
+    };
+
+
+  /* ========================================================
+     ADD PRODUCT
+  ======================================================== */
+
+  const handleAddProduct =
+    () => {
+
+      resetForm();
+
+      resetImageUpload();
+
+      setError(
+        ""
+      );
+
+      setSuccessMessage(
+        ""
+      );
+
+      setShowModal(
+        true
+      );
+
+    };
+
+
+  /* ========================================================
+     EDIT PRODUCT
+  ======================================================== */
 
   const handleEditProduct = (
     product
   ) => {
-    setEditingProduct(product);
+
+    resetImageUpload();
+
+
+    setEditingProduct(
+      product
+    );
+
 
     setForm({
       categoryId:
-        product.categoryId || "",
+        product.categoryId ||
+        "",
 
       name:
-        product.name || "",
+        product.name ||
+        "",
 
       slug:
-        product.slug || "",
+        product.slug ||
+        "",
 
       description:
-        product.description || "",
+        product.description ||
+        "",
 
       status:
         product.status ||
         "ACTIVE",
     });
 
-    setError("");
-    setShowModal(true);
+
+    setError(
+      ""
+    );
+
+
+    setShowModal(
+      true
+    );
+
   };
 
-  // =====================================================
-  // FORM CHANGE
-  // =====================================================
+
+  /* ========================================================
+     INPUT CHANGE
+  ======================================================== */
 
   const handleChange = (
     event
   ) => {
+
     const {
       name,
       value,
     } = event.target;
 
-    setForm((previous) => ({
-      ...previous,
-      [name]: value,
-    }));
+
+    setForm(
+      (
+        previous
+      ) => ({
+        ...previous,
+
+        [name]:
+          value,
+      })
+    );
+
   };
 
-  // =====================================================
-  // SUBMIT PRODUCT
-  // =====================================================
 
-  const handleSubmit = async (
+  /* ========================================================
+     IMAGE CHANGE
+  ======================================================== */
+
+  const handleProductImageChange = (
     event
   ) => {
-    event.preventDefault();
 
-    if (!form.categoryId) {
-      setError(
-        "Please select a category."
-      );
+    const file =
+      event.target
+        .files?.[0];
+
+
+    if (!file) {
       return;
     }
 
-    if (!form.name.trim()) {
+
+    if (
+      !ALLOWED_IMAGE_TYPES.includes(
+        file.type
+      )
+    ) {
       setError(
-        "Product name is required."
+        "Only JPG, JPEG, PNG and WEBP images are allowed."
       );
+
+      event.target.value =
+        "";
+
       return;
     }
 
-    if (!form.slug.trim()) {
+
+    if (
+      file.size >
+      MAX_IMAGE_SIZE
+    ) {
       setError(
-        "Product slug is required."
+        "Product image must be smaller than 4MB."
       );
+
+      event.target.value =
+        "";
+
       return;
     }
 
-    try {
-      setSaving(true);
-      setError("");
+
+    setError(
+      ""
+    );
+
+
+    if (
+      imagePreview &&
+      imagePreview.startsWith(
+        "blob:"
+      )
+    ) {
+      URL.revokeObjectURL(
+        imagePreview
+      );
+    }
+
+
+    const preview =
+      URL.createObjectURL(
+        file
+      );
+
+
+    setImageFile(
+      file
+    );
+
+
+    setImagePreview(
+      preview
+    );
+
+  };
+
+
+  /* ========================================================
+     CREATE / UPDATE PRODUCT
+
+     Product save and image upload are intentionally separated.
+     If image upload fails AFTER product creation, we never show
+     the incorrect message "Unable to save product".
+  ======================================================== */
+
+  const handleSubmit =
+    async (
+      event
+    ) => {
+
+      event.preventDefault();
+
+
+      if (
+        !form.categoryId
+      ) {
+        setError(
+          "Please select a category."
+        );
+
+        return;
+      }
+
+
+      if (
+        !form.name.trim()
+      ) {
+        setError(
+          "Product name is required."
+        );
+
+        return;
+      }
+
+
+      if (
+        !form.slug.trim()
+      ) {
+        setError(
+          "Product slug is required."
+        );
+
+        return;
+      }
+
+
+      setSaving(
+        true
+      );
+
+
+      setError(
+        ""
+      );
+
+
+      setSuccessMessage(
+        ""
+      );
+
 
       const payload = {
         categoryId:
@@ -2389,570 +2863,1139 @@ const Products = () => {
           form.slug.trim(),
 
         description:
-          form.description.trim() ||
+          form.description
+            .trim() ||
           null,
 
         status:
           form.status,
       };
 
-      if (editingProduct) {
-        await productService.update(
-          editingProduct.id,
-          payload
-        );
 
-        setSuccessMessage(
-          "Product updated successfully."
-        );
-      } else {
+      /* ====================================================
+         EDIT
+      ==================================================== */
+
+      if (
+        editingProduct
+      ) {
+        try {
+
+          await productService.update(
+            editingProduct.id,
+            payload
+          );
+
+
+          const hadImage =
+            Boolean(
+              imageFile
+            );
+
+
+          if (
+            imageFile
+          ) {
+            try {
+
+              await productService.addImage(
+                editingProduct.id,
+                imageFile,
+                imagePrimary
+              );
+
+            } catch (
+              imageError
+            ) {
+
+              console.error(
+                "Update product image error:",
+                imageError
+              );
+
+
+              setShowModal(
+                false
+              );
+
+
+              resetForm();
+
+              resetImageUpload();
+
+
+              await fetchProducts();
+
+
+              setError(
+                `Product updated successfully, but image upload failed: ${
+                  imageError
+                    ?.response
+                    ?.data
+                    ?.message ||
+                  imageError
+                    ?.message ||
+                  "Unable to upload product image."
+                }`
+              );
+
+
+              setSaving(
+                false
+              );
+
+              return;
+            }
+          }
+
+
+          setShowModal(
+            false
+          );
+
+
+          resetForm();
+
+          resetImageUpload();
+
+
+          await fetchProducts();
+
+
+          setSuccessMessage(
+            hadImage
+              ? "Product and image updated successfully."
+              : "Product updated successfully."
+          );
+
+
+          setTimeout(
+            () => {
+              setSuccessMessage(
+                ""
+              );
+            },
+            3000
+          );
+
+        } catch (err) {
+
+          console.error(
+            "Update product error:",
+            err
+          );
+
+
+          setError(
+            err?.response?.data
+              ?.message ||
+            err?.message ||
+            "Unable to update product."
+          );
+
+        } finally {
+
+          setSaving(
+            false
+          );
+
+        }
+
+
+        return;
+      }
+
+
+      /* ====================================================
+         CREATE
+      ==================================================== */
+
+      try {
+
         const response =
           await productService.create(
             payload
           );
 
-        setSuccessMessage(
-          "Product created successfully."
+
+        console.log(
+          "Create product response:",
+          response
         );
 
-        /*
-         * If a photo was selected while
-         * creating the product, upload it
-         * immediately after creation.
-         */
 
-        if (
-          imageFile &&
-          response?.product?.id
-        ) {
-          await productService.addImage(
-            response.product.id,
-            imageFile,
-            imagePrimary
+        const createdProduct =
+          response?.product ||
+          response?.data?.product ||
+          (
+            response?.data?.id
+              ? response.data
+              : null
+          ) ||
+          (
+            response?.id
+              ? response
+              : null
           );
 
-          resetImageUpload();
+
+        if (
+          !createdProduct?.id
+        ) {
+          throw new Error(
+            "Product was created but the API did not return the product ID."
+          );
         }
-      }
 
-      setShowModal(false);
-      resetForm();
 
-      await fetchProducts();
+        const hadImage =
+          Boolean(
+            imageFile
+          );
 
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
-    } catch (err) {
-      console.error(
-        "Save product error:",
-        err
-      );
 
-      setError(
-        err?.response?.data?.message ||
-          "Unable to save product."
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
+        /* ==================================================
+           IMAGE
+        ================================================== */
 
-  // =====================================================
-  // VIEW PRODUCT
-  // =====================================================
+        if (
+          imageFile
+        ) {
+          try {
 
-  const handleViewProduct = async (
-    product
-  ) => {
-    try {
-      const response =
-        await productService.getById(
-          product.id
+            await productService.addImage(
+              createdProduct.id,
+              imageFile,
+              imagePrimary
+            );
+
+          } catch (
+            imageError
+          ) {
+
+            console.error(
+              "Create product image upload error:",
+              imageError
+            );
+
+
+            console.error(
+              "Image API response:",
+              imageError
+                ?.response
+                ?.data
+            );
+
+
+            setShowModal(
+              false
+            );
+
+
+            resetForm();
+
+            resetImageUpload();
+
+
+            await fetchProducts();
+
+
+            setError(
+              `Product created successfully, but image upload failed: ${
+                imageError
+                  ?.response
+                  ?.data
+                  ?.message ||
+                imageError
+                  ?.message ||
+                "Unable to upload product image."
+              }`
+            );
+
+
+            return;
+          }
+        }
+
+
+        /* ==================================================
+           SUCCESS
+        ================================================== */
+
+        setShowModal(
+          false
         );
 
-      setViewingProduct(
-        response?.product ||
+
+        resetForm();
+
+        resetImageUpload();
+
+
+        await fetchProducts();
+
+
+        setSuccessMessage(
+          hadImage
+            ? "Product and image created successfully."
+            : "Product created successfully."
+        );
+
+
+        setTimeout(
+          () => {
+            setSuccessMessage(
+              ""
+            );
+          },
+          3000
+        );
+
+      } catch (err) {
+
+        console.error(
+          "Save product error:",
+          err
+        );
+
+
+        console.error(
+          "Save product response:",
+          err?.response?.data
+        );
+
+
+        setError(
+          err?.response?.data
+            ?.message ||
+          err?.message ||
+          "Unable to save product."
+        );
+
+      } finally {
+
+        setSaving(
+          false
+        );
+
+      }
+
+    };
+
+
+  /* ========================================================
+     VIEW
+  ======================================================== */
+
+  const handleViewProduct =
+    async (
+      product
+    ) => {
+
+      try {
+
+        const response =
+          await productService.getById(
+            product.id
+          );
+
+
+        setViewingProduct(
+          response?.product ||
+          response?.data ||
           product
+        );
+
+      } catch (err) {
+
+        console.error(
+          "View product error:",
+          err
+        );
+
+
+        setViewingProduct(
+          product
+        );
+
+      }
+
+
+      setShowViewModal(
+        true
       );
 
-      setShowViewModal(true);
-    } catch (err) {
-      console.error(
-        "View product error:",
-        err
-      );
+    };
 
-      setViewingProduct(product);
-      setShowViewModal(true);
-    }
-  };
 
-  // =====================================================
-  // STATUS CHANGE
-  // =====================================================
+  /* ========================================================
+     STATUS
+  ======================================================== */
 
-  const handleStatusChange = async (
-    product,
-    newStatus
-  ) => {
-    try {
-      await productService.updateStatus(
-        product.id,
-        newStatus
-      );
+  const handleStatusChange =
+    async (
+      product,
+      newStatus
+    ) => {
 
-      setProducts((previous) =>
-        previous.map((item) =>
-          item.id === product.id
-            ? {
-                ...item,
-                status:
-                  newStatus,
-              }
-            : item
-        )
-      );
+      try {
 
-      setSuccessMessage(
-        `Product ${
-          newStatus === "ACTIVE"
-            ? "activated"
-            : "deactivated"
-        } successfully.`
-      );
+        setError(
+          ""
+        );
 
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 2500);
-    } catch (err) {
-      console.error(
-        "Change product status error:",
-        err
-      );
 
-      setError(
-        err?.response?.data?.message ||
+        await productService.updateStatus(
+          product.id,
+          newStatus
+        );
+
+
+        setProducts(
+          (
+            previous
+          ) =>
+            previous.map(
+              (
+                item
+              ) =>
+                item.id ===
+                product.id
+                  ? {
+                      ...item,
+
+                      status:
+                        newStatus,
+                    }
+                  : item
+            )
+        );
+
+
+        setSuccessMessage(
+          `Product ${
+            newStatus ===
+            "ACTIVE"
+              ? "activated"
+              : "deactivated"
+          } successfully.`
+        );
+
+
+        setTimeout(
+          () => {
+            setSuccessMessage(
+              ""
+            );
+          },
+          2500
+        );
+
+      } catch (err) {
+
+        console.error(
+          "Product status error:",
+          err
+        );
+
+
+        setError(
+          err?.response?.data
+            ?.message ||
           "Unable to change product status."
-      );
-    }
-  };
+        );
 
-  // =====================================================
-  // DELETE PRODUCT
-  // =====================================================
+      }
+
+    };
+
+
+  /* ========================================================
+     DELETE PRODUCT
+  ======================================================== */
 
   const handleDeleteClick = (
     product
   ) => {
-    setDeletingProduct(product);
-    setShowDeleteModal(true);
+
+    setDeletingProduct(
+      product
+    );
+
+
+    setShowDeleteModal(
+      true
+    );
+
   };
+
 
   const confirmDelete =
     async () => {
-      if (!deletingProduct)
+
+      if (
+        !deletingProduct
+      ) {
         return;
+      }
+
 
       try {
-        setSaving(true);
+
+        setSaving(
+          true
+        );
+
+
+        setError(
+          ""
+        );
+
 
         await productService.remove(
           deletingProduct.id
         );
 
-        setProducts((previous) =>
-          previous.filter(
-            (item) =>
-              item.id !==
-              deletingProduct.id
-          )
+
+        setShowDeleteModal(
+          false
         );
 
-        setShowDeleteModal(false);
-        setDeletingProduct(null);
+
+        setDeletingProduct(
+          null
+        );
+
+
+        await fetchProducts();
+
 
         setSuccessMessage(
           "Product deleted successfully."
         );
 
-        setTimeout(() => {
-          setSuccessMessage("");
-        }, 3000);
+
+        setTimeout(
+          () => {
+            setSuccessMessage(
+              ""
+            );
+          },
+          3000
+        );
+
       } catch (err) {
+
         console.error(
           "Delete product error:",
           err
         );
 
+
         setError(
           err?.response?.data
             ?.message ||
-            "Unable to delete product."
+          "Unable to delete product."
         );
+
       } finally {
-        setSaving(false);
+
+        setSaving(
+          false
+        );
+
       }
+
     };
 
-  // =====================================================
-  // MANAGE PRODUCT IMAGES
-  // =====================================================
+
+  /* ========================================================
+     MANAGE IMAGES
+  ======================================================== */
 
   const handleManageImages = (
     product
   ) => {
-    setSelectedProduct(product);
+
+    setSelectedProduct(
+      product
+    );
+
 
     resetImageUpload();
 
-    setError("");
 
-    setShowImageModal(true);
-  };
-
-  // =====================================================
-  // IMAGE FILE SELECT
-  // =====================================================
-
-  const handleProductImageChange = (
-    event
-  ) => {
-    const file =
-      event.target.files?.[0];
-
-    if (!file) return;
-
-    const allowedTypes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/webp",
-    ];
-
-    if (
-      !allowedTypes.includes(
-        file.type
-      )
-    ) {
-      setError(
-        "Only JPG, JPEG, PNG and WEBP images are allowed."
-      );
-
-      event.target.value = "";
-
-      return;
-    }
-
-    if (
-      file.size >
-      5 * 1024 * 1024
-    ) {
-      setError(
-        "Product image must be smaller than 5MB."
-      );
-
-      event.target.value = "";
-
-      return;
-    }
-
-    setError("");
-
-    if (imagePreview) {
-      URL.revokeObjectURL(
-        imagePreview
-      );
-    }
-
-    const previewUrl =
-      URL.createObjectURL(
-        file
-      );
-
-    setImageFile(file);
-    setImagePreview(
-      previewUrl
+    setError(
+      ""
     );
+
+
+    setShowImageModal(
+      true
+    );
+
   };
 
-  // =====================================================
-  // ADD PRODUCT IMAGE
-  // =====================================================
 
-  const handleAddImage = async (
-    event
-  ) => {
-    event.preventDefault();
+  /* ========================================================
+     UPLOAD IMAGE FROM IMAGE MODAL
+  ======================================================== */
 
-    if (!selectedProduct) {
-      return;
-    }
+  const handleAddImage =
+    async (
+      event
+    ) => {
 
-    if (!imageFile) {
-      setError(
-        "Please select a product image."
-      );
+      event.preventDefault();
 
-      return;
-    }
 
-    try {
-      setSaving(true);
-      setError("");
-
-      await productService.addImage(
-        selectedProduct.id,
-        imageFile,
-        imagePrimary
-      );
-
-      const response =
-        await productService.getById(
-          selectedProduct.id
-        );
-
-      const updatedProduct =
-        response?.product ||
-        selectedProduct;
-
-      setSelectedProduct(
-        updatedProduct
-      );
-
-      setProducts((previous) =>
-        previous.map(
-          (product) =>
-            product.id ===
-            selectedProduct.id
-              ? updatedProduct
-              : product
-        )
-      );
-
-      resetImageUpload();
-
-      setSuccessMessage(
-        "Product image uploaded successfully."
-      );
-
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 2500);
-    } catch (err) {
-      console.error(
-        "Upload product image error:",
-        err
-      );
-
-      setError(
-        err?.response?.data?.message ||
-          "Unable to upload product image."
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // =====================================================
-  // DELETE PRODUCT IMAGE
-  // =====================================================
-
-  const handleDeleteImage =
-    async (imageId) => {
       if (
-        !window.confirm(
-          "Delete this product image?"
-        )
+        !selectedProduct
       ) {
         return;
       }
 
-      try {
-        setSaving(true);
-        setError("");
 
-        await productService.deleteImage(
-          imageId
+      if (
+        !imageFile
+      ) {
+        setError(
+          "Please select a product image."
         );
+
+        return;
+      }
+
+
+      try {
+
+        setSaving(
+          true
+        );
+
+
+        setError(
+          ""
+        );
+
+
+        await productService.addImage(
+          selectedProduct.id,
+          imageFile,
+          imagePrimary
+        );
+
 
         const response =
           await productService.getById(
             selectedProduct.id
           );
 
+
         const updatedProduct =
           response?.product ||
+          response?.data ||
           selectedProduct;
+
 
         setSelectedProduct(
           updatedProduct
         );
 
-        setProducts((previous) =>
-          previous.map(
-            (product) =>
-              product.id ===
-              selectedProduct.id
-                ? updatedProduct
-                : product
-          )
+
+        setProducts(
+          (
+            previous
+          ) =>
+            previous.map(
+              (
+                product
+              ) =>
+                product.id ===
+                selectedProduct.id
+                  ? updatedProduct
+                  : product
+            )
         );
+
+
+        resetImageUpload();
+
+
+        setSuccessMessage(
+          "Product image uploaded successfully."
+        );
+
+
+        setTimeout(
+          () => {
+            setSuccessMessage(
+              ""
+            );
+          },
+          2500
+        );
+
+      } catch (err) {
+
+        console.error(
+          "Upload product image error:",
+          err
+        );
+
+
+        console.error(
+          "Upload image response:",
+          err?.response?.data
+        );
+
+
+        setError(
+          err?.response?.data
+            ?.message ||
+          err?.message ||
+          "Unable to upload product image."
+        );
+
+      } finally {
+
+        setSaving(
+          false
+        );
+
+      }
+
+    };
+
+
+  /* ========================================================
+     DELETE IMAGE
+  ======================================================== */
+
+  const handleDeleteImage =
+    async (
+      imageId
+    ) => {
+
+      const confirmed =
+        window.confirm(
+          "Delete this product image?"
+        );
+
+
+      if (
+        !confirmed
+      ) {
+        return;
+      }
+
+
+      try {
+
+        setSaving(
+          true
+        );
+
+
+        setError(
+          ""
+        );
+
+
+        await productService.deleteImage(
+          imageId
+        );
+
+
+        const response =
+          await productService.getById(
+            selectedProduct.id
+          );
+
+
+        const updatedProduct =
+          response?.product ||
+          response?.data ||
+          selectedProduct;
+
+
+        setSelectedProduct(
+          updatedProduct
+        );
+
+
+        setProducts(
+          (
+            previous
+          ) =>
+            previous.map(
+              (
+                product
+              ) =>
+                product.id ===
+                selectedProduct.id
+                  ? updatedProduct
+                  : product
+            )
+        );
+
 
         setSuccessMessage(
           "Product image deleted successfully."
         );
 
-        setTimeout(() => {
-          setSuccessMessage("");
-        }, 2500);
+
+        setTimeout(
+          () => {
+            setSuccessMessage(
+              ""
+            );
+          },
+          2500
+        );
+
       } catch (err) {
+
         console.error(
           "Delete product image error:",
           err
         );
 
+
         setError(
           err?.response?.data
             ?.message ||
-            "Unable to delete product image."
+          "Unable to delete product image."
         );
+
       } finally {
-        setSaving(false);
+
+        setSaving(
+          false
+        );
+
       }
+
     };
 
-  // =====================================================
-  // COPY SLUG
-  // =====================================================
 
-  const copySlug = async (
-    slug
-  ) => {
-    try {
-      await navigator.clipboard.writeText(
-        slug
-      );
-
-      setSuccessMessage(
-        "Slug copied to clipboard."
-      );
-
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 1800);
-    } catch (err) {
-      console.error(
-        "Copy slug error:",
-        err
-      );
-    }
-  };
-
-  // =====================================================
-  // GET PRODUCT IMAGE
-  // =====================================================
+  /* ========================================================
+     PRODUCT IMAGE
+  ======================================================== */
 
   const getProductImage = (
     product
   ) => {
-    const primaryImage =
+
+    const primary =
       product.images?.find(
-        (image) =>
+        (
+          image
+        ) =>
           image.isPrimary
       );
 
+
     return (
-      primaryImage?.imageUrl ||
+      primary?.imageUrl ||
       product.images?.[0]
         ?.imageUrl ||
       null
     );
+
   };
 
-  // =====================================================
-  // BUILD IMAGE URL
-  // =====================================================
 
-  const getImageUrl = (url) => {
-    if (!url) return "";
+  /* ========================================================
+     IMAGE URL
+
+     Blob:
+       URL is already HTTPS, return directly.
+
+     Local:
+       prepend local/backend server URL.
+
+     Legacy localhost URL on Vercel:
+       replace localhost origin with production backend origin.
+  ======================================================== */
+
+  const getImageUrl = (
+    imageUrl
+  ) => {
 
     if (
-      url.startsWith("http://") ||
-      url.startsWith("https://")
+      !imageUrl
+    ) {
+      return "";
+    }
+
+
+    const url =
+      String(
+        imageUrl
+      )
+        .trim()
+        .replace(
+          /\\/g,
+          "/"
+        );
+
+
+    if (
+      url.startsWith(
+        "data:"
+      ) ||
+      url.startsWith(
+        "blob:"
+      )
     ) {
       return url;
     }
+
 
     const apiUrl =
       import.meta.env
         .VITE_API_URL ||
       "http://localhost:5000/api";
 
-    const serverUrl =
-      apiUrl.replace(
-        /\/api\/?$/,
-        ""
-      );
 
-    return `${serverUrl}${
-      url.startsWith("/")
-        ? ""
-        : "/"
-    }${url}`;
+    const serverUrl =
+      apiUrl
+        .replace(
+          /\/api\/?$/,
+          ""
+        )
+        .replace(
+          /\/+$/,
+          ""
+        );
+
+
+    /* ====================================================
+       OLD LOCALHOST URL
+    ==================================================== */
+
+    if (
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//i.test(
+        url
+      )
+    ) {
+      try {
+
+        const parsed =
+          new URL(
+            url
+          );
+
+
+        return (
+          `${serverUrl}` +
+          `${parsed.pathname}`
+        );
+
+      } catch {
+
+        return "";
+
+      }
+    }
+
+
+    /* ====================================================
+       CLOUD URL
+    ==================================================== */
+
+    if (
+      url.startsWith(
+        "https://"
+      ) ||
+      url.startsWith(
+        "http://"
+      )
+    ) {
+      return url;
+    }
+
+
+    /* ====================================================
+       RELATIVE URL
+    ==================================================== */
+
+    const relative =
+      url
+        .replace(
+          /^\/?api\/(?=uploads\/)/i,
+          ""
+        )
+        .replace(
+          /^\/+/,
+          ""
+        );
+
+
+    return (
+      `${serverUrl}/${relative}`
+    );
+
   };
 
-  // =====================================================
-  // KEYBOARD SHORTCUT
-  // =====================================================
+
+  /* ========================================================
+     COPY SLUG
+  ======================================================== */
+
+  const copySlug =
+    async (
+      slug
+    ) => {
+
+      try {
+
+        await navigator.clipboard
+          .writeText(
+            slug
+          );
+
+
+        setSuccessMessage(
+          "Slug copied to clipboard."
+        );
+
+
+        setTimeout(
+          () => {
+            setSuccessMessage(
+              ""
+            );
+          },
+          1800
+        );
+
+      } catch (err) {
+
+        console.error(
+          "Copy slug error:",
+          err
+        );
+
+      }
+
+    };
+
+
+  /* ========================================================
+     KEYBOARD
+  ======================================================== */
 
   useEffect(() => {
-    const handleKeyDown = (
-      event
-    ) => {
-      if (
-        (event.ctrlKey ||
-          event.metaKey) &&
-        event.key.toLowerCase() ===
-          "k"
-      ) {
-        event.preventDefault();
 
-        searchInputRef.current?.focus();
-      }
+    const handleKeyDown =
+      (
+        event
+      ) => {
 
-      if (
-        event.key === "Escape"
-      ) {
-        setShowModal(false);
-        setShowViewModal(false);
-        setShowImageModal(false);
-        setShowDeleteModal(false);
-      }
-    };
+        if (
+          (
+            event.ctrlKey ||
+            event.metaKey
+          ) &&
+          event.key
+            .toLowerCase() ===
+            "k"
+        ) {
+          event.preventDefault();
+
+          searchInputRef
+            .current
+            ?.focus();
+        }
+
+
+        if (
+          event.key ===
+          "Escape"
+        ) {
+          if (
+            !saving
+          ) {
+            setShowModal(
+              false
+            );
+
+            setShowViewModal(
+              false
+            );
+
+            setShowDeleteModal(
+              false
+            );
+
+            setShowImageModal(
+              false
+            );
+          }
+        }
+
+      };
+
 
     window.addEventListener(
       "keydown",
       handleKeyDown
     );
 
+
     return () =>
       window.removeEventListener(
         "keydown",
         handleKeyDown
       );
-  }, []);
 
-  // =====================================================
-  // RENDER
-  // =====================================================
+  }, [
+    saving,
+  ]);
+
+
+  /* ========================================================
+     DATE
+  ======================================================== */
+
+  const formatDate = (
+    date
+  ) => {
+
+    if (!date) {
+      return "—";
+    }
+
+
+    return new Date(
+      date
+    ).toLocaleDateString(
+      "en-IN",
+      {
+        day:
+          "2-digit",
+
+        month:
+          "short",
+
+        year:
+          "numeric",
+      }
+    );
+
+  };
+
+
+  /* ========================================================
+     RENDER
+  ======================================================== */
 
   return (
     <div className="mmics-products-page">
 
-      {/* =================================================
-          HEADER
-      ================================================= */}
+      {/* HEADER */}
 
       <div className="mmics-products-header">
 
@@ -2973,18 +4016,24 @@ const Products = () => {
 
         </div>
 
+
         <div className="mmics-products-header-actions">
 
           <button
             type="button"
             className="mmics-products-refresh-btn"
-            onClick={fetchProducts}
-            title="Refresh products"
+            onClick={
+              fetchProducts
+            }
+            disabled={
+              loading
+            }
           >
             <RefreshCw
               size={17}
             />
           </button>
+
 
           <button
             type="button"
@@ -3004,9 +4053,8 @@ const Products = () => {
 
       </div>
 
-      {/* =================================================
-          SUCCESS ALERT
-      ================================================= */}
+
+      {/* SUCCESS */}
 
       {successMessage && (
         <div className="mmics-products-alert success">
@@ -3022,18 +4070,21 @@ const Products = () => {
           <button
             type="button"
             onClick={() =>
-              setSuccessMessage("")
+              setSuccessMessage(
+                ""
+              )
             }
           >
-            <X size={15} />
+            <X
+              size={15}
+            />
           </button>
 
         </div>
       )}
 
-      {/* =================================================
-          ERROR ALERT
-      ================================================= */}
+
+      {/* ERROR */}
 
       {error &&
         !showModal &&
@@ -3051,18 +4102,21 @@ const Products = () => {
             <button
               type="button"
               onClick={() =>
-                setError("")
+                setError(
+                  ""
+                )
               }
             >
-              <X size={15} />
+              <X
+                size={15}
+              />
             </button>
 
           </div>
         )}
 
-      {/* =================================================
-          STATS
-      ================================================= */}
+
+      {/* STATS */}
 
       <div className="mmics-products-stats">
 
@@ -3086,6 +4140,7 @@ const Products = () => {
 
         </div>
 
+
         <div className="mmics-product-stat-card">
 
           <div className="mmics-product-stat-icon active">
@@ -3106,6 +4161,7 @@ const Products = () => {
 
         </div>
 
+
         <div className="mmics-product-stat-card">
 
           <div className="mmics-product-stat-icon inactive">
@@ -3125,6 +4181,7 @@ const Products = () => {
           </div>
 
         </div>
+
 
         <div className="mmics-product-stat-card">
 
@@ -3148,9 +4205,8 @@ const Products = () => {
 
       </div>
 
-      {/* =================================================
-          TOOLBAR
-      ================================================= */}
+
+      {/* TOOLBAR */}
 
       <div className="mmics-products-toolbar">
 
@@ -3169,13 +4225,13 @@ const Products = () => {
             value={
               searchTerm
             }
-            onChange={(
-              event
-            ) =>
-              setSearchTerm(
-                event.target
-                  .value
-              )
+            onChange={
+              (
+                event
+              ) =>
+                setSearchTerm(
+                  event.target.value
+                )
             }
           />
 
@@ -3184,6 +4240,7 @@ const Products = () => {
           </kbd>
 
         </div>
+
 
         <div className="mmics-admin-products-filters">
 
@@ -3197,13 +4254,13 @@ const Products = () => {
               value={
                 categoryFilter
               }
-              onChange={(
-                event
-              ) =>
-                setCategoryFilter(
-                  event.target
-                    .value
-                )
+              onChange={
+                (
+                  event
+                ) =>
+                  setCategoryFilter(
+                    event.target.value
+                  )
               }
             >
               <option value="ALL">
@@ -3211,7 +4268,9 @@ const Products = () => {
               </option>
 
               {categories.map(
-                (category) => (
+                (
+                  category
+                ) => (
                   <option
                     key={
                       category.id
@@ -3234,6 +4293,7 @@ const Products = () => {
 
           </div>
 
+
           <div className="mmics-products-filter">
 
             <Power
@@ -3244,13 +4304,13 @@ const Products = () => {
               value={
                 statusFilter
               }
-              onChange={(
-                event
-              ) =>
-                setStatusFilter(
-                  event.target
-                    .value
-                )
+              onChange={
+                (
+                  event
+                ) =>
+                  setStatusFilter(
+                    event.target.value
+                  )
               }
             >
               <option value="ALL">
@@ -3276,16 +4336,14 @@ const Products = () => {
 
       </div>
 
-      {/* =================================================
-          TABLE
-      ================================================= */}
+
+      {/* TABLE */}
 
       <div className="mmics-products-table-card">
 
         <div className="mmics-products-table-top">
 
           <div>
-
             <h2>
               Product Catalogue
             </h2>
@@ -3294,18 +4352,21 @@ const Products = () => {
               {
                 filteredProducts.length
               }{" "}
-              {filteredProducts.length ===
-              1
-                ? "product"
-                : "products"}{" "}
+              {
+                filteredProducts.length ===
+                1
+                  ? "product"
+                  : "products"
+              }{" "}
               shown
             </span>
-
           </div>
 
         </div>
 
+
         {loading ? (
+
           <div className="mmics-products-loading">
 
             <div className="mmics-products-spinner" />
@@ -3315,8 +4376,10 @@ const Products = () => {
             </p>
 
           </div>
+
         ) : filteredProducts.length ===
           0 ? (
+
           <div className="mmics-products-empty">
 
             <div className="mmics-products-empty-icon">
@@ -3330,43 +4393,19 @@ const Products = () => {
             </h3>
 
             <p>
-              {searchTerm ||
-              categoryFilter !==
-                "ALL" ||
-              statusFilter !==
-                "ALL"
-                ? "Try changing your filters or search."
-                : "Start by adding your first product."}
+              Start by adding a product
+              or change your filters.
             </p>
 
-            {!searchTerm &&
-              categoryFilter ===
-                "ALL" &&
-              statusFilter ===
-                "ALL" && (
-                <button
-                  type="button"
-                  onClick={
-                    handleAddProduct
-                  }
-                  className="mmics-products-empty-btn"
-                >
-                  <Plus
-                    size={16}
-                  />
-
-                  Add Product
-                </button>
-              )}
-
           </div>
+
         ) : (
+
           <div className="mmics-products-table-wrapper">
 
             <table className="mmics-products-table">
 
               <thead>
-
                 <tr>
                   <th>
                     PRODUCT
@@ -3394,17 +4433,21 @@ const Products = () => {
 
                   <th />
                 </tr>
-
               </thead>
+
 
               <tbody>
 
                 {filteredProducts.map(
-                  (product) => {
+                  (
+                    product
+                  ) => {
+
                     const productImage =
                       getProductImage(
                         product
                       );
+
 
                     return (
                       <tr
@@ -3412,8 +4455,6 @@ const Products = () => {
                           product.id
                         }
                       >
-
-                        {/* PRODUCT */}
 
                         <td>
 
@@ -3423,9 +4464,11 @@ const Products = () => {
 
                               {productImage ? (
                                 <img
-                                  src={getImageUrl(
-                                    productImage
-                                  )}
+                                  src={
+                                    getImageUrl(
+                                      productImage
+                                    )
+                                  }
                                   alt={
                                     product.name
                                   }
@@ -3439,7 +4482,6 @@ const Products = () => {
                             </div>
 
                             <div>
-
                               <strong>
                                 {
                                   product.name
@@ -3447,47 +4489,28 @@ const Products = () => {
                               </strong>
 
                               <span>
-                                {product.description
-                                  ? product.description
-                                      .replace(
-                                        /\s+/g,
-                                        " "
-                                      )
-                                      .slice(
-                                        0,
-                                        65
-                                      ) +
-                                    (product
-                                      .description
-                                      .length >
-                                    65
-                                      ? "..."
-                                      : "")
-                                  : "No description"}
+                                {
+                                  product.description ||
+                                  "No description"
+                                }
                               </span>
-
                             </div>
 
                           </div>
 
                         </td>
 
-                        {/* CATEGORY */}
 
                         <td>
-
                           <span className="mmics-product-category">
-
-                            {product
-                              .category
-                              ?.name ||
-                              "Uncategorized"}
-
+                            {
+                              product.category
+                                ?.name ||
+                              "Uncategorized"
+                            }
                           </span>
-
                         </td>
 
-                        {/* SLUG */}
 
                         <td>
 
@@ -3518,7 +4541,6 @@ const Products = () => {
 
                         </td>
 
-                        {/* IMAGES */}
 
                         <td>
 
@@ -3536,17 +4558,16 @@ const Products = () => {
                             />
 
                             <span>
-                              {product
-                                .images
-                                ?.length ||
-                                0}
+                              {
+                                product.images
+                                  ?.length ||
+                                0
+                              }
                             </span>
-
                           </button>
 
                         </td>
 
-                        {/* STATUS */}
 
                         <td>
 
@@ -3558,44 +4579,29 @@ const Products = () => {
                                 : "inactive"
                             }`}
                           >
-
                             <span className="status-dot" />
 
-                            {product.status ===
-                            "ACTIVE"
-                              ? "Active"
-                              : "Inactive"}
-
+                            {
+                              product.status ===
+                              "ACTIVE"
+                                ? "Active"
+                                : "Inactive"
+                            }
                           </span>
 
                         </td>
 
-                        {/* UPDATED */}
 
                         <td>
-
                           <span className="mmics-product-date">
-
-                            {product.updatedAt
-                              ? new Date(
-                                  product.updatedAt
-                                ).toLocaleDateString(
-                                  "en-IN",
-                                  {
-                                    day: "2-digit",
-                                    month:
-                                      "short",
-                                    year:
-                                      "numeric",
-                                  }
-                                )
-                              : "—"}
-
+                            {
+                              formatDate(
+                                product.updatedAt
+                              )
+                            }
                           </span>
-
                         </td>
 
-                        {/* ACTIONS */}
 
                         <td>
 
@@ -3615,6 +4621,7 @@ const Products = () => {
                               />
                             </button>
 
+
                             <button
                               type="button"
                               title="Edit"
@@ -3629,6 +4636,7 @@ const Products = () => {
                               />
                             </button>
 
+
                             <button
                               type="button"
                               title="Images"
@@ -3642,6 +4650,7 @@ const Products = () => {
                                 size={16}
                               />
                             </button>
+
 
                             <button
                               type="button"
@@ -3661,17 +4670,22 @@ const Products = () => {
                                 )
                               }
                             >
-                              {product.status ===
-                              "ACTIVE" ? (
-                                <PowerOff
-                                  size={16}
-                                />
-                              ) : (
-                                <Power
-                                  size={16}
-                                />
-                              )}
+                              {
+                                product.status ===
+                                "ACTIVE"
+                                  ? (
+                                    <PowerOff
+                                      size={16}
+                                    />
+                                  )
+                                  : (
+                                    <Power
+                                      size={16}
+                                    />
+                                  )
+                              }
                             </button>
+
 
                             <button
                               type="button"
@@ -3706,54 +4720,52 @@ const Products = () => {
 
       </div>
 
-      {/* =================================================
-          ADD / EDIT PRODUCT MODAL
-      ================================================= */}
+
+      {/* ====================================================
+          CREATE / EDIT MODAL
+      ==================================================== */}
 
       {showModal && (
-        <div
-          className="mmics-products-modal-overlay"
-          onMouseDown={(
-            event
-          ) => {
-            if (
-              event.target ===
-              event.currentTarget
-            ) {
-              setShowModal(
-                false
-              );
-            }
-          }}
-        >
+
+        <div className="mmics-products-modal-overlay">
 
           <div className="mmics-products-modal">
 
             <div className="mmics-products-modal-header">
 
               <div>
-
                 <span>
-                  {editingProduct
-                    ? "PRODUCT MANAGEMENT"
-                    : "NEW PRODUCT"}
+                  {
+                    editingProduct
+                      ? "PRODUCT MANAGEMENT"
+                      : "NEW PRODUCT"
+                  }
                 </span>
 
                 <h2>
-                  {editingProduct
-                    ? "Edit Product"
-                    : "Add Product"}
+                  {
+                    editingProduct
+                      ? "Edit Product"
+                      : "Add Product"
+                  }
                 </h2>
-
               </div>
+
 
               <button
                 type="button"
-                onClick={() =>
+                disabled={
+                  saving
+                }
+                onClick={() => {
                   setShowModal(
                     false
-                  )
-                }
+                  );
+
+                  resetForm();
+
+                  resetImageUpload();
+                }}
               >
                 <X
                   size={20}
@@ -3762,34 +4774,30 @@ const Products = () => {
 
             </div>
 
+
             <form
+              className="mmics-products-form"
               onSubmit={
                 handleSubmit
               }
-              className="mmics-products-form"
             >
 
               {error && (
                 <div className="mmics-products-form-error">
-
                   <AlertTriangle
                     size={16}
                   />
 
                   {error}
-
                 </div>
               )}
 
-              {/* CATEGORY */}
 
               <div className="mmics-products-form-group">
 
                 <label>
                   Category
-                  <span>
-                    *
-                  </span>
+                  <span>*</span>
                 </label>
 
                 <div className="mmics-products-select-wrap">
@@ -3830,7 +4838,6 @@ const Products = () => {
                         </option>
                       )
                     )}
-
                   </select>
 
                   <ChevronDown
@@ -3841,15 +4848,12 @@ const Products = () => {
 
               </div>
 
-              {/* PRODUCT NAME */}
 
               <div className="mmics-products-form-group">
 
                 <label>
                   Product Name
-                  <span>
-                    *
-                  </span>
+                  <span>*</span>
                 </label>
 
                 <input
@@ -3858,29 +4862,26 @@ const Products = () => {
                   value={
                     form.name
                   }
-                  onChange={(
-                    event
-                  ) =>
-                    handleNameChange(
-                      event.target
-                        .value
-                    )
-                  }
                   placeholder="Enter product name"
+                  onChange={
+                    (
+                      event
+                    ) =>
+                      handleNameChange(
+                        event.target.value
+                      )
+                  }
                   required
                 />
 
               </div>
 
-              {/* SLUG */}
 
               <div className="mmics-products-form-group">
 
                 <label>
                   Slug
-                  <span>
-                    *
-                  </span>
+                  <span>*</span>
                 </label>
 
                 <div className="mmics-products-slug-input">
@@ -3898,20 +4899,13 @@ const Products = () => {
                     onChange={
                       handleChange
                     }
-                    placeholder="product-slug"
                     required
                   />
 
                 </div>
 
-                <small>
-                  Used for the public
-                  product URL.
-                </small>
-
               </div>
 
-              {/* DESCRIPTION */}
 
               <div className="mmics-products-form-group">
 
@@ -3924,129 +4918,14 @@ const Products = () => {
                   value={
                     form.description
                   }
+                  placeholder="Enter product description"
                   onChange={
                     handleChange
                   }
-                  placeholder="Enter product description..."
-                  rows={5}
                 />
 
               </div>
 
-              {/* PHOTO */}
-
-              {!editingProduct && (
-                <>
-                  <div className="mmics-products-form-group">
-
-                    <label>
-                      Product Photo
-                    </label>
-
-                    <input
-                      ref={
-                        productImageInputRef
-                      }
-                      type="file"
-                      accept="image/jpeg,image/jpg,image/png,image/webp"
-                      onChange={
-                        handleProductImageChange
-                      }
-                      style={{
-                        display:
-                          "none",
-                      }}
-                    />
-
-                    <button
-                      type="button"
-                      className="mmics-products-photo-upload"
-                      onClick={() =>
-                        productImageInputRef.current?.click()
-                      }
-                    >
-
-                      <Upload
-                        size={17}
-                      />
-
-                      <div>
-
-                        <strong>
-                          {imageFile
-                            ? "Change Product Photo"
-                            : "Upload Product Photo"}
-                        </strong>
-
-                        <span>
-                          JPG, PNG or WEBP
-                          · Max 5MB
-                        </span>
-
-                      </div>
-
-                    </button>
-
-                  </div>
-
-                  {imagePreview && (
-                    <div className="mmics-products-upload-preview">
-
-                      <img
-                        src={
-                          imagePreview
-                        }
-                        alt="Product preview"
-                      />
-
-                      <button
-                        type="button"
-                        onClick={
-                          resetImageUpload
-                        }
-                      >
-                        <X
-                          size={15}
-                        />
-                      </button>
-
-                    </div>
-                  )}
-
-                  <label className="mmics-products-primary-checkbox">
-
-                    <input
-                      type="checkbox"
-                      checked={
-                        imagePrimary
-                      }
-                      onChange={(
-                        event
-                      ) =>
-                        setImagePrimary(
-                          event.target
-                            .checked
-                        )
-                      }
-                    />
-
-                    <span className="custom-checkbox">
-
-                      {imagePrimary && (
-                        <Check
-                          size={12}
-                        />
-                      )}
-
-                    </span>
-
-                    Set as primary image
-
-                  </label>
-                </>
-              )}
-
-              {/* STATUS */}
 
               <div className="mmics-products-form-group">
 
@@ -4070,6 +4949,7 @@ const Products = () => {
                           previous
                         ) => ({
                           ...previous,
+
                           status:
                             "ACTIVE",
                         })
@@ -4077,11 +4957,12 @@ const Products = () => {
                     }
                   >
                     <Check
-                      size={15}
+                      size={14}
                     />
 
                     Active
                   </button>
+
 
                   <button
                     type="button"
@@ -4097,6 +4978,7 @@ const Products = () => {
                           previous
                         ) => ({
                           ...previous,
+
                           status:
                             "INACTIVE",
                         })
@@ -4104,7 +4986,7 @@ const Products = () => {
                     }
                   >
                     <PowerOff
-                      size={15}
+                      size={14}
                     />
 
                     Inactive
@@ -4114,24 +4996,144 @@ const Products = () => {
 
               </div>
 
-              {/* MODAL FOOTER */}
+
+              {/* IMAGE */}
+
+              <div className="mmics-products-form-group">
+
+                <label>
+                  Product Image
+                </label>
+
+                <input
+                  ref={
+                    productImageInputRef
+                  }
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  onChange={
+                    handleProductImageChange
+                  }
+                  style={{
+                    display:
+                      "none",
+                  }}
+                />
+
+
+                <button
+                  type="button"
+                  className="mmics-products-photo-upload"
+                  onClick={() =>
+                    productImageInputRef
+                      .current
+                      ?.click()
+                  }
+                >
+                  <Upload
+                    size={20}
+                  />
+
+                  <div>
+                    <strong>
+                      {
+                        imageFile
+                          ? "Change Photo"
+                          : "Choose Product Photo"
+                      }
+                    </strong>
+
+                    <span>
+                      JPG, PNG or WEBP · Max 4MB
+                    </span>
+                  </div>
+                </button>
+
+
+                {imagePreview && (
+
+                  <div className="mmics-products-upload-preview">
+
+                    <img
+                      src={
+                        imagePreview
+                      }
+                      alt="Product preview"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={
+                        resetImageUpload
+                      }
+                    >
+                      <X
+                        size={15}
+                      />
+                    </button>
+
+                  </div>
+
+                )}
+
+
+                {imageFile && (
+
+                  <label className="mmics-products-primary-checkbox">
+
+                    <input
+                      type="checkbox"
+                      checked={
+                        imagePrimary
+                      }
+                      onChange={
+                        (
+                          event
+                        ) =>
+                          setImagePrimary(
+                            event.target.checked
+                          )
+                      }
+                    />
+
+                    <span className="custom-checkbox">
+                      {imagePrimary && (
+                        <Check
+                          size={12}
+                        />
+                      )}
+                    </span>
+
+                    Set as primary image
+
+                  </label>
+
+                )}
+
+              </div>
+
 
               <div className="mmics-products-modal-footer">
 
                 <button
                   type="button"
                   className="secondary"
-                  onClick={() =>
-                    setShowModal(
-                      false
-                    )
-                  }
                   disabled={
                     saving
                   }
+                  onClick={() => {
+                    setShowModal(
+                      false
+                    );
+
+                    resetForm();
+
+                    resetImageUpload();
+                  }}
                 >
                   Cancel
                 </button>
+
 
                 <button
                   type="submit"
@@ -4153,9 +5155,11 @@ const Products = () => {
                         size={17}
                       />
 
-                      {editingProduct
-                        ? "Update Product"
-                        : "Create Product"}
+                      {
+                        editingProduct
+                          ? "Update Product"
+                          : "Create Product"
+                      }
                     </>
                   )}
 
@@ -4168,36 +5172,24 @@ const Products = () => {
           </div>
 
         </div>
+
       )}
 
-      {/* =================================================
-          VIEW PRODUCT MODAL
-      ================================================= */}
+
+      {/* ====================================================
+          VIEW MODAL
+      ==================================================== */}
 
       {showViewModal &&
         viewingProduct && (
-          <div
-            className="mmics-products-modal-overlay"
-            onMouseDown={(
-              event
-            ) => {
-              if (
-                event.target ===
-                event.currentTarget
-              ) {
-                setShowViewModal(
-                  false
-                );
-              }
-            }}
-          >
+
+          <div className="mmics-products-modal-overlay">
 
             <div className="mmics-products-view-modal">
 
               <div className="mmics-products-modal-header">
 
                 <div>
-
                   <span>
                     PRODUCT DETAILS
                   </span>
@@ -4207,7 +5199,6 @@ const Products = () => {
                       viewingProduct.name
                     }
                   </h2>
-
                 </div>
 
                 <button
@@ -4225,18 +5216,20 @@ const Products = () => {
 
               </div>
 
-              <div className="mmics-products-view-content">
 
-                {/* GALLERY */}
+              <div className="mmics-products-view-content">
 
                 <div className="mmics-products-view-gallery">
 
-                  {viewingProduct.images
+                  {viewingProduct
+                    .images
                     ?.length ? (
+
                     viewingProduct.images.map(
                       (
                         image
                       ) => (
+
                         <div
                           key={
                             image.id
@@ -4247,11 +5240,12 @@ const Products = () => {
                               : ""
                           }`}
                         >
-
                           <img
-                            src={getImageUrl(
-                              image.imageUrl
-                            )}
+                            src={
+                              getImageUrl(
+                                image.imageUrl
+                              )
+                            }
                             alt={
                               viewingProduct.name
                             }
@@ -4262,11 +5256,13 @@ const Products = () => {
                               Primary
                             </span>
                           )}
-
                         </div>
+
                       )
                     )
+
                   ) : (
+
                     <div className="mmics-products-no-image">
 
                       <ImageIcon
@@ -4274,21 +5270,19 @@ const Products = () => {
                       />
 
                       <span>
-                        No product
-                        images
+                        No product images
                       </span>
 
                     </div>
+
                   )}
 
                 </div>
 
-                {/* DETAILS */}
 
                 <div className="mmics-products-view-details">
 
                   <div className="mmics-products-detail-item">
-
                     <span>
                       Category
                     </span>
@@ -4301,11 +5295,10 @@ const Products = () => {
                         "—"
                       }
                     </strong>
-
                   </div>
 
-                  <div className="mmics-products-detail-item">
 
+                  <div className="mmics-products-detail-item">
                     <span>
                       Slug
                     </span>
@@ -4316,62 +5309,38 @@ const Products = () => {
                         viewingProduct.slug
                       }
                     </strong>
-
                   </div>
 
-                  <div className="mmics-products-detail-item">
 
+                  <div className="mmics-products-detail-item">
                     <span>
                       Status
                     </span>
 
-                    <span
-                      className={`mmics-product-status ${
-                        viewingProduct.status ===
-                        "ACTIVE"
-                          ? "active"
-                          : "inactive"
-                      }`}
-                    >
-
-                      <span className="status-dot" />
-
-                      {viewingProduct.status ===
-                      "ACTIVE"
-                        ? "Active"
-                        : "Inactive"}
-
-                    </span>
-
+                    <strong>
+                      {
+                        viewingProduct.status
+                      }
+                    </strong>
                   </div>
 
-                  <div className="mmics-products-detail-item">
 
+                  <div className="mmics-products-detail-item">
                     <span>
                       Created
                     </span>
 
                     <strong>
-                      {viewingProduct.createdAt
-                        ? new Date(
-                            viewingProduct.createdAt
-                          ).toLocaleDateString(
-                            "en-IN",
-                            {
-                              day: "2-digit",
-                              month:
-                                "long",
-                              year:
-                                "numeric",
-                            }
-                          )
-                        : "—"}
+                      {
+                        formatDate(
+                          viewingProduct.createdAt
+                        )
+                      }
                     </strong>
-
                   </div>
 
-                  <div className="mmics-products-detail-description">
 
+                  <div className="mmics-products-detail-description">
                     <span>
                       Description
                     </span>
@@ -4382,12 +5351,12 @@ const Products = () => {
                         "No description provided."
                       }
                     </p>
-
                   </div>
 
                 </div>
 
               </div>
+
 
               <div className="mmics-products-modal-footer">
 
@@ -4402,6 +5371,7 @@ const Products = () => {
                 >
                   Close
                 </button>
+
 
                 <button
                   type="button"
@@ -4428,36 +5398,24 @@ const Products = () => {
             </div>
 
           </div>
+
         )}
 
-      {/* =================================================
-          PRODUCT IMAGE MANAGEMENT
-      ================================================= */}
+
+      {/* ====================================================
+          IMAGE MODAL
+      ==================================================== */}
 
       {showImageModal &&
         selectedProduct && (
-          <div
-            className="mmics-products-modal-overlay"
-            onMouseDown={(
-              event
-            ) => {
-              if (
-                event.target ===
-                event.currentTarget
-              ) {
-                setShowImageModal(
-                  false
-                );
-              }
-            }}
-          >
+
+          <div className="mmics-products-modal-overlay">
 
             <div className="mmics-products-image-modal">
 
               <div className="mmics-products-modal-header">
 
                 <div>
-
                   <span>
                     MEDIA MANAGEMENT
                   </span>
@@ -4471,8 +5429,8 @@ const Products = () => {
                       selectedProduct.name
                     }
                   </p>
-
                 </div>
+
 
                 <button
                   type="button"
@@ -4482,6 +5440,10 @@ const Products = () => {
                     );
 
                     resetImageUpload();
+
+                    setError(
+                      ""
+                    );
                   }}
                 >
                   <X
@@ -4491,9 +5453,9 @@ const Products = () => {
 
               </div>
 
-              {/* IMAGE ERROR */}
 
               {error && (
+
                 <div
                   className="mmics-products-form-error"
                   style={{
@@ -4501,7 +5463,6 @@ const Products = () => {
                       "15px 20px 0",
                   }}
                 >
-
                   <AlertTriangle
                     size={16}
                   />
@@ -4511,14 +5472,20 @@ const Products = () => {
                   <button
                     type="button"
                     onClick={() =>
-                      setError("")
+                      setError(
+                        ""
+                      )
                     }
                     style={{
                       marginLeft:
                         "auto",
-                      border: 0,
+
+                      border:
+                        0,
+
                       background:
                         "transparent",
+
                       cursor:
                         "pointer",
                     }}
@@ -4527,13 +5494,12 @@ const Products = () => {
                       size={14}
                     />
                   </button>
-
                 </div>
+
               )}
 
-              <div className="mmics-products-image-content">
 
-                {/* EXISTING IMAGES */}
+              <div className="mmics-products-image-content">
 
                 <div className="mmics-products-existing-images">
 
@@ -4555,26 +5521,30 @@ const Products = () => {
 
                   </div>
 
+
                   {selectedProduct
                     .images
                     ?.length ? (
+
                     <div className="mmics-products-image-grid">
 
                       {selectedProduct.images.map(
                         (
                           image
                         ) => (
+
                           <div
                             className="mmics-products-image-card"
                             key={
                               image.id
                             }
                           >
-
                             <img
-                              src={getImageUrl(
-                                image.imageUrl
-                              )}
+                              src={
+                                getImageUrl(
+                                  image.imageUrl
+                                )
+                              }
                               alt={
                                 selectedProduct.name
                               }
@@ -4589,26 +5559,28 @@ const Products = () => {
                             <button
                               type="button"
                               className="image-delete-btn"
+                              disabled={
+                                saving
+                              }
                               onClick={() =>
                                 handleDeleteImage(
                                   image.id
                                 )
-                              }
-                              disabled={
-                                saving
                               }
                             >
                               <Trash2
                                 size={15}
                               />
                             </button>
-
                           </div>
+
                         )
                       )}
 
                     </div>
+
                   ) : (
+
                     <div className="mmics-products-no-images">
 
                       <ImageIcon
@@ -4616,16 +5588,15 @@ const Products = () => {
                       />
 
                       <span>
-                        No images added
-                        yet.
+                        No images added yet.
                       </span>
 
                     </div>
+
                   )}
 
                 </div>
 
-                {/* UPLOAD */}
 
                 <form
                   className="mmics-products-add-image"
@@ -4635,12 +5606,11 @@ const Products = () => {
                 >
 
                   <div className="mmics-products-section-title">
-
                     <strong>
                       Upload Image
                     </strong>
-
                   </div>
+
 
                   <input
                     ref={
@@ -4657,40 +5627,38 @@ const Products = () => {
                     }}
                   />
 
-                  {/* DROP / PICK AREA */}
 
                   <button
                     type="button"
                     className="mmics-products-photo-upload"
                     onClick={() =>
-                      productImageInputRef.current?.click()
+                      productImageInputRef
+                        .current
+                        ?.click()
                     }
                   >
-
                     <Upload
                       size={20}
                     />
 
                     <div>
-
                       <strong>
-                        {imageFile
-                          ? "Change Photo"
-                          : "Choose Product Photo"}
+                        {
+                          imageFile
+                            ? "Change Photo"
+                            : "Choose Product Photo"
+                        }
                       </strong>
 
                       <span>
-                        JPG, PNG or WEBP
-                        · Max 5MB
+                        JPG, PNG or WEBP · Max 4MB
                       </span>
-
                     </div>
-
                   </button>
 
-                  {/* PREVIEW */}
 
                   {imagePreview && (
+
                     <div className="mmics-products-upload-preview">
 
                       <img
@@ -4712,9 +5680,9 @@ const Products = () => {
                       </button>
 
                     </div>
+
                   )}
 
-                  {/* PRIMARY */}
 
                   <label className="mmics-products-primary-checkbox">
 
@@ -4723,31 +5691,28 @@ const Products = () => {
                       checked={
                         imagePrimary
                       }
-                      onChange={(
-                        event
-                      ) =>
-                        setImagePrimary(
-                          event.target
-                            .checked
-                        )
+                      onChange={
+                        (
+                          event
+                        ) =>
+                          setImagePrimary(
+                            event.target.checked
+                          )
                       }
                     />
 
                     <span className="custom-checkbox">
-
                       {imagePrimary && (
                         <Check
                           size={12}
                         />
                       )}
-
                     </span>
 
                     Set as primary image
 
                   </label>
 
-                  {/* UPLOAD BUTTON */}
 
                   <button
                     type="submit"
@@ -4757,15 +5722,15 @@ const Products = () => {
                       !imageFile
                     }
                   >
-
                     <Upload
                       size={16}
                     />
 
-                    {saving
-                      ? "Uploading..."
-                      : "Upload Product Photo"}
-
+                    {
+                      saving
+                        ? "Uploading..."
+                        : "Upload Product Photo"
+                    }
                   </button>
 
                 </form>
@@ -4775,43 +5740,32 @@ const Products = () => {
             </div>
 
           </div>
+
         )}
 
-      {/* =================================================
+
+      {/* ====================================================
           DELETE MODAL
-      ================================================= */}
+      ==================================================== */}
 
       {showDeleteModal &&
         deletingProduct && (
-          <div
-            className="mmics-products-modal-overlay"
-            onMouseDown={(
-              event
-            ) => {
-              if (
-                event.target ===
-                event.currentTarget
-              ) {
-                setShowDeleteModal(
-                  false
-                );
-              }
-            }}
-          >
+
+          <div className="mmics-products-modal-overlay">
 
             <div className="mmics-products-delete-modal">
 
               <div className="mmics-products-delete-icon">
-
                 <Trash2
                   size={24}
                 />
-
               </div>
+
 
               <h2>
                 Delete Product?
               </h2>
+
 
               <p>
                 You are about to
@@ -4824,6 +5778,7 @@ const Products = () => {
                 .
               </p>
 
+
               <div className="mmics-products-delete-warning">
 
                 <AlertTriangle
@@ -4834,39 +5789,42 @@ const Products = () => {
                   This action cannot be
                   undone. Associated
                   product images will
-                  also be removed
-                  according to your
-                  database relation
-                  rules.
+                  also be removed.
                 </span>
 
               </div>
+
 
               <div className="mmics-products-delete-actions">
 
                 <button
                   type="button"
                   className="secondary"
-                  onClick={() =>
-                    setShowDeleteModal(
-                      false
-                    )
-                  }
                   disabled={
                     saving
                   }
+                  onClick={() => {
+                    setShowDeleteModal(
+                      false
+                    );
+
+                    setDeletingProduct(
+                      null
+                    );
+                  }}
                 >
                   Cancel
                 </button>
 
+
                 <button
                   type="button"
                   className="danger"
-                  onClick={
-                    confirmDelete
-                  }
                   disabled={
                     saving
+                  }
+                  onClick={
+                    confirmDelete
                   }
                 >
 
@@ -4893,11 +5851,12 @@ const Products = () => {
             </div>
 
           </div>
+
         )}
 
     </div>
   );
 };
 
-export default Products;
 
+export default Products;

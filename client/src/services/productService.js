@@ -2,11 +2,16 @@ import api from "./api";
 
 
 /* ============================================================
-   NORMALIZE RESPONSE
+   RESPONSE HELPER
 ============================================================ */
 
-const getResponseData = (response) => {
-  return response?.data ?? response;
+const getData = (
+  response
+) => {
+  return (
+    response?.data ??
+    response
+  );
 };
 
 
@@ -16,9 +21,9 @@ const getResponseData = (response) => {
 
 const productService = {
 
-  /* ==========================================================
-     GET ALL PRODUCTS
-  ========================================================== */
+  /* ========================================================
+     GET ALL
+  ======================================================== */
 
   getAll: async () => {
     try {
@@ -28,7 +33,8 @@ const productService = {
           "/products"
         );
 
-      return getResponseData(
+
+      return getData(
         response
       );
 
@@ -40,16 +46,17 @@ const productService = {
       );
 
       throw error;
-
     }
   },
 
 
-  /* ==========================================================
-     GET PRODUCT BY ID
-  ========================================================== */
+  /* ========================================================
+     GET BY ID
+  ======================================================== */
 
-  getById: async (id) => {
+  getById: async (
+    id
+  ) => {
     try {
 
       const response =
@@ -57,7 +64,8 @@ const productService = {
           `/products/${id}`
         );
 
-      return getResponseData(
+
+      return getData(
         response
       );
 
@@ -69,16 +77,17 @@ const productService = {
       );
 
       throw error;
-
     }
   },
 
 
-  /* ==========================================================
-     CREATE PRODUCT
-  ========================================================== */
+  /* ========================================================
+     CREATE
+  ======================================================== */
 
-  create: async (data) => {
+  create: async (
+    data
+  ) => {
     try {
 
       const response =
@@ -87,7 +96,8 @@ const productService = {
           data
         );
 
-      return getResponseData(
+
+      return getData(
         response
       );
 
@@ -98,20 +108,21 @@ const productService = {
         error
       );
 
+
       console.error(
         "Create product response:",
         error?.response?.data
       );
 
-      throw error;
 
+      throw error;
     }
   },
 
 
-  /* ==========================================================
-     UPDATE PRODUCT
-  ========================================================== */
+  /* ========================================================
+     UPDATE
+  ======================================================== */
 
   update: async (
     id,
@@ -125,7 +136,8 @@ const productService = {
           data
         );
 
-      return getResponseData(
+
+      return getData(
         response
       );
 
@@ -136,20 +148,21 @@ const productService = {
         error
       );
 
+
       console.error(
         "Update product response:",
         error?.response?.data
       );
 
-      throw error;
 
+      throw error;
     }
   },
 
 
-  /* ==========================================================
-     UPDATE PRODUCT STATUS
-  ========================================================== */
+  /* ========================================================
+     STATUS
+  ======================================================== */
 
   updateStatus: async (
     id,
@@ -165,33 +178,37 @@ const productService = {
           }
         );
 
-      return getResponseData(
+
+      return getData(
         response
       );
 
     } catch (error) {
 
       console.error(
-        "Update product status error:",
+        "Product status error:",
         error
       );
 
+
       console.error(
-        "Update status response:",
+        "Product status response:",
         error?.response?.data
       );
 
-      throw error;
 
+      throw error;
     }
   },
 
 
-  /* ==========================================================
+  /* ========================================================
      DELETE PRODUCT
-  ========================================================== */
+  ======================================================== */
 
-  remove: async (id) => {
+  remove: async (
+    id
+  ) => {
     try {
 
       const response =
@@ -199,7 +216,8 @@ const productService = {
           `/products/${id}`
         );
 
-      return getResponseData(
+
+      return getData(
         response
       );
 
@@ -211,14 +229,17 @@ const productService = {
       );
 
       throw error;
-
     }
   },
 
 
-  /* ==========================================================
-     ADD PRODUCT IMAGE
-  ========================================================== */
+  /* ========================================================
+     ADD IMAGE
+
+     IMPORTANT:
+     Do NOT manually set multipart Content-Type.
+     Browser/Axios adds the boundary automatically.
+  ======================================================== */
 
   addImage: async (
     productId,
@@ -227,20 +248,16 @@ const productService = {
   ) => {
 
     if (!productId) {
-
       throw new Error(
         "Product ID is required."
       );
-
     }
 
 
     if (!imageFile) {
-
       throw new Error(
         "Product image is required."
       );
-
     }
 
 
@@ -249,15 +266,6 @@ const productService = {
       const formData =
         new FormData();
 
-
-      /*
-       * IMPORTANT:
-       *
-       * Your backend multer field
-       * should also be:
-       *
-       * upload.single("image")
-       */
 
       formData.append(
         "image",
@@ -282,7 +290,7 @@ const productService = {
         );
 
 
-      return getResponseData(
+      return getData(
         response
       );
 
@@ -301,26 +309,22 @@ const productService = {
 
 
       throw error;
-
     }
-
   },
 
 
-  /* ==========================================================
-     DELETE PRODUCT IMAGE
-  ========================================================== */
+  /* ========================================================
+     DELETE IMAGE
+  ======================================================== */
 
   deleteImage: async (
     imageId
   ) => {
 
     if (!imageId) {
-
       throw new Error(
         "Image ID is required."
       );
-
     }
 
 
@@ -332,7 +336,7 @@ const productService = {
         );
 
 
-      return getResponseData(
+      return getData(
         response
       );
 
@@ -343,14 +347,18 @@ const productService = {
         error
       );
 
+
       throw error;
-
     }
-
   },
 
 };
 
 
+/*
+ * REQUIRED because Products.jsx uses:
+ *
+ * import productService from "../../services/productService";
+ */
 
 export default productService;
