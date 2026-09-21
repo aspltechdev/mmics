@@ -1,120 +1,399 @@
-// client/src/components/layout/Navbar.jsx
+import React, {
+  useEffect,
+  useState,
+} from "react";
 
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Mail, Phone } from 'lucide-react';
+import {
+  Link,
+  useLocation,
+} from "react-router-dom";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  Mail,
+  Phone,
+  Menu,
+  X,
+} from "lucide-react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faInstagram,
   faFacebookF,
   faYoutube,
   faWhatsapp,
   faLinkedinIn,
-} from '@fortawesome/free-brands-svg-icons';
+} from "@fortawesome/free-brands-svg-icons";
 
-import logo from '../../assets/mmics-logo.png';
-import './Navbar.css';
+import logo from "../../assets/mmics-logo.png";
+
+import "./Navbar.css";
+
 
 const Navbar = () => {
   const location = useLocation();
 
+  const [
+    isMenuOpen,
+    setIsMenuOpen,
+  ] = useState(false);
+
+
+  /* =========================================================
+     CLOSE MOBILE MENU ON ROUTE CHANGE
+  ========================================================= */
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
+
+  /* =========================================================
+     ACTIVE LINK
+  ========================================================= */
+
+  const isActive = (path) => {
+    if (path === "/") {
+      return location.pathname === "/";
+    }
+
+    return location.pathname.startsWith(
+      path
+    );
+  };
+
+
+  /* =========================================================
+     CLOSE MOBILE MENU
+  ========================================================= */
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+
   return (
-    <div className="navbar-wrapper">
-      {/* Top Bar */}
+    <header className="navbar-wrapper">
+
+      {/* =====================================================
+          TOP BAR
+      ===================================================== */}
+
       <div className="top-bar">
+
         <div className="top-bar-left">
-          <span>
-            <Mail size={16} />
-            mmmicslimited@gmail.com
-          </span>
 
           <span>
-            <Phone size={16} />
-            +91 98402 77476
+            <Mail />
+
+            <span>
+              mmmicslimited@gmail.com
+            </span>
           </span>
+
+
+          <span>
+            <Phone />
+
+            <span>
+              +91 98402 77476
+            </span>
+          </span>
+
         </div>
+
 
         <div className="top-bar-right">
-          <a href="#" aria-label="Instagram">
-            <FontAwesomeIcon icon={faInstagram} />
+
+          <a
+            href="#"
+            aria-label="Instagram"
+          >
+            <FontAwesomeIcon
+              icon={faInstagram}
+            />
           </a>
 
-          <a href="#" aria-label="Facebook">
-            <FontAwesomeIcon icon={faFacebookF} />
+
+          <a
+            href="#"
+            aria-label="Facebook"
+          >
+            <FontAwesomeIcon
+              icon={faFacebookF}
+            />
           </a>
 
-          <a href="#" aria-label="YouTube">
-            <FontAwesomeIcon icon={faYoutube} />
+
+          <a
+            href="#"
+            aria-label="YouTube"
+          >
+            <FontAwesomeIcon
+              icon={faYoutube}
+            />
           </a>
 
-          <a href="#" aria-label="WhatsApp">
-            <FontAwesomeIcon icon={faWhatsapp} />
+
+          <a
+            href="#"
+            aria-label="WhatsApp"
+          >
+            <FontAwesomeIcon
+              icon={faWhatsapp}
+            />
           </a>
 
-          <a href="#" aria-label="LinkedIn">
-            <FontAwesomeIcon icon={faLinkedinIn} />
+
+          <a
+            href="#"
+            aria-label="LinkedIn"
+          >
+            <FontAwesomeIcon
+              icon={faLinkedinIn}
+            />
           </a>
+
         </div>
+
       </div>
 
-      {/* Main Navigation */}
+
+      {/* =====================================================
+          MAIN NAVBAR
+      ===================================================== */}
+
       <nav className="main-nav">
-        {/* Logo contains the organization name, so no separate text is added */}
-        <Link to="/" className="nav-logo">
+
+        {/* LOGO */}
+
+        <Link
+          to="/"
+          className="nav-logo"
+          onClick={closeMenu}
+          aria-label="MMICS Home"
+        >
           <img
             src={logo}
-            alt="MMMICS Logo"
+            alt="MMICS Logo"
           />
         </Link>
 
+
+        {/* ===================================================
+            DESKTOP + TABLET NAVIGATION
+        =================================================== */}
+
         <div className="nav-links">
+
           <Link
             to="/"
-            className={location.pathname === '/' ? 'active' : ''}
+            className={
+              isActive("/")
+                ? "active"
+                : ""
+            }
           >
             Home
           </Link>
 
+
           <Link
             to="/about"
-            className={location.pathname === '/about' ? 'active' : ''}
+            className={
+              isActive("/about")
+                ? "active"
+                : ""
+            }
           >
             About Us
           </Link>
 
+
           <Link
             to="/products"
             className={
-              location.pathname.startsWith('/products') ? 'active' : ''
+              isActive("/products")
+                ? "active"
+                : ""
             }
           >
             Product
           </Link>
 
+
           <Link
             to="/members"
             className={
-              location.pathname === '/members' ? 'active' : ''
+              isActive("/members")
+                ? "active"
+                : ""
             }
           >
             Membership
           </Link>
 
+
           <Link
             to="/gallery"
-            className={location.pathname === '/gallery' ? 'active' : ''}
+            className={
+              isActive("/gallery")
+                ? "active"
+                : ""
+            }
           >
             Gallery
           </Link>
+
         </div>
 
-        <Link to="/contact" className="nav-cta">
+
+        {/* CONTACT BUTTON */}
+
+        <Link
+          to="/contact"
+          className={`nav-cta ${
+            isActive("/contact")
+              ? "active"
+              : ""
+          }`}
+        >
           Contact Us
         </Link>
+
+
+        {/* ===================================================
+            MOBILE ONLY HAMBURGER
+        =================================================== */}
+
+        <button
+          type="button"
+          className={`mobile-menu-toggle ${
+            isMenuOpen
+              ? "open"
+              : ""
+          }`}
+          onClick={() =>
+            setIsMenuOpen(
+              (previous) =>
+                !previous
+            )
+          }
+          aria-label={
+            isMenuOpen
+              ? "Close menu"
+              : "Open menu"
+          }
+          aria-expanded={
+            isMenuOpen
+          }
+        >
+
+          {isMenuOpen ? (
+            <X />
+          ) : (
+            <Menu />
+          )}
+
+        </button>
+
       </nav>
-    </div>
+
+
+      {/* =====================================================
+          MOBILE MENU
+      ===================================================== */}
+
+      <div
+        className={`mobile-nav ${
+          isMenuOpen
+            ? "mobile-nav-open"
+            : ""
+        }`}
+      >
+
+        <div className="mobile-nav-links">
+
+          <Link
+            to="/"
+            onClick={closeMenu}
+            className={
+              isActive("/")
+                ? "active"
+                : ""
+            }
+          >
+            Home
+          </Link>
+
+
+          <Link
+            to="/about"
+            onClick={closeMenu}
+            className={
+              isActive("/about")
+                ? "active"
+                : ""
+            }
+          >
+            About Us
+          </Link>
+
+
+          <Link
+            to="/products"
+            onClick={closeMenu}
+            className={
+              isActive("/products")
+                ? "active"
+                : ""
+            }
+          >
+            Product
+          </Link>
+
+
+          <Link
+            to="/members"
+            onClick={closeMenu}
+            className={
+              isActive("/members")
+                ? "active"
+                : ""
+            }
+          >
+            Membership
+          </Link>
+
+
+          <Link
+            to="/gallery"
+            onClick={closeMenu}
+            className={
+              isActive("/gallery")
+                ? "active"
+                : ""
+            }
+          >
+            Gallery
+          </Link>
+
+
+          <Link
+            to="/contact"
+            onClick={closeMenu}
+            className="mobile-nav-contact"
+          >
+            Contact Us
+          </Link>
+
+        </div>
+
+      </div>
+
+    </header>
   );
 };
+
 
 export default Navbar;

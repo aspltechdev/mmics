@@ -20,6 +20,9 @@ import memberService from "../../services/memberService";
 
 import "./Members.css";
 
+import memberHero from "../../assets/memberhero.png";
+import memberCta from "../../assets/membercta.png";
+
 
 // ============================================================
 // SERVER URL
@@ -313,6 +316,14 @@ const Members = () => {
       ==================================================== */}
 
       <section className="mmics-members-hero">
+
+        <img
+          src={memberHero}
+          alt="MMICS packaging and industrial solutions"
+          className="mmics-member-hero-image"
+        />
+                
+        <div className="mmics-member-hero-overlay" />
 
         <div className="mmics-members-hero-content">
 
@@ -699,6 +710,12 @@ const Members = () => {
       ==================================================== */}
 
       <section className="mmics-members-cta">
+
+        <img
+          src={memberCta}
+          alt="Join the MMICS community"
+          className="mmics-members-cta-image"
+        />
 
         <div className="mmics-members-cta-overlay" />
 

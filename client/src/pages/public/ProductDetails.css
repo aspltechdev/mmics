@@ -5,6 +5,10 @@
 .mmics-product-details-page {
   width: 100%;
 
+  min-width: 0;
+
+  overflow-x: hidden;
+
   background: #ffffff;
 
   color: #111111;
@@ -28,6 +32,8 @@
   max-width: 1180px;
 
   margin: 0 auto;
+
+  min-width: 0;
 }
 
 
@@ -128,7 +134,7 @@
 
   color: #a0a8af;
 
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .mmics-product-main-placeholder svg {
@@ -304,11 +310,11 @@
 
   color: #2f5d91;
 
-  font-size: 8px;
+  font-size: 12px;
 
-  line-height: 1;
+  line-height: 1.2;
 
-  font-weight: 600;
+  font-weight: 700;
 
   text-transform: uppercase;
 
@@ -348,9 +354,9 @@
 
   color: #666666;
 
-  font-size: 10px;
+  font-size: 15px;
 
-  line-height: 1.55;
+  line-height: 1.65;
 
   font-weight: 400;
 }
@@ -369,11 +375,11 @@
 
   color: #2f5d91;
 
-  font-size: 14px;
+  font-size: 16px;
 
-  line-height: 1;
+  line-height: 1.2;
 
-  font-weight: 500;
+  font-weight: 600;
 }
 
 
@@ -385,7 +391,10 @@
   display: grid;
 
   grid-template-columns:
-    repeat(3, 1fr);
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
 
   gap: 9px;
 }
@@ -396,7 +405,7 @@
    ============================================================ */
 
 .mmics-product-feature {
-  min-height: 31px;
+  min-height: 38px;
 
   padding:
     0 10px;
@@ -416,16 +425,18 @@
 
   color: #555555;
 
-  font-size: 8px;
+  font-size: 12px;
 
-  line-height: 1;
+  line-height: 1.2;
 
-  white-space: nowrap;
+  white-space: normal;
+
+  overflow-wrap: anywhere;
 }
 
 .mmics-product-feature > span {
-  width: 13px;
-  height: 13px;
+  width: 16px;
+  height: 16px;
 
   flex-shrink: 0;
 
@@ -443,8 +454,8 @@
 }
 
 .mmics-product-feature svg {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
 
   stroke-width: 2.5;
 }
@@ -455,9 +466,14 @@
    ============================================================ */
 
 .mmics-product-detail-quote {
-  width: 145px;
+  width: auto;
 
-  height: 38px;
+  min-width: 155px;
+
+  min-height: 44px;
+
+  padding:
+    0 20px;
 
   margin-top: 29px;
 
@@ -476,9 +492,9 @@
 
   text-decoration: none;
 
-  font-size: 9px;
+  font-size: 13px;
 
-  font-weight: 500;
+  font-weight: 600;
 
   transition:
     background 0.2s ease,
@@ -532,11 +548,11 @@
 
   color: #2f5d91;
 
-  font-size: 7px;
+  font-size: 11px;
 
-  line-height: 1;
+  line-height: 1.2;
 
-  font-weight: 600;
+  font-weight: 700;
 
   letter-spacing: 0.5px;
 }
@@ -630,9 +646,9 @@
 
   color: #777777;
 
-  font-size: 9px;
+  font-size: 14px;
 
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 
@@ -725,11 +741,11 @@
 .mmics-product-detail-cta-content > span {
   margin-bottom: 13px;
 
-  font-size: 7px;
+  font-size: 11px;
 
-  line-height: 1;
+  line-height: 1.2;
 
-  font-weight: 500;
+  font-weight: 600;
 
   letter-spacing: 0.55px;
 }
@@ -768,9 +784,9 @@
       0.82
     );
 
-  font-size: 8px;
+  font-size: 14px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 
@@ -779,9 +795,14 @@
    ============================================================ */
 
 .mmics-product-detail-cta-button {
-  width: 105px;
+  width: auto;
 
-  height: 32px;
+  min-width: 125px;
+
+  min-height: 44px;
+
+  padding:
+    0 18px;
 
   display: inline-flex;
 
@@ -798,9 +819,9 @@
 
   text-decoration: none;
 
-  font-size: 8px;
+  font-size: 13px;
 
-  font-weight: 500;
+  font-weight: 600;
 
   transition:
     transform 0.2s ease,
@@ -862,7 +883,7 @@
 .mmics-product-details-state p {
   margin: 0;
 
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .mmics-product-details-spinner {
@@ -891,7 +912,7 @@
    ============================================================ */
 
 .mmics-product-details-back {
-  height: 36px;
+  min-height: 42px;
 
   padding:
     0 16px;
@@ -910,7 +931,7 @@
 
   text-decoration: none;
 
-  font-size: 9px;
+  font-size: 13px;
 }
 
 .mmics-product-details-back svg {
@@ -967,7 +988,10 @@
 
   .mmics-product-feature-grid {
     grid-template-columns:
-      repeat(2, 1fr);
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
   }
 
   .mmics-product-information-grid {
@@ -1018,7 +1042,7 @@
   }
 
   .mmics-product-detail-description p {
-    font-size: 10px;
+    font-size: 14px;
   }
 
 
@@ -1026,11 +1050,16 @@
 
   .mmics-product-feature-grid {
     grid-template-columns:
-      repeat(2, 1fr);
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
   }
 
   .mmics-product-feature {
-    font-size: 8px;
+    min-height: 40px;
+
+    font-size: 12px;
   }
 
 
@@ -1095,17 +1124,21 @@
   }
 
   .mmics-product-feature {
+    min-height: 42px;
+
     padding:
-      0 7px;
+      8px 10px;
 
-    gap: 5px;
+    gap: 7px;
 
-    font-size: 7px;
+    font-size: 12px;
+
+    line-height: 1.3;
   }
 
   .mmics-product-feature > span {
-    width: 12px;
-    height: 12px;
+    width: 16px;
+    height: 16px;
   }
 
   .mmics-product-detail-quote {
@@ -1116,4 +1149,99 @@
     font-size: 22px;
   }
 
+}
+
+/* ============================================================
+   RESPONSIVE SAFETY / READABILITY
+   ============================================================ */
+
+.mmics-product-details-page *,
+.mmics-product-details-page *::before,
+.mmics-product-details-page *::after {
+  box-sizing: border-box;
+}
+
+.mmics-product-details-container,
+.mmics-product-information-container,
+.mmics-product-gallery,
+.mmics-product-detail-content,
+.mmics-product-information-card {
+  min-width: 0;
+}
+
+.mmics-product-detail-content h1,
+.mmics-product-detail-description,
+.mmics-product-information-card h3,
+.mmics-product-information-card p {
+  overflow-wrap: anywhere;
+}
+
+.mmics-product-thumbnails {
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 700px) {
+  .mmics-product-main-image {
+    height: clamp(300px, 78vw, 360px);
+  }
+
+  .mmics-product-image-prev,
+  .mmics-product-image-next {
+    width: 42px;
+    height: 42px;
+  }
+
+  .mmics-product-detail-quote {
+    min-height: 44px;
+    font-size: 13px;
+  }
+
+  .mmics-product-information-heading span {
+    font-size: 11px;
+  }
+
+  .mmics-product-information-card p {
+    font-size: 14px;
+  }
+
+  .mmics-product-detail-cta-content > span {
+    font-size: 11px;
+  }
+
+  .mmics-product-detail-cta-content p {
+    font-size: 14px;
+  }
+
+  .mmics-product-detail-cta-button {
+    min-height: 44px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 380px) {
+  .mmics-product-feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mmics-product-main-image {
+    height: 280px;
+  }
+
+  .mmics-product-thumbnails button {
+    width: 54px;
+    height: 48px;
+    flex-basis: 54px;
+  }
+
+  .mmics-product-detail-content h1 {
+    font-size: 25px;
+  }
+
+  .mmics-product-information-heading h2 {
+    font-size: 23px;
+  }
+
+  .mmics-product-detail-cta-content h2 {
+    font-size: 21px;
+  }
 }

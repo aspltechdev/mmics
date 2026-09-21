@@ -1142,6 +1142,8 @@ import { Link } from "react-router-dom";
 import api from "../../services/api";
 
 import "./Gallery.css";
+import galleryHero from "../../assets/product-hero.png";
+import productCta from "../../assets/about-cta-bg.png";
 
 
 // ============================================================
@@ -1666,7 +1668,16 @@ const Gallery = () => {
 
       <section className="mmics-public-gallery-hero">
 
+        <img
+          src={galleryHero}
+          alt="MMICS packaging and industrial solutions"
+          className="mmics-gallery-hero-image"
+        />
+        
+        <div className="mmics-gallery-hero-overlay" />
+
         <div className="mmics-public-gallery-hero-content">
+
 
           <span>
             MMICS GALLERY
@@ -2252,6 +2263,57 @@ const Gallery = () => {
         </div>
 
       )}
+
+      {/* ====================================================
+                CTA
+            ==================================================== */}
+      
+            <section className="mmics-products-cta">
+      
+              <img
+                src={productCta}
+                alt=""
+                className="mmics-products-cta-image"
+              />
+      
+              <div className="mmics-products-cta-overlay" />
+      
+      
+              <div className="mmics-products-cta-content">
+      
+                <span>
+                  LET'S CONNECT
+                </span>
+      
+      
+                <h2>
+                  Ready to Find the{" "}
+                  <strong>
+                    Right Solution?
+                  </strong>
+                </h2>
+      
+      
+                <p>
+                  Tell us your requirement and let
+                  our team help you choose the right
+                  product for your business.
+                </p>
+      
+      
+                <a
+                  href="/contact"
+                  className="mmics-products-cta-button"
+                >
+                  Contact Us
+      
+                  <ArrowRight />
+      
+                </a>
+      
+              </div>
+      
+            </section>
 
     </main>
   );

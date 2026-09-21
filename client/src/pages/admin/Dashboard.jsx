@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import {
   Users,
   Package,
@@ -28,6 +29,7 @@ const Dashboard = () => {
     const loadDashboard = async () => {
       try {
         setLoading(true);
+        setError("");
 
         const response =
           await dashboardService.getAnalytics();
@@ -36,7 +38,10 @@ const Dashboard = () => {
           response?.data || response
         );
       } catch (err) {
-        console.error(err);
+        console.error(
+          "Dashboard error:",
+          err
+        );
 
         setError(
           "Unable to load dashboard data."
@@ -100,209 +105,307 @@ const Dashboard = () => {
     },
   ];
 
-  if (loading) {
-    return (
-      <div className="mmics-admin-page-loading">
-        <div className="mmics-admin-spinner" />
-        <span>
-          Loading dashboard...
-        </span>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="mmics-admin-error">
-        {error}
-      </div>
-    );
-  }
-
   return (
     <div className="mmics-dashboard">
 
-      {/* HEADER */}
+      <div className="mmics-dashboard-content">
 
-      <div className="mmics-dashboard-header">
+        {/* ================================================
+            LOADING
+        ================================================= */}
 
-        <div>
-          <span className="mmics-dashboard-eyebrow">
-            OVERVIEW
-          </span>
+        {loading && (
+          <div className="mmics-admin-page-loading">
 
-          <h1>Dashboard</h1>
+            <div className="mmics-admin-spinner" />
 
-          <p>
-            Manage your MMICS digital portal
-            from one place.
-          </p>
-        </div>
+            <span>
+              Loading dashboard...
+            </span>
 
-      </div>
+          </div>
+        )}
 
-      {/* STATS */}
 
-      <div className="mmics-dashboard-stats">
+        {/* ================================================
+            ERROR
+        ================================================= */}
 
-        {stats.map((stat) => {
-          const Icon = stat.icon;
+        {!loading && error && (
+          <div className="mmics-admin-error">
+            {error}
+          </div>
+        )}
 
-          return (
-            <div
-              className="mmics-dashboard-stat"
-              key={stat.label}
-            >
-              <div className="mmics-dashboard-stat-top">
 
-                <div className="mmics-dashboard-stat-icon">
-                  <Icon size={19} />
+        {/* ================================================
+            DASHBOARD CONTENT
+        ================================================= */}
+
+        {!loading && !error && (
+          <>
+
+            {/* ============================================
+                HEADER
+            ============================================= */}
+
+            <div className="mmics-dashboard-header">
+
+              <div>
+
+                <span className="mmics-dashboard-eyebrow">
+                  OVERVIEW
+                </span>
+
+                <h1>
+                  Dashboard
+                </h1>
+
+                <p>
+                  Manage your MMICS digital
+                  portal from one place.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            {/* ============================================
+                STATISTICS
+            ============================================= */}
+
+            <div className="mmics-dashboard-stats">
+
+              {stats.map((stat) => {
+                const Icon = stat.icon;
+
+                return (
+                  <div
+                    className="mmics-dashboard-stat"
+                    key={stat.label}
+                  >
+
+                    <div className="mmics-dashboard-stat-top">
+
+                      <div className="mmics-dashboard-stat-icon">
+                        <Icon size={19} />
+                      </div>
+
+                      <ArrowUpRight
+                        size={16}
+                      />
+
+                    </div>
+
+
+                    <div className="mmics-dashboard-stat-value">
+                      {stat.value}
+                    </div>
+
+
+                    <div className="mmics-dashboard-stat-label">
+                      {stat.label}
+                    </div>
+
+
+                    <div className="mmics-dashboard-stat-active">
+
+                      {stat.active}{" "}
+
+                      {stat.label ===
+                      "New Enquiries"
+                        ? "total"
+                        : "active"}
+
+                    </div>
+
+                  </div>
+                );
+              })}
+
+            </div>
+
+
+            {/* ============================================
+                LOWER GRID
+            ============================================= */}
+
+            <div className="mmics-dashboard-grid">
+
+
+              {/* ==========================================
+                  RECENT MEMBERS
+              =========================================== */}
+
+              <section className="mmics-dashboard-card">
+
+                <div className="mmics-dashboard-card-header">
+
+                  <div>
+
+                    <span>
+                      MEMBERS
+                    </span>
+
+                    <h2>
+                      Recent Members
+                    </h2>
+
+                  </div>
+
+                  <Users size={19} />
+
                 </div>
 
-                <ArrowUpRight size={16} />
 
-              </div>
+                <div className="mmics-dashboard-list">
 
-              <div className="mmics-dashboard-stat-value">
-                {stat.value}
-              </div>
+                  {analytics?.recentMembers
+                    ?.length ? (
 
-              <div className="mmics-dashboard-stat-label">
-                {stat.label}
-              </div>
+                    analytics.recentMembers.map(
+                      (member) => (
 
-              <div className="mmics-dashboard-stat-active">
-                {stat.active} active
-              </div>
-            </div>
-          );
-        })}
+                        <div
+                          className="mmics-dashboard-list-item"
+                          key={member.id}
+                        >
 
-      </div>
+                          <div className="mmics-dashboard-list-avatar">
 
-      {/* LOWER GRID */}
+                            {member.name
+                              ?.charAt(0)
+                              ?.toUpperCase() ||
+                              "M"}
 
-      <div className="mmics-dashboard-grid">
+                          </div>
 
-        {/* RECENT MEMBERS */}
 
-        <section className="mmics-dashboard-card">
+                          <div className="mmics-dashboard-list-details">
 
-          <div className="mmics-dashboard-card-header">
+                            <strong>
+                              {member.name}
+                            </strong>
 
-            <div>
-              <span>
-                MEMBERS
-              </span>
+                            <span>
+                              {member.membershipNumber ||
+                                "MMICS Member"}
+                            </span>
 
-              <h2>
-                Recent Members
-              </h2>
-            </div>
+                          </div>
 
-            <Users size={19} />
 
-          </div>
+                          <small>
+                            {member.status ||
+                              "ACTIVE"}
+                          </small>
 
-          <div className="mmics-dashboard-list">
+                        </div>
 
-            {analytics?.recentMembers
-              ?.length ? (
-              analytics.recentMembers.map(
-                (member) => (
-                  <div
-                    className="mmics-dashboard-list-item"
-                    key={member.id}
-                  >
-                    <div className="mmics-dashboard-list-avatar">
-                      {member.name
-                        ?.charAt(0)
-                        ?.toUpperCase()}
+                      )
+                    )
+
+                  ) : (
+
+                    <div className="mmics-dashboard-empty">
+                      No members yet.
                     </div>
 
-                    <div>
-                      <strong>
-                        {member.name}
-                      </strong>
+                  )}
 
-                      <span>
-                        {member.membershipNumber}
-                      </span>
-                    </div>
+                </div>
 
-                    <small>
-                      {member.status}
-                    </small>
+              </section>
+
+
+              {/* ==========================================
+                  RECENT ENQUIRIES
+              =========================================== */}
+
+              <section className="mmics-dashboard-card">
+
+                <div className="mmics-dashboard-card-header">
+
+                  <div>
+
+                    <span>
+                      ENQUIRIES
+                    </span>
+
+                    <h2>
+                      Recent Enquiries
+                    </h2>
+
                   </div>
-                )
-              )
-            ) : (
-              <div className="mmics-dashboard-empty">
-                No members yet.
-              </div>
-            )}
 
-          </div>
+                  <MessageSquare
+                    size={19}
+                  />
 
-        </section>
+                </div>
 
-        {/* RECENT ENQUIRIES */}
 
-        <section className="mmics-dashboard-card">
+                <div className="mmics-dashboard-list">
 
-          <div className="mmics-dashboard-card-header">
+                  {analytics?.recentEnquiries
+                    ?.length ? (
 
-            <div>
-              <span>
-                ENQUIRIES
-              </span>
+                    analytics.recentEnquiries.map(
+                      (enquiry) => (
 
-              <h2>
-                Recent Enquiries
-              </h2>
-            </div>
+                        <div
+                          className="mmics-dashboard-enquiry"
+                          key={enquiry.id}
+                        >
 
-            <MessageSquare size={19} />
+                          <div>
 
-          </div>
+                            <strong>
+                              {enquiry.name}
+                            </strong>
 
-          <div className="mmics-dashboard-list">
+                            <span>
+                              {enquiry.subject ||
+                                enquiry.type ||
+                                "General Enquiry"}
+                            </span>
 
-            {analytics?.recentEnquiries
-              ?.length ? (
-              analytics.recentEnquiries.map(
-                (enquiry) => (
-                  <div
-                    className="mmics-dashboard-enquiry"
-                    key={enquiry.id}
-                  >
-                    <div>
-                      <strong>
-                        {enquiry.name}
-                      </strong>
+                          </div>
 
-                      <span>
-                        {enquiry.subject ||
-                          enquiry.type}
-                      </span>
+
+                          <small>
+
+                            <Clock3
+                              size={12}
+                            />
+
+                            {enquiry.status ||
+                              "NEW"}
+
+                          </small>
+
+                        </div>
+
+                      )
+                    )
+
+                  ) : (
+
+                    <div className="mmics-dashboard-empty">
+                      No enquiries yet.
                     </div>
 
-                    <small>
-                      <Clock3 size={12} />
-                      {enquiry.status}
-                    </small>
-                  </div>
-                )
-              )
-            ) : (
-              <div className="mmics-dashboard-empty">
-                No enquiries yet.
-              </div>
-            )}
+                  )}
 
-          </div>
+                </div>
 
-        </section>
+              </section>
+
+            </div>
+
+          </>
+        )}
 
       </div>
 

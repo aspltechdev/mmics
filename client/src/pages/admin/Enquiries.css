@@ -6,10 +6,20 @@
 
 .mmics-enquiries {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   min-height: 100%;
   padding: 28px;
   color: #17152a;
-  background: #f7f7fb;
+  background: #ffffff;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.mmics-enquiries *,
+.mmics-enquiries *::before,
+.mmics-enquiries *::after {
+  box-sizing: border-box;
 }
 
 /* ============================================================

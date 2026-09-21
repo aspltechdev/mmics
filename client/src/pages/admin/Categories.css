@@ -4,10 +4,19 @@
 
 .mmics-categories-page {
   width: 100%;
-  min-height: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 100vh;
   padding: 30px;
-  background: #f6f7f9;
+  background: #ffffff;
   color: #17191d;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.mmics-categories-page *,
+.mmics-categories-page *::before,
+.mmics-categories-page *::after {
   box-sizing: border-box;
 }
 
@@ -260,7 +269,12 @@
 ========================================================= */
 
 .mmics-categories-toolbar {
-  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 160px;
   align-items: center;
   gap: 10px;
 
@@ -274,9 +288,9 @@
 }
 
 .mmics-categories-search {
+  width: 100%;
   height: 42px;
   min-width: 0;
-  flex: 1;
 
   padding: 0 12px;
 
@@ -343,8 +357,9 @@
 }
 
 .mmics-categories-status-filter {
+  width: 160px;
   height: 42px;
-  min-width: 160px;
+  min-width: 0;
 
   padding: 0 35px 0 12px;
 
@@ -1706,11 +1721,7 @@
   }
 
   .mmics-categories-toolbar {
-    flex-wrap: wrap;
-  }
-
-  .mmics-categories-search {
-    flex-basis: 100%;
+    grid-template-columns: minmax(0, 1fr) 160px;
   }
 }
 
@@ -1778,21 +1789,12 @@
 
   .mmics-categories-toolbar {
     padding: 10px;
-
-    flex-direction: column;
-
-    align-items: stretch;
+    grid-template-columns: 1fr;
   }
 
-  .mmics-categories-search {
-    width: 100%;
-
-    flex: none;
-  }
-
+  .mmics-categories-search,
   .mmics-categories-status-filter {
     width: 100%;
-
     min-width: 0;
   }
 
@@ -1919,5 +1921,87 @@
 
   .mmics-categories-delete-actions button {
     width: 100%;
+  }
+}
+
+/* =========================================================
+   FINAL ADMIN PAGE STABILITY FIXES
+========================================================= */
+.mmics-categories-page,
+.mmics-categories-header,
+.mmics-categories-toolbar,
+.mmics-categories-table-card,
+.mmics-categories-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.mmics-categories-table-wrapper {
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.mmics-categories-modal-backdrop {
+  padding: 20px;
+  overflow-y: auto;
+}
+.mmics-categories-modal,
+.mmics-categories-view-modal,
+.mmics-categories-delete-modal {
+  max-height: calc(100dvh - 40px);
+}
+@media (max-width: 700px) {
+  .mmics-categories-header { align-items: flex-start; }
+  .mmics-categories-header-actions,
+  .mmics-categories-toolbar { width: 100%; }
+  .mmics-categories-modal-backdrop { padding: 12px; align-items: flex-start; }
+  .mmics-categories-modal,
+  .mmics-categories-view-modal,
+  .mmics-categories-delete-modal { width: 100%; max-height: calc(100dvh - 24px); }
+}
+
+
+/* =========================================================
+   FINAL CATEGORY PAGE ALIGNMENT FIX
+   Matches the white Members page content area
+========================================================= */
+
+.mmics-categories-header,
+.mmics-categories-stats,
+.mmics-categories-toolbar,
+.mmics-categories-table-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.mmics-categories-table-card {
+  background: #ffffff;
+}
+
+.mmics-categories-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 1100px) {
+  .mmics-categories-page {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 700px) {
+  .mmics-categories-page {
+    padding: 17px;
+  }
+}
+
+@media (max-width: 420px) {
+  .mmics-categories-page {
+    padding: 13px;
   }
 }

@@ -59,11 +59,6 @@ const AdminLayout = () => {
       icon: Images,
     },
     {
-      label: "Website Content",
-      path: "/admin/website-content",
-      icon: FileText,
-    },
-    {
       label: "Enquiries",
       path: "/admin/enquiries",
       icon: MessageSquare,

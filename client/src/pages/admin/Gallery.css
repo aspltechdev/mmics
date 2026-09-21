@@ -11,7 +11,7 @@
   --gallery-border: #e9eaf0;
   --gallery-border-dark: #dedfe7;
 
-  --gallery-bg: #f7f7fa;
+  --gallery-bg: #ffffff;
   --gallery-card: #ffffff;
 
   --gallery-success: #15946b;
@@ -24,10 +24,19 @@
   --gallery-warning-bg: #fff8e6;
 
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   min-height: 100%;
   padding: 28px 30px 50px;
-  background: var(--gallery-bg);
+  background: #ffffff;
   color: var(--gallery-text);
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.mmics-gallery-page *,
+.mmics-gallery-page *::before,
+.mmics-gallery-page *::after {
   box-sizing: border-box;
 }
 

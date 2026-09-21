@@ -5,7 +5,12 @@
 
 .mmics-public-gallery-page {
   width: 100%;
+
+  min-width: 0;
+
   min-height: 100vh;
+
+  overflow-x: hidden;
 
   background: #ffffff;
 
@@ -139,11 +144,11 @@
 
   color: #4d4d4d;
 
-  font-size: 7px;
+  font-size: 11px;
 
-  line-height: 1;
+  line-height: 1.2;
 
-  font-weight: 600;
+  font-weight: 700;
 
   letter-spacing: 0.45px;
 
@@ -199,11 +204,11 @@
   margin:
     16px 0 0;
 
-  color: #707070;
+  color: #fcf7f7;
 
-  font-size: 10px;
+  font-size: 14px;
 
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 
@@ -232,6 +237,8 @@
   max-width: 1180px;
 
   margin: 0 auto;
+
+  min-width: 0;
 }
 
 
@@ -255,11 +262,11 @@
 
   color: #2f5d91;
 
-  font-size: 7px;
+  font-size: 11px;
 
-  line-height: 1;
+  line-height: 1.2;
 
-  font-weight: 600;
+  font-weight: 700;
 
   letter-spacing: 0.65px;
 }
@@ -292,9 +299,9 @@
 
   color: #7b7b7b;
 
-  font-size: 9px;
+  font-size: 14px;
 
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 
@@ -522,9 +529,9 @@
 .mmics-gallery-album-hover small {
   color: #ffffff;
 
-  font-size: 8px;
+  font-size: 12px;
 
-  line-height: 1;
+  line-height: 1.2;
 
   font-weight: 600;
 
@@ -553,9 +560,9 @@
 
   color: #ff6900;
 
-  font-size: 7px;
+  font-size: 11px;
 
-  line-height: 1;
+  line-height: 1.2;
 
   font-weight: 600;
 
@@ -598,9 +605,9 @@
 
   color: #777777;
 
-  font-size: 8.5px;
+  font-size: 14px;
 
-  line-height: 1.55;
+  line-height: 1.6;
 
   -webkit-line-clamp: 2;
 
@@ -628,7 +635,7 @@
 
   color: #2f5d91;
 
-  font-size: 8px;
+  font-size: 13px;
 
   font-weight: 600;
 }
@@ -689,11 +696,11 @@
 .mmics-public-gallery-state p {
   margin: 0;
 
-  font-size: 9px;
+  font-size: 14px;
 }
 
 .mmics-public-gallery-state button {
-  height: 34px;
+  min-height: 42px;
 
   padding:
     0 17px;
@@ -711,7 +718,9 @@
     Helvetica,
     sans-serif;
 
-  font-size: 8px;
+  font-size: 13px;
+
+  font-weight: 600;
 
   cursor: pointer;
 }
@@ -844,9 +853,9 @@
 
   color: #ff6900;
 
-  font-size: 7px;
+  font-size: 11px;
 
-  line-height: 1;
+  line-height: 1.2;
 
   font-weight: 600;
 
@@ -875,9 +884,9 @@
 
   color: #777777;
 
-  font-size: 8.5px;
+  font-size: 14px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 
@@ -888,8 +897,8 @@
 .mmics-gallery-album-close {
   flex-shrink: 0;
 
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
 
   display: flex;
 
@@ -1310,7 +1319,7 @@
 
   color: #ffffff;
 
-  font-size: 9px;
+  font-size: 13px;
 
   line-height: 1.4;
 
@@ -1333,7 +1342,7 @@
       0.45
     );
 
-  font-size: 7px;
+  font-size: 11px;
 }
 
 
@@ -1354,6 +1363,10 @@
 
   .mmics-gallery-album-modal-image {
     height: 225px;
+  }
+
+  .mmics-products-cta {
+    height: 290px;
   }
 
 }
@@ -1397,6 +1410,22 @@
         3,
         minmax(0, 1fr)
       );
+  }
+
+   /* CTA */
+
+  .mmics-products-cta {
+    height: 265px;
+  }
+
+  .mmics-products-cta-content h2 {
+    font-size: 23px;
+  }
+
+  .mmics-products-cta-content p {
+    max-width: 340px;
+
+    font-size: 14px;
   }
 
 }
@@ -1446,6 +1475,22 @@
     height: 190px;
   }
 
+   /* CTA */
+
+  .mmics-products-cta {
+    height: 265px;
+  }
+
+  .mmics-products-cta-content h2 {
+    font-size: 23px;
+  }
+
+  .mmics-products-cta-content p {
+    max-width: 340px;
+
+    font-size: 13.5px;
+  }
+
 }
 
 
@@ -1482,7 +1527,9 @@
   .mmics-public-gallery-hero-content p {
     max-width: 390px;
 
-    font-size: 9px;
+    font-size: 14px;
+
+    line-height: 1.6;
   }
 
 
@@ -1498,7 +1545,7 @@
   }
 
   .mmics-public-gallery-heading p {
-    font-size: 8.5px;
+    font-size: 14px;
   }
 
 
@@ -1544,7 +1591,7 @@
   }
 
   .mmics-gallery-album-modal-header p {
-    font-size: 8px;
+    font-size: 13px;
   }
 
   .mmics-gallery-album-close {
@@ -1630,7 +1677,396 @@
 
 }
 
+.mmics-gallery-hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.mmics-gallery-hero-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(31, 61, 94, 0.88) 0%,
+      rgba(38, 72, 108, 0.73) 32%,
+      rgba(38, 72, 108, 0.30) 57%,
+      rgba(38, 72, 108, 0.04) 80%
+    );
+}
+
+/* ============================================================
+   CTA
+   ============================================================ */
+
+.mmics-products-cta {
+  position: relative;
+
+  width: 100%;
+
+  height: 270px;
+
+  overflow: hidden;
+
+  background: #669ad8;
+}
 
 
+/* ============================================================
+   CTA IMAGE
+   ============================================================ */
+
+.mmics-products-cta-image {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
+}
 
 
+/* ============================================================
+   CTA OVERLAY
+   ============================================================ */
+
+.mmics-products-cta-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+        180deg,
+        rgba(31, 61, 94, 0.18) 0%,
+        rgba(31, 61, 94, 0.85) 75%,
+        rgba(31, 61, 94, 0.94) 100%
+      );
+}
+
+
+/* ============================================================
+   CTA CONTENT
+   ============================================================ */
+
+.mmics-products-cta-content {
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    0 20px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  color: #ffffff;
+}
+
+
+/* ============================================================
+   CTA LABEL
+   ============================================================ */
+
+.mmics-products-cta-content > span {
+  margin-bottom: 12px;
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  line-height: 1.2;
+
+  font-weight: 500;
+
+  letter-spacing: 0.5px;
+}
+
+
+/* ============================================================
+   CTA TITLE
+   ============================================================ */
+
+.mmics-products-cta-content h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 27px;
+
+  line-height: 1.1;
+
+  font-weight: 500;
+
+  letter-spacing: -0.7px;
+}
+
+.mmics-products-cta-content h2 strong {
+  color: #ff6900;
+
+  font-weight: 500;
+}
+
+
+/* ============================================================
+   CTA DESCRIPTION
+   ============================================================ */
+
+.mmics-products-cta-content p {
+  max-width: 500px;
+
+  margin:
+    10px 0 19px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.82
+    );
+
+  font-size: 8px;
+
+  line-height: 1.5;
+}
+
+
+/* ============================================================
+   CTA BUTTON
+   ============================================================ */
+
+.mmics-products-cta-button {
+  width: auto;
+
+  min-width: 120px;
+
+  min-height: 44px;
+
+  padding: 0 18px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  border-radius: 5px;
+
+  background: #ffffff;
+
+  color: #222222;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.mmics-products-cta-button:hover {
+  background: #f2f2f2;
+
+  transform:
+    translateY(-1px);
+}
+
+.mmics-products-cta-button svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ============================================================
+   RESPONSIVE SAFETY / READABILITY
+   Added to the existing Gallery design
+   ============================================================ */
+
+.mmics-public-gallery-page *,
+.mmics-public-gallery-page *::before,
+.mmics-public-gallery-page *::after {
+  box-sizing: border-box;
+}
+
+.mmics-public-gallery-container,
+.mmics-public-gallery-hero-content,
+.mmics-gallery-albums,
+.mmics-gallery-album-card,
+.mmics-gallery-album-content,
+.mmics-gallery-album-modal-inner,
+.mmics-gallery-album-modal-header,
+.mmics-gallery-album-modal-grid {
+  min-width: 0;
+}
+
+.mmics-gallery-album-content h3,
+.mmics-gallery-album-content p,
+.mmics-gallery-album-modal-header h2,
+.mmics-gallery-album-modal-header p,
+.mmics-gallery-lightbox-caption {
+  overflow-wrap: anywhere;
+}
+
+.mmics-gallery-album-modal {
+  overflow-y: auto;
+}
+
+
+/* ============================================================
+   SMALL TABLET
+   ============================================================ */
+
+@media (max-width: 760px) {
+
+  .mmics-gallery-album-modal-header {
+    gap: 14px;
+  }
+
+  .mmics-gallery-album-close {
+    width: 38px;
+    height: 38px;
+  }
+
+  .mmics-gallery-lightbox-caption {
+    font-size: 13px;
+  }
+
+  .mmics-gallery-lightbox-counter {
+    font-size: 11px;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 560px) {
+
+  .mmics-public-gallery-hero-content > span,
+  .mmics-public-gallery-heading > span,
+  .mmics-gallery-album-content > span,
+  .mmics-gallery-album-modal-header span {
+    font-size: 11px;
+  }
+
+  .mmics-public-gallery-hero-content p,
+  .mmics-public-gallery-heading p,
+  .mmics-gallery-album-content p {
+    font-size: 14px;
+  }
+
+  .mmics-gallery-album-link {
+    font-size: 13px;
+  }
+
+  .mmics-public-gallery-state p {
+    font-size: 14px;
+  }
+
+  .mmics-public-gallery-state button {
+    min-height: 42px;
+    font-size: 13px;
+  }
+
+  .mmics-products-cta-content > span {
+    font-size: 11px;
+  }
+
+  .mmics-products-cta-content p {
+    font-size: 13.5px;
+  }
+
+  .mmics-products-cta-button {
+    min-height: 44px;
+    font-size: 13px;
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL MOBILE
+   Album popup becomes a single column
+   ============================================================ */
+
+@media (max-width: 420px) {
+
+  .mmics-gallery-album-modal {
+    padding: 8px;
+  }
+
+  .mmics-gallery-album-modal-grid {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+
+    padding: 10px;
+  }
+
+  .mmics-gallery-album-modal-image {
+    height: 220px;
+  }
+
+  .mmics-gallery-album-modal-header {
+    padding:
+      17px 14px 15px;
+  }
+
+  .mmics-gallery-album-modal-header h2 {
+    font-size: 20px;
+  }
+
+  .mmics-gallery-album-close {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mmics-gallery-lightbox {
+    padding:
+      52px 6px 22px;
+  }
+
+  .mmics-gallery-lightbox-prev,
+  .mmics-gallery-lightbox-next {
+    width: 38px;
+    height: 38px;
+  }
+
+  .mmics-gallery-lightbox-content img {
+    max-height:
+      calc(100vh - 145px);
+  }
+
+}

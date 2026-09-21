@@ -1,268 +1,566 @@
-/* =========================================================
-   ADMIN DASHBOARD
-========================================================= */
+/* ============================================================
+   MMICS ADMIN DASHBOARD
+   ============================================================ */
+
+
+/* ============================================================
+   DASHBOARD PAGE
+   ============================================================ */
+
+.mmics-dashboard {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  min-height: 100vh;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  background: #f5f6f7;
+
+  overflow-x: hidden;
+}
+
+.mmics-dashboard *,
+.mmics-dashboard *::before,
+.mmics-dashboard *::after {
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   WHITE MAIN CONTENT AREA
+   SAME ALIGNMENT AS MEMBERS PAGE
+   ============================================================ */
+
+.mmics-dashboard-content {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  min-height: 100vh;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
 
 .mmics-dashboard-header {
+  width: 100%;
+  min-width: 0;
+
   display: flex;
-  justify-content: space-between;
   align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 24px;
 
   margin-bottom: 28px;
+
+  background: #ffffff;
 }
+
+.mmics-dashboard-header > div {
+  min-width: 0;
+}
+
+
+/* ============================================================
+   EYEBROW
+   ============================================================ */
 
 .mmics-dashboard-eyebrow {
-  color: #8b1e2d;
+  display: block;
 
-  font-size: 10px;
+  margin-bottom: 8px;
+
+  color: #b42318;
+
+  font-size: 11px;
+  line-height: 1;
+
   font-weight: 800;
-  letter-spacing: 0.15em;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
 }
+
+
+/* ============================================================
+   TITLE
+   ============================================================ */
 
 .mmics-dashboard-header h1 {
-  margin-top: 5px;
+  margin: 0;
 
-  font-size: 30px;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  color: #111111;
+
+  font-size: 32px;
+  line-height: 1.15;
+
+  font-weight: 800;
+
+  letter-spacing: -0.04em;
 }
+
+
+/* ============================================================
+   DESCRIPTION
+   ============================================================ */
 
 .mmics-dashboard-header p {
-  margin-top: 8px;
+  max-width: 620px;
 
-  color: #777777;
+  margin: 8px 0 0;
 
-  font-size: 13px;
+  color: #737982;
+
+  font-size: 14px;
+  line-height: 1.55;
 }
 
-/* =========================================================
-   STATS
-========================================================= */
+
+/* ============================================================
+   STATS GRID
+   ============================================================ */
 
 .mmics-dashboard-stats {
+  width: 100%;
+  min-width: 0;
+
   display: grid;
 
   grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
 
   gap: 16px;
 
   margin-bottom: 22px;
+
+  background: #ffffff;
 }
 
+
+/* ============================================================
+   STAT CARD
+   ============================================================ */
+
 .mmics-dashboard-stat {
+  width: 100%;
+  min-width: 0;
+
+  min-height: 150px;
+
   padding: 19px;
+
+  border: 1px solid #e1e4e8;
+
+  border-radius: 14px;
 
   background: #ffffff;
 
-  border: 1px solid #e9e9e9;
-  border-radius: 13px;
+  box-shadow:
+    0 1px 4px
+    rgba(
+      0,
+      0,
+      0,
+      0.025
+    );
 
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .mmics-dashboard-stat:hover {
   transform: translateY(-2px);
 
+  border-color: #d9dde1;
+
   box-shadow:
-    0 10px 28px
-    rgba(0, 0, 0, 0.06);
+    0 10px 26px
+    rgba(
+      20,
+      25,
+      30,
+      0.055
+    );
 }
 
+
+/* ============================================================
+   STAT TOP
+   ============================================================ */
+
 .mmics-dashboard-stat-top {
+  width: 100%;
+
   display: flex;
+
   align-items: center;
   justify-content: space-between;
 
-  color: #aaaaaa;
+  gap: 12px;
+
+  color: #a2a7ad;
 }
+
+.mmics-dashboard-stat-top > svg {
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   STAT ICON
+   ============================================================ */
 
 .mmics-dashboard-stat-icon {
   width: 38px;
   height: 38px;
 
-  display: grid;
-  place-items: center;
+  flex: 0 0 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 
   border-radius: 9px;
 
-  background: #faf0f2;
-  color: #8b1e2d;
+  background: #faeef0;
+
+  color: #b42335;
 }
+
+.mmics-dashboard-stat-icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+
+/* ============================================================
+   STAT VALUE
+   ============================================================ */
 
 .mmics-dashboard-stat-value {
   margin-top: 20px;
 
+  color: #111111;
+
   font-size: 28px;
   line-height: 1;
 
-  font-weight: 750;
+  font-weight: 800;
+
   letter-spacing: -0.04em;
 }
+
+
+/* ============================================================
+   STAT LABEL
+   ============================================================ */
 
 .mmics-dashboard-stat-label {
   margin-top: 7px;
 
-  color: #555555;
+  color: #4f545b;
 
   font-size: 12px;
+  line-height: 1.4;
+
   font-weight: 600;
 }
+
+
+/* ============================================================
+   STAT ACTIVE TEXT
+   ============================================================ */
 
 .mmics-dashboard-stat-active {
   margin-top: 8px;
 
-  color: #999999;
+  color: #949aa2;
 
   font-size: 10px;
+  line-height: 1.4;
 }
 
-/* =========================================================
+
+/* ============================================================
    LOWER GRID
-========================================================= */
+   ============================================================ */
 
 .mmics-dashboard-grid {
+  width: 100%;
+  min-width: 0;
+
   display: grid;
 
   grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
 
   gap: 18px;
+
+  background: #ffffff;
 }
+
+
+/* ============================================================
+   DASHBOARD CARD
+   ============================================================ */
 
 .mmics-dashboard-card {
-  background: #ffffff;
-
-  border: 1px solid #e9e9e9;
-  border-radius: 13px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 
   overflow: hidden;
+
+  border: 1px solid #e1e4e8;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 1px 4px
+    rgba(
+      0,
+      0,
+      0,
+      0.025
+    );
 }
 
-.mmics-dashboard-card-header {
-  min-height: 78px;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* ============================================================
+   CARD HEADER
+   ============================================================ */
+
+.mmics-dashboard-card-header {
+  width: 100%;
+
+  min-height: 78px;
 
   padding: 18px 20px;
 
-  border-bottom: 1px solid #eeeeee;
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border-bottom: 1px solid #eceef0;
+
+  background: #ffffff;
 }
 
 .mmics-dashboard-card-header > div {
+  min-width: 0;
+
   display: flex;
+
   flex-direction: column;
 }
 
 .mmics-dashboard-card-header span {
-  color: #999999;
+  color: #8c9299;
 
   font-size: 9px;
+  line-height: 1;
+
   font-weight: 700;
+
   letter-spacing: 0.12em;
+
+  text-transform: uppercase;
 }
 
 .mmics-dashboard-card-header h2 {
-  margin-top: 4px;
+  margin: 5px 0 0;
+
+  color: #17191d;
 
   font-size: 15px;
+  line-height: 1.3;
+
+  font-weight: 700;
 }
 
 .mmics-dashboard-card-header > svg {
-  color: #8b1e2d;
+  width: 19px;
+  height: 19px;
+
+  flex-shrink: 0;
+
+  color: #b42335;
 }
 
-/* =========================================================
+
+/* ============================================================
    LIST
-========================================================= */
+   ============================================================ */
 
 .mmics-dashboard-list {
-  padding: 5px 20px 10px;
+  width: 100%;
+  min-width: 0;
+
+  padding:
+    5px 20px
+    10px;
+
+  background: #ffffff;
 }
 
+
+/* ============================================================
+   MEMBER LIST ITEM
+   ============================================================ */
+
 .mmics-dashboard-list-item {
+  width: 100%;
+  min-width: 0;
+
   min-height: 64px;
 
   display: flex;
+
   align-items: center;
+
   gap: 11px;
 
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f0f1f2;
 }
 
 .mmics-dashboard-list-item:last-child {
   border-bottom: 0;
 }
 
+
+/* ============================================================
+   MEMBER AVATAR
+   ============================================================ */
+
 .mmics-dashboard-list-avatar {
   width: 34px;
   height: 34px;
 
-  display: grid;
-  place-items: center;
+  flex: 0 0 34px;
 
-  flex-shrink: 0;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 
   border-radius: 50%;
 
-  background: #f3e8ea;
-  color: #8b1e2d;
+  background: #f5e8eb;
+
+  color: #b42335;
 
   font-size: 11px;
+
   font-weight: 700;
 }
 
-.mmics-dashboard-list-item > div:nth-child(2) {
+
+/* ============================================================
+   MEMBER DETAILS
+   ============================================================ */
+
+.mmics-dashboard-list-details,
+.mmics-dashboard-list-item
+  > div:nth-child(2) {
   min-width: 0;
 
-  display: flex;
-  flex-direction: column;
-
   flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
 }
 
 .mmics-dashboard-list-item strong {
   overflow: hidden;
 
+  color: #292d32;
+
   font-size: 12px;
+  line-height: 1.4;
+
+  font-weight: 700;
 
   white-space: nowrap;
+
   text-overflow: ellipsis;
 }
 
 .mmics-dashboard-list-item span {
   margin-top: 2px;
 
-  color: #999999;
+  overflow: hidden;
+
+  color: #92979e;
 
   font-size: 10px;
+  line-height: 1.4;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
 }
 
 .mmics-dashboard-list-item small {
-  color: #8b1e2d;
+  flex-shrink: 0;
+
+  color: #b42335;
 
   font-size: 9px;
+  line-height: 1;
+
   font-weight: 700;
+
   text-transform: uppercase;
 }
 
-/* =========================================================
+
+/* ============================================================
    ENQUIRIES
-========================================================= */
+   ============================================================ */
 
 .mmics-dashboard-enquiry {
+  width: 100%;
+  min-width: 0;
+
   min-height: 64px;
 
   display: flex;
+
   align-items: center;
   justify-content: space-between;
 
   gap: 15px;
 
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f0f1f2;
 }
 
 .mmics-dashboard-enquiry:last-child {
@@ -272,16 +570,25 @@
 .mmics-dashboard-enquiry > div {
   min-width: 0;
 
+  flex: 1;
+
   display: flex;
+
   flex-direction: column;
 }
 
 .mmics-dashboard-enquiry strong {
   overflow: hidden;
 
+  color: #292d32;
+
   font-size: 12px;
+  line-height: 1.4;
+
+  font-weight: 700;
 
   white-space: nowrap;
+
   text-overflow: ellipsis;
 }
 
@@ -290,109 +597,276 @@
 
   overflow: hidden;
 
-  color: #999999;
+  color: #92979e;
 
   font-size: 10px;
+  line-height: 1.4;
 
   white-space: nowrap;
+
   text-overflow: ellipsis;
 }
 
 .mmics-dashboard-enquiry small {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-
   flex-shrink: 0;
 
-  color: #8b1e2d;
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  color: #b42335;
 
   font-size: 9px;
+  line-height: 1;
+
   font-weight: 700;
+
   text-transform: uppercase;
 }
 
-/* =========================================================
-   STATES
-========================================================= */
+.mmics-dashboard-enquiry small svg {
+  flex-shrink: 0;
+}
 
-.mmics-admin-page-loading {
-  min-height: 300px;
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+.mmics-dashboard-empty {
+  width: 100%;
+
+  min-height: 100px;
+
+  padding: 30px 0;
 
   display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  color: #92979e;
+
+  font-size: 12px;
+
+  background: #ffffff;
+}
+
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+
+.mmics-admin-page-loading {
+  width: 100%;
+
+  min-height: 400px;
+
+  display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
 
   gap: 12px;
 
-  color: #888888;
+  background: #ffffff;
+
+  color: #7f848a;
 
   font-size: 12px;
 }
+
+
+/* ============================================================
+   SPINNER
+   ============================================================ */
 
 .mmics-admin-spinner {
   width: 28px;
   height: 28px;
 
   border: 3px solid #eeeeee;
-  border-top-color: #8b1e2d;
+
+  border-top-color: #b42318;
 
   border-radius: 50%;
 
   animation:
-    mmicsAdminSpin 0.8s linear infinite;
+    mmicsAdminSpin
+    0.8s
+    linear
+    infinite;
 }
 
 @keyframes mmicsAdminSpin {
+
   to {
-    transform: rotate(360deg);
+    transform:
+      rotate(360deg);
   }
+
 }
 
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+
 .mmics-admin-error {
+  width: 100%;
+
   padding: 20px;
 
   border: 1px solid #ead0d4;
+
   border-radius: 10px;
 
   background: #fff7f8;
+
   color: #8b1e2d;
 
   font-size: 13px;
 }
 
-.mmics-dashboard-empty {
-  padding: 30px 0;
 
-  text-align: center;
-
-  color: #999999;
-
-  font-size: 12px;
-}
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+/* ============================================================
+   TABLET
+   ============================================================ */
 
 @media (max-width: 1000px) {
+
+  .mmics-dashboard {
+    padding: 0;
+  }
+
+  .mmics-dashboard-content {
+    min-height: 100vh;
+
+    padding: 24px;
+  }
+
   .mmics-dashboard-stats {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
   }
 
   .mmics-dashboard-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      1fr;
   }
+
 }
 
-@media (max-width: 550px) {
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 700px) {
+
+  .mmics-dashboard {
+    padding: 0;
+  }
+
+  .mmics-dashboard-content {
+    min-height: 100vh;
+
+    padding:
+      20px 16px;
+  }
+
+  .mmics-dashboard-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+  }
+
+  .mmics-dashboard-header h1 {
+    font-size: 28px;
+  }
+
+  .mmics-dashboard-header p {
+    font-size: 13px;
+  }
+
   .mmics-dashboard-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      1fr;
+
+    gap: 12px;
+  }
+
+  .mmics-dashboard-stat {
+    min-height: 140px;
+
+    padding: 17px;
+  }
+
+  .mmics-dashboard-card-header {
+    min-height: 68px;
+
+    padding:
+      15px 16px;
+  }
+
+  .mmics-dashboard-list {
+    padding:
+      5px 16px
+      10px;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 420px) {
+
+  .mmics-dashboard {
+    padding: 0;
+  }
+
+  .mmics-dashboard-content {
+    padding:
+      18px 14px;
   }
 
   .mmics-dashboard-header h1 {
     font-size: 26px;
   }
+
+  .mmics-dashboard-stat {
+    padding: 16px;
+  }
+
+  .mmics-dashboard-stat-value {
+    font-size: 25px;
+  }
+
+  .mmics-dashboard-enquiry {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    padding:
+      12px 0;
+  }
+
 }

@@ -801,7 +801,7 @@
 //           <kbd>Ctrl K</kbd>
 //         </div>
 
-//         <div className="mmics-products-filters">
+//         <div className="mmics-admin-products-filters">
 
 //           <div className="mmics-products-filter">
 //             <Package size={16} />
@@ -3185,7 +3185,7 @@ const Products = () => {
 
         </div>
 
-        <div className="mmics-products-filters">
+        <div className="mmics-admin-products-filters">
 
           <div className="mmics-products-filter">
 

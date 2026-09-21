@@ -5,6 +5,10 @@
 .mmics-products-page {
   width: 100%;
 
+  min-width: 0;
+
+  overflow-x: hidden;
+
   background: #ffffff;
 
   color: #111111;
@@ -27,6 +31,8 @@
   max-width: 1180px;
 
   margin: 0 auto;
+
+  min-width: 0;
 }
 
 
@@ -126,11 +132,11 @@
 
   color: #ffffff;
 
-  font-size: 9px;
+  font-size: 12px;
 
-  line-height: 1;
+  line-height: 1.2;
 
-  font-weight: 500;
+  font-weight: 600;
 
   letter-spacing: 0.65px;
 }
@@ -177,9 +183,9 @@
       0.84
     );
 
-  font-size: 10px;
+  font-size: 14px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 
   font-weight: 400;
 }
@@ -203,9 +209,13 @@
    ============================================================ */
 
 .mmics-products-primary-btn {
-  width: 115px;
+  width: auto;
 
-  height: 34px;
+  min-width: 130px;
+
+  min-height: 42px;
+
+  padding: 0 18px;
 
   display: inline-flex;
 
@@ -221,7 +231,7 @@
 
   text-decoration: none;
 
-  font-size: 8px;
+  font-size: 13px;
 
   font-weight: 600;
 
@@ -243,9 +253,13 @@
    ============================================================ */
 
 .mmics-products-outline-btn {
-  width: 135px;
+  width: auto;
 
-  height: 34px;
+  min-width: 150px;
+
+  min-height: 42px;
+
+  padding: 0 18px;
 
   display: inline-flex;
 
@@ -278,7 +292,7 @@
 
   text-decoration: none;
 
-  font-size: 8px;
+  font-size: 13px;
 
   font-weight: 500;
 
@@ -335,11 +349,11 @@
 
   color: #2f5d91;
 
-  font-size: 7px;
+  font-size: 11px;
 
-  line-height: 1;
+  line-height: 1.2;
 
-  font-weight: 600;
+  font-weight: 700;
 
   letter-spacing: 0.55px;
 }
@@ -372,9 +386,9 @@
 
   color: #7e7e7e;
 
-  font-size: 8.5px;
+  font-size: 14px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 
   font-weight: 400;
 }
@@ -401,7 +415,7 @@
 }
 
 .mmics-products-filters button {
-  height: 26px;
+  min-height: 40px;
 
   padding:
     0 13px;
@@ -422,7 +436,7 @@
     Helvetica,
     sans-serif;
 
-  font-size: 7px;
+  font-size: 13px;
 
   line-height: 1;
 
@@ -834,7 +848,7 @@
 
   color: #777777;
 
-  font-size: 10px;
+  font-size: 14px;
 
   text-align: center;
 }
@@ -845,7 +859,7 @@
 }
 
 .mmics-products-state button {
-  height: 32px;
+  min-height: 42px;
 
   padding:
     0 15px;
@@ -871,7 +885,7 @@
     Helvetica,
     sans-serif;
 
-  font-size: 8px;
+  font-size: 13px;
 
   cursor: pointer;
 }
@@ -999,7 +1013,7 @@
 
   color: #ffffff;
 
-  font-size: 7px;
+  font-size: 11px;
 
   line-height: 1;
 
@@ -1052,9 +1066,9 @@
       0.82
     );
 
-  font-size: 8px;
+  font-size: 14px;
 
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 
@@ -1063,9 +1077,13 @@
    ============================================================ */
 
 .mmics-products-cta-button {
-  width: 100px;
+  width: auto;
 
-  height: 32px;
+  min-width: 120px;
+
+  min-height: 44px;
+
+  padding: 0 18px;
 
   display: inline-flex;
 
@@ -1083,7 +1101,7 @@
 
   text-decoration: none;
 
-  font-size: 8px;
+  font-size: 13px;
 
   font-weight: 500;
 
@@ -1237,7 +1255,7 @@
 
     max-width: 400px;
 
-    font-size: 9px;
+    font-size: 14px;
   }
 
 
@@ -1396,7 +1414,7 @@
   .mmics-products-hero-kicker {
     margin-bottom: 11px;
 
-    font-size: 7px;
+    font-size: 11px;
   }
 
   .mmics-products-hero-content h1 {
@@ -1409,7 +1427,7 @@
     margin:
       13px 0 18px;
 
-    font-size: 8.5px;
+    font-size: 14px;
   }
 
   .mmics-products-hero-actions {
@@ -1424,7 +1442,11 @@
 
     width: auto;
 
-    height: 32px;
+    min-height: 44px;
+
+    padding: 0 12px;
+
+    font-size: 12px;
   }
 
 
@@ -1440,7 +1462,7 @@
   }
 
   .mmics-products-heading > span {
-    font-size: 6.5px;
+    font-size: 11px;
   }
 
   .mmics-products-heading h2 {
@@ -1450,7 +1472,7 @@
   }
 
   .mmics-products-heading p {
-    font-size: 8px;
+    font-size: 13.5px;
   }
 
 
@@ -1519,18 +1541,18 @@
   }
 
   .mmics-product-view-btn {
-    min-height: 55px;
+    min-height: 48px;
 
     border-radius: 12px;
 
-    font-size: 18px;
+    font-size: 15px;
 
     gap: 16px;
   }
 
   .mmics-product-view-btn svg {
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
   }
 
 
@@ -1547,7 +1569,7 @@
   .mmics-products-cta-content p {
     max-width: 340px;
 
-    font-size: 8px;
+    font-size: 13.5px;
   }
 
 }
@@ -1564,7 +1586,7 @@
   }
 
   .mmics-products-hero-content p {
-    font-size: 8px;
+    font-size: 13px;
   }
 
   .mmics-product-image-box {
@@ -1583,4 +1605,57 @@
     font-size: 11px;
   }
 
+}
+
+/* ============================================================
+   RESPONSIVE SAFETY / READABILITY
+   ============================================================ */
+
+.mmics-products-page *,
+.mmics-products-page *::before,
+.mmics-products-page *::after {
+  box-sizing: border-box;
+}
+
+.mmics-products-hero-content,
+.mmics-products-grid,
+.mmics-product-card,
+.mmics-product-content {
+  min-width: 0;
+}
+
+.mmics-product-content h3,
+.mmics-product-content p {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .mmics-products-filters {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mmics-products-filters button {
+    min-height: 40px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 520px) {
+  .mmics-products-hero-actions {
+    flex-wrap: wrap;
+  }
+
+  .mmics-products-primary-btn,
+  .mmics-products-outline-btn {
+    min-width: 0;
+  }
+
+  .mmics-product-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .mmics-product-content h3 {
+    overflow-wrap: anywhere;
+  }
 }

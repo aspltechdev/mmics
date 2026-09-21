@@ -141,11 +141,6 @@ const AppRoutes = () => {
           />
 
           <Route
-            path="/admin/website-content"
-            element={<div>Website Content</div>}
-          />
-
-          <Route
             path="/admin/enquiries"
             element={<Enquiries />}
           />

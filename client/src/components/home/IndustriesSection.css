@@ -1,119 +1,810 @@
-/* client/src/components/home/IndustriesSection.css */
+/* ============================================================
+   INDUSTRIES SECTION
+============================================================ */
+
 .industries-section {
-  padding: 80px 5%;
-  background-color: #ffffff;
-  font-family: 'Inter', sans-serif;
-  display: flex;
+  width: 100%;
+
+  padding:
+    80px 5%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 0.95fr)
+    minmax(0, 1.2fr);
+
   align-items: center;
+
   gap: 60px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  overflow: hidden;
 }
 
-.industries-content { flex: 1; }
+
+.industries-section *,
+.industries-section *::before,
+.industries-section *::after {
+  box-sizing: border-box;
+}
+
+
+/* ============================================================
+   LEFT CONTENT
+============================================================ */
+
+.industries-content {
+  width: 100%;
+  min-width: 0;
+}
+
 
 .industries-label {
-  color: #1e3a8a;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 12px;
   display: block;
+
+  margin-bottom: 14px;
+
+  color: #1e3a8a;
+
+  font-size: 12px;
+  line-height: 1;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  text-transform: uppercase;
 }
+
 
 .industries-title {
-  font-size: 40px;
-  font-weight: 700;
+  max-width: 560px;
+
+  margin:
+    0 0 20px;
+
   color: #0f172a;
+
+  font-size: 40px;
   line-height: 1.2;
-  margin-bottom: 20px;
+
+  font-weight: 700;
 }
 
-.industries-title .highlight { color: #f97316; }
+
+.industries-title .highlight {
+  color: #f97316;
+}
+
 
 .industries-desc {
-  font-size: 16px;
+  max-width: 600px;
+
+  margin:
+    0 0 30px;
+
   color: #475569;
-  line-height: 1.6;
-  margin-bottom: 30px;
+
+  font-size: 16px;
+  line-height: 1.65;
 }
 
-.industries-content .btn-primary {
-  background-color: #1e3a8a;
-  color: white;
-  padding: 14px 28px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 15px;
+
+/* ============================================================
+   BUTTON
+============================================================ */
+
+.industries-products-button {
+  min-height: 46px;
+
+  padding:
+    0 27px;
+
   display: inline-flex;
+
   align-items: center;
-  gap: 8px;
-  transition: background 0.2s;
+  justify-content: center;
+
+  gap: 12px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: #213f91;
+
+  color: #ffffff;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  line-height: 1;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.industries-content .btn-primary:hover { background-color: #152c6b; }
 
-.industries-carousel {
-  flex: 1;
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  padding-bottom: 10px;
+.industries-products-button svg {
+  width: 18px;
+  height: 18px;
+
+  flex-shrink: 0;
+
+  transition:
+    transform 0.25s ease;
+}
+
+
+.industries-products-button:hover {
+  background: #173375;
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 8px 22px
+    rgba(
+      33,
+      63,
+      145,
+      0.2
+    );
+}
+
+
+.industries-products-button:hover svg {
+  transform:
+    translateX(4px);
+}
+
+
+/* ============================================================
+   CAROUSEL STAGE
+============================================================ */
+
+.industries-carousel-stage {
   position: relative;
+
+  width: 100%;
+  min-width: 0;
+
+  height: 360px;
+
+  overflow: hidden;
 }
+
+
+/* ============================================================
+   CARD AREA
+============================================================ */
+
+.industries-cards {
+  position: relative;
+
+  width: 100%;
+  height: 330px;
+
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   BASE CARD
+============================================================ */
 
 .industry-card {
-  position: relative;
-  min-width: 200px;
-  height: 250px;
-  border-radius: 12px;
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  height: 300px;
+
   overflow: hidden;
-  flex-shrink: 0;
+
+  border-radius: 15px;
+
+  background: #eef1f4;
+
+  cursor: pointer;
+
+  transform-origin: center center;
+
+  transition:
+    left 0.85s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+    width 0.85s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+    height 0.85s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+    transform 0.85s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+    opacity 0.65s ease,
+    box-shadow 0.65s ease;
+
+  will-change:
+    left,
+    width,
+    height,
+    transform,
+    opacity;
 }
+
+
+/* ============================================================
+   CENTER CARD - 80%
+============================================================ */
+
+.industry-card-center {
+  left: 50%;
+
+  width: 80%;
+
+  height: 315px;
+
+  z-index: 5;
+
+  opacity: 1;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    )
+    scale(1);
+
+  box-shadow:
+    0 16px 38px
+    rgba(
+      0,
+      0,
+      0,
+      0.14
+    );
+}
+
+
+/* ============================================================
+   LEFT CARD - PEEK
+============================================================ */
+
+.industry-card-left {
+  left: 0%;
+
+  width: 38%;
+
+  height: 255px;
+
+  z-index: 2;
+
+  opacity: 0.72;
+
+  transform:
+    translate(
+      -76%,
+      -50%
+    )
+    scale(0.88);
+
+  box-shadow: none;
+}
+
+
+/* ============================================================
+   RIGHT CARD - PEEK
+============================================================ */
+
+.industry-card-right {
+  left: 100%;
+
+  width: 38%;
+
+  height: 255px;
+
+  z-index: 2;
+
+  opacity: 0.72;
+
+  transform:
+    translate(
+      -24%,
+      -50%
+    )
+    scale(0.88);
+
+  box-shadow: none;
+}
+
+
+/* ============================================================
+   HIDDEN CARD
+============================================================ */
+
+.industry-card-hidden {
+  left: 50%;
+
+  width: 40%;
+
+  height: 230px;
+
+  z-index: 0;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    )
+    scale(0.76);
+}
+
+
+/* ============================================================
+   CARD IMAGE
+============================================================ */
 
 .industry-card img {
   width: 100%;
   height: 100%;
+
+  display: block;
+
   object-fit: cover;
+  object-position: center;
+
+  transform: scale(1);
+
+  transition:
+    transform 0.9s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      );
 }
+
+
+/* center comes forward slightly */
+
+.industry-card-center img {
+  transform:
+    scale(1.015);
+}
+
+
+/* ============================================================
+   OVERLAY
+============================================================ */
 
 .industry-overlay {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-  padding: 20px;
-  color: white;
+
+  inset:
+    auto 0 0;
+
+  padding:
+    80px 22px
+    22px;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(
+        0,
+        0,
+        0,
+        0.88
+      )
+      0%,
+      rgba(
+        0,
+        0,
+        0,
+        0.38
+      )
+      50%,
+      transparent
+      100%
+    );
+
+  transition:
+    opacity 0.55s ease;
 }
+
 
 .industry-overlay h3 {
-  font-size: 18px;
-  font-weight: 600;
   margin: 0;
+
+  color: #ffffff;
+
+  font-size: 20px;
+  line-height: 1.25;
+
+  font-weight: 700;
+
+  text-shadow:
+    0 2px 5px
+    rgba(
+      0,
+      0,
+      0,
+      0.45
+    );
 }
 
-.arrow-btn {
+
+/* side titles hidden */
+
+.industry-card-left
+.industry-overlay h3,
+.industry-card-right
+.industry-overlay h3 {
+  opacity: 0;
+}
+
+
+/* ============================================================
+   ARROWS
+============================================================ */
+
+.industries-arrow {
   position: absolute;
+
   top: 50%;
-  transform: translateY(-50%);
-  background: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+
+  z-index: 20;
+
+  width: 45px;
+  height: 45px;
+
+  padding: 0;
+
   display: flex;
+
   align-items: center;
   justify-content: center;
+
+  transform:
+    translateY(-70%);
+
+  border: 0;
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  color: #151d2b;
+
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  z-index: 10;
+
+  box-shadow:
+    0 5px 16px
+    rgba(
+      0,
+      0,
+      0,
+      0.2
+    );
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.arrow-btn.left { left: 10px; }
-.arrow-btn.right { right: 10px; }
 
-@media (max-width: 1024px) {
-  .industries-section { flex-direction: column; }
-  .industries-carousel { width: 100%; }
+.industries-arrow:hover {
+  background: #213f91;
+
+  color: #ffffff;
+
+  transform:
+    translateY(-70%)
+    scale(1.07);
+
+  box-shadow:
+    0 8px 22px
+    rgba(
+      33,
+      63,
+      145,
+      0.28
+    );
+}
+
+
+.industries-arrow:active {
+  transform:
+    translateY(-70%)
+    scale(0.94);
+}
+
+
+.industries-arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
+
+.industries-arrow-left {
+  left: 10px;
+}
+
+
+.industries-arrow-right {
+  right: 10px;
+}
+
+
+/* ============================================================
+   DOTS
+============================================================ */
+
+.industries-dots {
+  position: absolute;
+
+  left: 50%;
+  bottom: 2px;
+
+  transform:
+    translateX(-50%);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+
+.industries-dot {
+  width: 7px;
+  height: 7px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: #cbd1dc;
+
+  cursor: pointer;
+
+  transition:
+    width 0.3s ease,
+    background 0.3s ease,
+    border-radius 0.3s ease;
+}
+
+
+.industries-dot.active {
+  width: 22px;
+
+  border-radius: 999px;
+
+  background: #213f91;
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media (max-width: 1050px) {
+
+  .industries-section {
+    grid-template-columns:
+      1fr;
+
+    gap: 45px;
+
+    padding:
+      65px 5%;
+  }
+
+
+  .industries-carousel-stage {
+    height: 360px;
+  }
+
+
+  .industry-card-center {
+    width: 80%;
+
+    height: 320px;
+  }
+
+
+  .industry-card-left,
+  .industry-card-right {
+    height: 260px;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 700px) {
+
+  .industries-section {
+    padding:
+      50px 18px;
+
+    gap: 34px;
+  }
+
+
+  .industries-title {
+    font-size: 32px;
+  }
+
+
+  .industries-desc {
+    font-size: 15px;
+  }
+
+
+  .industries-products-button {
+    min-height: 44px;
+
+    padding:
+      0 22px;
+
+    font-size: 13px;
+  }
+
+
+  .industries-carousel-stage {
+    height: 310px;
+  }
+
+
+  .industries-cards {
+    height: 285px;
+  }
+
+
+  .industry-card-center {
+    width: 80%;
+
+    height: 270px;
+  }
+
+
+  .industry-card-left,
+  .industry-card-right {
+    width: 46%;
+
+    height: 220px;
+  }
+
+
+  .industry-card-left {
+    transform:
+      translate(
+        -80%,
+        -50%
+      )
+      scale(0.86);
+  }
+
+
+  .industry-card-right {
+    transform:
+      translate(
+        -20%,
+        -50%
+      )
+      scale(0.86);
+  }
+
+
+  .industry-overlay h3 {
+    font-size: 18px;
+  }
+
+
+  .industries-arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+
+  .industries-arrow-left {
+    left: 4px;
+  }
+
+
+  .industries-arrow-right {
+    right: 4px;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+============================================================ */
+
+@media (max-width: 480px) {
+
+  .industries-section {
+    padding:
+      42px 14px;
+  }
+
+
+  .industries-title {
+    font-size: 28px;
+  }
+
+
+  .industries-desc {
+    font-size: 14px;
+  }
+
+
+  .industries-carousel-stage {
+    height: 280px;
+  }
+
+
+  .industries-cards {
+    height: 255px;
+  }
+
+
+  .industry-card-center {
+    height: 240px;
+  }
+
+
+  .industry-card-left,
+  .industry-card-right {
+    height: 195px;
+  }
+
+
+  .industries-arrow {
+    width: 37px;
+    height: 37px;
+  }
+
 }

@@ -7,42 +7,35 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(cuid())
-  name     String
-  email    String   @unique
-  password String
-  role     UserRole @default(MEMBER)
-  isActive Boolean  @default(true)
-
-  member Member?
-
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(MEMBER)
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  member    Member?
 
   @@index([email])
   @@index([role])
 }
 
 model Member {
-  id               String @id @default(cuid())
-  userId           String @unique
-  membershipNumber String @unique
-
-  name         String
-  phone        String
-  email        String
-  address      String?
-  profileImage String?
-
-  designation     String?
-  designationOrder Int @default(0)
-
-  status MemberStatus @default(ACTIVE)
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String       @id @default(cuid())
+  userId           String       @unique
+  membershipNumber String       @unique
+  name             String
+  phone            String
+  email            String
+  address          String?
+  profileImage     String?
+  status           MemberStatus @default(ACTIVE)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  designation      String?
+  designationOrder Int          @default(0)
+  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([name])
   @@index([phone])
@@ -53,33 +46,28 @@ model Member {
 }
 
 model ProductCategory {
-  id          String  @id @default(cuid())
-  name        String  @unique
-  slug        String  @unique
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
   description String?
-  isActive    Boolean @default(true)
-
-  products Product[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
 }
 
 model Product {
-  id          String  @id @default(cuid())
+  id          String          @id @default(cuid())
   categoryId  String
   name        String
-  slug        String  @unique
+  slug        String          @unique
   description String?
-
-  status ProductStatus @default(ACTIVE)
-
-  category  ProductCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  images    ProductImage[]
-  enquiries Enquiry[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status      ProductStatus   @default(ACTIVE)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  enquiries   Enquiry[]
+  category    ProductCategory @relation(fields: [categoryId], references: [id])
+  images      ProductImage[]
 
   @@index([categoryId])
   @@index([name])
@@ -87,59 +75,50 @@ model Product {
 }
 
 model ProductImage {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
   productId String
   imageUrl  String
-  isPrimary Boolean @default(false)
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
+  isPrimary Boolean  @default(false)
   createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([productId])
 }
 
 model Gallery {
-  id          String  @id @default(cuid())
+  id          String         @id @default(cuid())
   title       String
   description String?
-  isActive    Boolean @default(true)
-
-  images GalleryImage[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  images      GalleryImage[]
 }
 
 model GalleryImage {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
   galleryId String
   imageUrl  String
   caption   String?
-
-  gallery Gallery @relation(fields: [galleryId], references: [id], onDelete: Cascade)
-
   createdAt DateTime @default(now())
+  gallery   Gallery  @relation(fields: [galleryId], references: [id], onDelete: Cascade)
 
   @@index([galleryId])
 }
 
 model Enquiry {
-  id      String  @id @default(cuid())
-  name    String
-  email   String
-  phone   String?
-  subject String?
-  message String
-
-  type   EnquiryType   @default(CONTACT)
-  status EnquiryStatus @default(NEW)
-
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  type      EnquiryType   @default(CONTACT)
+  status    EnquiryStatus @default(NEW)
   productId String?
-  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  product   Product?      @relation(fields: [productId], references: [id])
 
   @@index([type])
   @@index([status])
@@ -148,21 +127,17 @@ model Enquiry {
 }
 
 model HeroSlide {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String?
   subtitle    String?
   description String?
-
-  imageUrl String
-
-  buttonText String?
-  buttonUrl  String?
-
-  sortOrder Int     @default(0)
-  isActive  Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  imageUrl    String
+  buttonText  String?
+  buttonUrl   String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([sortOrder])
   @@index([isActive])
@@ -175,32 +150,28 @@ model WebsiteContent {
   subtitle    String?
   description String?
   imageUrl    String?
-
-  isActive Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 }
 
 model OrganizationInfo {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
   description String?
   vision      String?
   mission     String?
   history     String?
   leadership  String?
-
-  updatedAt DateTime @updatedAt
+  updatedAt   DateTime @updatedAt
 }
 
 model ContactInfo {
-  id      String  @id @default(cuid())
-  address String?
-  phone   String?
-  email   String?
-  mapUrl  String?
-
+  id        String   @id @default(cuid())
+  address   String?
+  phone     String?
+  email     String?
+  mapUrl    String?
   updatedAt DateTime @updatedAt
 }
 

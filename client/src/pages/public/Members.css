@@ -5,9 +5,13 @@
 .mmics-members-page {
   width: 100%;
 
+  min-width: 0;
+
   min-height: 100vh;
 
   background: #ffffff;
+
+  overflow-x: hidden;
 
   color: #111111;
 
@@ -29,6 +33,8 @@
   max-width: 1180px;
 
   margin: 0 auto;
+
+  min-width: 0;
 }
 
 
@@ -41,7 +47,13 @@
 
   width: 100%;
 
-  min-height: 315px;
+  /*
+    Keep the hero wide on desktop so the banner image
+    is not aggressively cropped by a tall fixed container.
+  */
+  height: clamp(300px, 31vw, 415px);
+
+  min-height: 0;
 
   overflow: hidden;
 
@@ -66,6 +78,8 @@
 
   position: absolute;
 
+  z-index: 1;
+
   width: 400px;
   height: 400px;
 
@@ -87,6 +101,8 @@
   content: "";
 
   position: absolute;
+
+  z-index: 1;
 
   width: 280px;
   height: 280px;
@@ -123,7 +139,7 @@
   margin: 0 auto;
 
   padding:
-    55px 0;
+    45px 0;
 }
 
 
@@ -136,9 +152,9 @@
 
   margin-bottom: 13px;
 
-  color: #2f5d91;
+  color: #e6e9ee;
 
-  font-size: 8px;
+  font-size: 12px;
 
   line-height: 1;
 
@@ -183,11 +199,11 @@
   margin:
     17px 0 0;
 
-  color: #6d6d6d;
+  color: #fffdfd;
 
-  font-size: 10px;
+  font-size: 15px;
 
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 
@@ -225,13 +241,13 @@
 
   color: #2f5d91;
 
-  font-size: 7px;
+  font-size: 12px;
 
-  line-height: 1;
+  line-height: 1.2;
 
-  font-weight: 600;
+  font-weight: 700;
 
-  letter-spacing: 0.6px;
+  letter-spacing: 0.8px;
 }
 
 .mmics-members-heading h2 {
@@ -262,9 +278,9 @@
 
   color: #7a7a7a;
 
-  font-size: 9px;
+  font-size: 14px;
 
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 
@@ -343,7 +359,7 @@
     Helvetica,
     sans-serif;
 
-  font-size: 10px;
+  font-size: 14px;
 
   transition:
     border-color 0.2s ease,
@@ -432,7 +448,7 @@
     Helvetica,
     sans-serif;
 
-  font-size: 10px;
+  font-size: 14px;
 
   cursor: pointer;
 }
@@ -451,7 +467,7 @@
 
   color: #929292;
 
-  font-size: 8px;
+  font-size: 13px;
 }
 
 .mmics-members-result-count strong {
@@ -616,9 +632,9 @@
 
   color: #2f5d91;
 
-  font-size: 7px;
+  font-size: 11px;
 
-  line-height: 1;
+  line-height: 1.25;
 
   font-weight: 600;
 
@@ -655,9 +671,9 @@
 
   color: #ff6900;
 
-  font-size: 10px;
+  font-size: 13px;
 
-  line-height: 1.35;
+  line-height: 1.4;
 
   font-weight: 500;
 }
@@ -705,7 +721,7 @@
     Helvetica,
     sans-serif;
 
-  font-size: 9px;
+  font-size: 13px;
 
   font-weight: 600;
 
@@ -768,11 +784,11 @@
 .mmics-members-state p {
   margin: 0;
 
-  font-size: 9px;
+  font-size: 14px;
 }
 
 .mmics-members-state button {
-  min-height: 34px;
+  min-height: 42px;
 
   padding:
     0 15px;
@@ -797,7 +813,9 @@
     Helvetica,
     sans-serif;
 
-  font-size: 8px;
+  font-size: 13px;
+
+  font-weight: 600;
 
   cursor: pointer;
 }
@@ -834,202 +852,133 @@
 
 .mmics-members-cta {
   position: relative;
-
   width: 100%;
-
-  min-height: 285px;
-
+  min-height: 310px;
   overflow: hidden;
-
-  background:
-    linear-gradient(
-      120deg,
-      #244f7e,
-      #315d94
-    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #244f7e;
 }
 
-
-/* subtle CTA pattern */
-
-.mmics-members-cta::before {
-  content: "";
-
+.mmics-members-cta-image {
   position: absolute;
-
-  width: 420px;
-  height: 420px;
-
-  right: -130px;
-  top: -200px;
-
-  border:
-    70px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.035
-    );
-
-  border-radius: 50%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+  transition: transform 0.6s ease;
 }
 
-
-/* ============================================================
-   CTA OVERLAY
-   ============================================================ */
+.mmics-members-cta:hover .mmics-members-cta-image {
+  transform: scale(1.02);
+}
 
 .mmics-members-cta-overlay {
   position: absolute;
-
   inset: 0;
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(
-        25,
-        65,
-        105,
-        0.35
-      ),
-      rgba(
-        49,
-        93,
-        148,
-        0.05
-      )
-    );
+  z-index: 1;
+  background:  linear-gradient(
+        180deg,
+        rgba(31, 61, 94, 0.18) 0%,
+        rgba(31, 61, 94, 0.85) 75%,
+        rgba(31, 61, 94, 0.94) 100%
+      );
 }
 
-
-/* ============================================================
-   CTA CONTENT
-   ============================================================ */
+.mmics-members-cta::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 420px;
+  height: 420px;
+  right: -130px;
+  top: -200px;
+  border: 70px solid rgba(255, 255, 255, 0.035);
+  border-radius: 50%;
+  pointer-events: none;
+}
 
 .mmics-members-cta-content {
   position: relative;
-
-  z-index: 2;
-
+  z-index: 3;
   width: 100%;
-  min-height: 285px;
-
+  min-height: 310px;
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   justify-content: center;
-
   box-sizing: border-box;
-
-  padding:
-    40px 20px;
-
+  padding: 40px 20px;
   text-align: center;
-
   color: #ffffff;
 }
 
 .mmics-members-cta-content > span {
   margin-bottom: 12px;
-
-  font-size: 7px;
-
-  line-height: 1;
-
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 1.2;
   font-weight: 600;
-
   letter-spacing: 0.6px;
 }
 
 .mmics-members-cta-content h2 {
   margin: 0;
-
+  color: #ffffff;
   font-size: 29px;
-
   line-height: 1.1;
-
   font-weight: 500;
-
   letter-spacing: -0.7px;
 }
 
 .mmics-members-cta-content h2 strong {
   color: #ff6900;
-
   font-weight: 500;
 }
 
 .mmics-members-cta-content p {
   max-width: 480px;
-
-  margin:
-    11px 0 20px;
-
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.82
-    );
-
-  font-size: 8.5px;
-
-  line-height: 1.55;
+  margin: 11px 0 20px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-
-/* ============================================================
-   CTA BUTTON
-   ============================================================ */
-
 .mmics-members-cta-button {
-  height: 35px;
-
-  padding:
-    0 18px;
-
+  min-height: 44px;
+  padding: 0 18px;
   display: inline-flex;
-
   align-items: center;
   justify-content: center;
-
   gap: 8px;
-
   border-radius: 5px;
-
   background: #ffffff;
-
   color: #222222;
-
   text-decoration: none;
-
-  font-size: 8px;
-
+  font-size: 13px;
   font-weight: 600;
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 .mmics-members-cta-button:hover {
-  background: #f2f2f2;
-
-  transform:
-    translateY(-1px);
+  background: #ff6900;
+  color: #ffffff;
+  transform: translateY(-2px);
 }
 
 .mmics-members-cta-button svg {
   width: 14px;
   height: 14px;
+  transition: transform 0.2s ease;
 }
 
+.mmics-members-cta-button:hover svg {
+  transform: translateX(3px);
+}
 
 /* ============================================================
    MEMBER MODAL BACKDROP
@@ -1112,8 +1061,8 @@
   top: 12px;
   right: 12px;
 
-  width: 31px;
-  height: 31px;
+  width: 36px;
+  height: 36px;
 
   display: flex;
 
@@ -1198,7 +1147,7 @@
 
   color: #2f5d91;
 
-  font-size: 7px;
+  font-size: 11px;
 
   font-weight: 600;
 
@@ -1223,7 +1172,7 @@
 
   color: #ff6900;
 
-  font-size: 11px;
+  font-size: 13px;
 
   font-weight: 500;
 }
@@ -1243,7 +1192,7 @@
 
   color: #929292;
 
-  font-size: 7px;
+  font-size: 11px;
 
   text-transform: uppercase;
 
@@ -1255,9 +1204,9 @@
 
   color: #555555;
 
-  font-size: 9px;
+  font-size: 14px;
 
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 
@@ -1266,6 +1215,20 @@
    ============================================================ */
 
 @media (max-width: 1000px) {
+
+  .mmics-members-hero {
+    height: clamp(290px, 35vw, 350px);
+  }
+
+  .mmics-members-hero-content {
+    padding:
+      40px 0;
+  }
+
+  .mmics-members-hero-content h1 {
+    font-size: 40px;
+  }
+
 
   .mmics-members-container,
   .mmics-members-hero-content {
@@ -1304,22 +1267,42 @@
   /* HERO */
 
   .mmics-members-hero {
-    min-height: 280px;
+    height: 300px;
+
+    min-height: 300px;
+  }
+
+  .mmics-member-hero-image {
+    object-fit: cover;
+
+    object-position: center top;
+  }
+
+  .mmics-member-hero-overlay {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(31, 61, 94, 0.94) 0%,
+        rgba(38, 72, 108, 0.80) 65%,
+        rgba(38, 72, 108, 0.48) 100%
+      );
   }
 
   .mmics-members-hero-content {
     padding:
-      50px 0;
+      42px 0;
   }
 
   .mmics-members-hero-content h1 {
-    font-size: 38px;
+    font-size: 36px;
   }
 
   .mmics-members-hero-content p {
     max-width: 390px;
 
-    font-size: 9px;
+    font-size: 14px;
+
+    line-height: 1.55;
   }
 
 
@@ -1412,6 +1395,22 @@
 
 @media (max-width: 420px) {
 
+  .mmics-members-hero {
+    height: 285px;
+
+    min-height: 285px;
+  }
+
+  .mmics-member-hero-image {
+    object-position: center top;
+  }
+
+  .mmics-members-hero-content {
+    padding:
+      38px 0;
+  }
+
+
   .mmics-members-container,
   .mmics-members-hero-content {
     width:
@@ -1419,7 +1418,7 @@
   }
 
   .mmics-members-hero-content h1 {
-    font-size: 34px;
+    font-size: 32px;
   }
 
   .mmics-member-image {
@@ -1430,4 +1429,213 @@
     font-size: 19px;
   }
 
+}
+
+.mmics-member-hero-image {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center center;
+}
+
+.mmics-member-hero-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(31, 61, 94, 0.90) 0%,
+      rgba(38, 72, 108, 0.76) 32%,
+      rgba(38, 72, 108, 0.30) 58%,
+      rgba(38, 72, 108, 0.04) 82%
+    );
+}
+
+
+/* CTA responsive image/overlay */
+@media (max-width: 700px) {
+  .mmics-members-cta-image {
+    object-position: center top;
+  }
+
+  .mmics-members-cta-overlay {
+    background: rgba(28, 67, 107, 0.84);
+  }
+}
+
+/* ============================================================
+   RESPONSIVE SAFETY / READABILITY FIXES
+   Added without changing the existing page design
+   ============================================================ */
+
+.mmics-members-page *,
+.mmics-members-page *::before,
+.mmics-members-page *::after {
+  box-sizing: border-box;
+}
+
+.mmics-members-toolbar,
+.mmics-members-grid,
+.mmics-member-card,
+.mmics-member-content,
+.mmics-member-modal-content {
+  min-width: 0;
+}
+
+.mmics-member-content h3,
+.mmics-member-designation,
+.mmics-member-number,
+.mmics-member-modal-content h2,
+.mmics-member-modal-content p {
+  overflow-wrap: anywhere;
+}
+
+.mmics-member-modal-backdrop {
+  overflow-y: auto;
+}
+
+@media (max-width: 700px) {
+  .mmics-members-search input,
+  .mmics-members-filter {
+    height: 46px;
+    font-size: 14px;
+  }
+
+  .mmics-members-result-count {
+    font-size: 12px;
+  }
+
+  .mmics-member-card {
+    width: 100%;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .mmics-member-number {
+    font-size: 11px;
+  }
+
+  .mmics-member-designation,
+  .mmics-member-view {
+    font-size: 13px;
+  }
+
+  .mmics-members-state p {
+    font-size: 14px;
+  }
+
+  .mmics-members-state button {
+    min-height: 42px;
+    font-size: 13px;
+  }
+
+  .mmics-member-modal-backdrop {
+    padding: 14px;
+  }
+
+  .mmics-member-modal {
+    max-height: calc(100vh - 28px);
+  }
+
+  .mmics-member-modal-content > span,
+  .mmics-member-modal-content small {
+    font-size: 11px;
+  }
+
+  .mmics-member-modal-designation {
+    font-size: 13px;
+  }
+
+  .mmics-member-modal-content div p {
+    font-size: 14px;
+  }
+
+  .mmics-members-cta-content > span {
+    font-size: 11px;
+  }
+
+  .mmics-members-cta-content p {
+    font-size: 14px;
+  }
+
+  .mmics-members-cta-button {
+    min-height: 44px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 420px) {
+  .mmics-members-hero-content h1 {
+    font-size: 32px;
+  }
+
+  .mmics-members-hero-content p,
+  .mmics-members-heading p {
+    font-size: 13.5px;
+  }
+
+  .mmics-members-heading > span {
+    font-size: 11px;
+  }
+
+  .mmics-members-heading h2 {
+    font-size: 23px;
+  }
+
+  .mmics-member-modal-backdrop {
+    padding: 8px;
+  }
+
+  .mmics-member-modal {
+    max-height: calc(100vh - 16px);
+  }
+
+  .mmics-member-modal-image {
+    height: 230px;
+    min-height: 230px;
+  }
+
+  .mmics-member-modal-content {
+    padding: 24px 18px;
+  }
+}
+
+/* ============================================================
+   FINAL IMAGE POSITION FIX
+   Keep the top/head area visible on hero and CTA images
+   ============================================================ */
+
+.mmics-member-hero-image,
+.mmics-members-cta-image {
+  object-fit: cover;
+  object-position: center top;
+}
+
+@media (max-width: 700px) {
+  .mmics-member-hero-image,
+  .mmics-members-cta-image {
+    object-position: center top;
+  }
+}
+
+@media (max-width: 420px) {
+  .mmics-member-hero-image,
+  .mmics-members-cta-image {
+    object-position: center top;
+  }
 }

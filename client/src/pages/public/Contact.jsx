@@ -1600,6 +1600,8 @@ import {
 import api from "../../services/api"; // adjust path as needed
 import "./Contact.css";
 
+import contectHero from "../../assets/contactus.png";
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -1782,7 +1784,7 @@ const Contact = () => {
         <div className="mmics-contact-hero-image">
 
           <img
-            src="/images/contact-hero.jpg"
+            src={contectHero}
             alt="MMICS industrial facility"
           />
 

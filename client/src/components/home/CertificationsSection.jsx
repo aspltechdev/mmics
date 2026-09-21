@@ -2,13 +2,19 @@
 import React from 'react';
 import './CertificationsSection.css';
 
+import ice from "../../assets/iec.png";
+import msme from "../../assets/msme.png";
+import fieo from "../../assets/fieo.png";
+import goi from "../../assets/goi.png";
+import mc from "../../assets/mc.png";
+
 const CertificationsSection = () => {
   const logos = [
-    { id: 1, src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Indian_Embassy_Logo.svg/1200px-Indian_Embassy_Logo.svg.png', alt: 'IEC' },
-    { id: 2, src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/MSME_Logo.png/800px-MSME_Logo.png', alt: 'MSME' },
-    { id: 3, src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/FIEO_Logo.png/800px-FIEO_Logo.png', alt: 'FIEO' },
-    { id: 4, src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Emblem_of_India.svg/800px-Emblem_of_India.svg.png', alt: 'Government of India' },
-    { id: 5, src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/MSME_Logo.png/800px-MSME_Logo.png', alt: 'Cooperative Society' },
+    { id: 1, src: ice, alt: 'IEC' },
+    { id: 2, src: msme, alt: 'MSME' },
+    { id: 3, src: fieo, alt: 'FIEO' },
+    { id: 4, src: goi, alt: 'Government of India' },
+    { id: 5, src: mc, alt: 'Cooperative Society' },
   ];
 
   return (

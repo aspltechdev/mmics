@@ -756,8 +756,8 @@ import productService from "../../services/productService";
 import categoryService from "../../services/categoryService";
 
 import "./Products.css";
-
-
+import productHero from "../../assets/product-hero.png";
+import productCta from "../../assets/about-cta-bg.png";
 // ============================================================
 // SERVER URL
 // ============================================================
@@ -1084,7 +1084,7 @@ const Products = () => {
       <section className="mmics-products-hero">
 
         <img
-          src="/images/products-hero.jpg"
+          src={productHero}
           alt="MMICS packaging and industrial solutions"
           className="mmics-products-hero-image"
         />
@@ -1466,7 +1466,7 @@ const Products = () => {
       <section className="mmics-products-cta">
 
         <img
-          src="/images/products-cta.jpg"
+          src={productCta}
           alt=""
           className="mmics-products-cta-image"
         />

@@ -1,102 +1,221 @@
 /* client/src/components/layout/Footer.css */
+
 .footer {
-  background-color: #f97316; /* Orange */
-  color: white;
-  font-family: 'Inter', sans-serif;
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+
+  background-color: #f97316;
+  color: #ffffff;
+
+  font-family: "Inter", sans-serif;
+
   padding-top: 70px;
 }
 
-.footer-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 0 6% 60px;      /* increased bottom padding */
-  gap: 50px;               /* increased column gap */
+.footer *,
+.footer *::before,
+.footer *::after {
+  box-sizing: border-box;
 }
 
+
+/* ============================================================
+   MAIN FOOTER LAYOUT
+   ============================================================ */
+
+.footer-container {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  gap: 50px;
+
+  padding:
+    0 6% 60px;
+}
+
+
+/* ============================================================
+   COLUMNS
+   ============================================================ */
+
 .footer-col {
-  flex: 1;
-  min-width: 220px;        /* slightly wider min-width */
+  min-width: 0;
+
+  flex:
+    1 1 180px;
 }
 
 .footer-col.brand {
-  flex: 1.6;               /* slightly wider brand column */
+  flex:
+    1.6 1 300px;
 }
+
+
+/* ============================================================
+   BRAND / LOGO
+   ============================================================ */
 
 .footer-brand-header {
   display: flex;
   align-items: center;
-  margin-bottom: 30px;     /* increased from 24px */
+
+  margin-bottom: 30px;
 }
 
 .footer-brand-header img {
-  height: 110px;           /* increased from 70px — bigger logo */
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
   display: block;
+
+  width: auto;
+  height: 110px;
+
+  max-width: 100%;
+
+  object-fit: contain;
 }
 
 .footer-desc {
-  font-size: 15px;         /* slightly bigger */
-  line-height: 1.7;
-  opacity: 0.95;
   max-width: 420px;
+
+  margin: 0;
+
+  font-size: 15px;
+  line-height: 1.7;
+
+  opacity: 0.95;
+
+  overflow-wrap: anywhere;
 }
 
+
+/* ============================================================
+   HEADINGS
+   ============================================================ */
+
 .footer-col h4 {
-  font-size: 20px;         /* bigger heading */
-  margin-bottom: 24px;     /* more spacing below heading */
+  margin:
+    0 0 24px;
+
+  color: #ffffff;
+
+  font-size: 20px;
+  line-height: 1.25;
+
   font-weight: 600;
 }
 
+
+/* ============================================================
+   LISTS
+   ============================================================ */
+
 .footer-col ul {
-  list-style: none;
-  padding: 0;
   margin: 0;
+
+  padding: 0;
+
+  list-style: none;
 }
 
 .footer-col ul li {
-  margin-bottom: 12px;     /* more spacing between items */
-  font-size: 15px;         /* bigger list font */
+  margin-bottom: 12px;
+
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.footer-col ul li:last-child {
+  margin-bottom: 0;
 }
 
 .footer-col ul li a {
-  color: white;
+  display: inline-block;
+
+  color: #ffffff;
+
   text-decoration: none;
+
   opacity: 0.9;
-  transition: opacity 0.2s;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .footer-col ul li a:hover {
   opacity: 1;
+
   text-decoration: underline;
 }
 
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+
 .footer-contact p {
-  font-size: 15px;         /* bigger */
-  margin-bottom: 12px;
-  line-height: 1.6;
+  margin:
+    0 0 14px;
+
+  color: #ffffff;
+
+  font-size: 15px;
+  line-height: 1.65;
+
+  overflow-wrap: anywhere;
 }
 
+.footer-contact p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* ============================================================
+   BOTTOM BAR
+   ============================================================ */
+
 .footer-bottom {
-  background-color: #1e3a8a;
-  padding: 18px 6%;        /* slightly taller bar */
+  width: 100%;
+
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
-  font-size: 14px;         /* bigger footer-bottom text */
+
+  justify-content: space-between;
+
   flex-wrap: wrap;
-  gap: 12px;
+
+  gap:
+    12px 25px;
+
+  padding:
+    18px 6%;
+
+  background-color: #1e3a8a;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .footer-bottom-links {
   display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
   gap: 25px;
 }
 
 .footer-bottom-links a {
-  color: white;
+  color: #ffffff;
+
   text-decoration: none;
 }
 
@@ -104,12 +223,245 @@
   text-decoration: underline;
 }
 
-@media (max-width: 768px) {
-  .footer-brand-header img {
-    height: 80px;          /* still big on mobile */
+
+/* ============================================================
+   SMALL LAPTOP / LARGE TABLET
+   2 COLUMNS
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+  .footer-container {
+    gap:
+      42px 36px;
+
+    padding:
+      0 5% 55px;
   }
+
+  .footer-col,
+  .footer-col.brand {
+    flex:
+      0 0 calc(50% - 18px);
+
+    width:
+      calc(50% - 18px);
+  }
+
+  .footer-brand-header img {
+    height: 95px;
+  }
+
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  .footer {
+    padding-top: 55px;
+  }
+
+  .footer-container {
+    gap:
+      36px 28px;
+
+    padding:
+      0 24px 48px;
+  }
+
+  .footer-col,
+  .footer-col.brand {
+    flex:
+      0 0 calc(50% - 14px);
+
+    width:
+      calc(50% - 14px);
+  }
+
+  .footer-brand-header {
+    margin-bottom: 22px;
+  }
+
+  .footer-brand-header img {
+    height: 80px;
+  }
+
+  .footer-col h4 {
+    margin-bottom: 18px;
+
+    font-size: 18px;
+  }
+
+  .footer-col ul li {
+    margin-bottom: 10px;
+
+    font-size: 14px;
+  }
+
+  .footer-desc,
+  .footer-contact p {
+    font-size: 14px;
+  }
+
   .footer-bottom {
     flex-direction: column;
+
+    justify-content: center;
+
+    padding:
+      16px 24px;
+
     text-align: center;
   }
+
+  .footer-bottom-links {
+    justify-content: center;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   1 COLUMN
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+  .footer {
+    padding-top: 45px;
+  }
+
+  .footer-container {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 32px;
+
+    padding:
+      0 20px 40px;
+  }
+
+  .footer-col,
+  .footer-col.brand {
+    flex:
+      0 0 100%;
+
+    width: 100%;
+
+    max-width: 100%;
+  }
+
+  .footer-brand-header {
+    margin-bottom: 18px;
+  }
+
+  .footer-brand-header img {
+    width: auto;
+    height: 72px;
+
+    max-width: 240px;
+  }
+
+  .footer-desc {
+    width: 100%;
+
+    max-width: none;
+
+    font-size: 14px;
+  }
+
+  .footer-col h4 {
+    margin-bottom: 14px;
+
+    font-size: 17px;
+  }
+
+  .footer-col ul li {
+    margin-bottom: 8px;
+
+    font-size: 14px;
+  }
+
+  .footer-col ul li a {
+    min-height: 34px;
+
+    display: inline-flex;
+
+    align-items: center;
+  }
+
+  .footer-contact p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .footer-bottom {
+    padding:
+      16px 20px;
+
+    gap: 10px;
+
+    font-size: 13px;
+  }
+
+  .footer-bottom-links {
+    width: 100%;
+
+    justify-content: center;
+
+    gap:
+      8px 18px;
+  }
+
+  .footer-bottom-links a {
+    min-height: 34px;
+
+    display: inline-flex;
+
+    align-items: center;
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+  .footer-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .footer-brand-header img {
+    height: 66px;
+
+    max-width: 220px;
+  }
+
+  .footer-col h4 {
+    font-size: 16px;
+  }
+
+  .footer-desc,
+  .footer-contact p,
+  .footer-col ul li {
+    font-size: 13.5px;
+  }
+
+  .footer-bottom {
+    padding:
+      14px 16px;
+
+    font-size: 12.5px;
+  }
+
 }

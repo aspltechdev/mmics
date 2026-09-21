@@ -51,4 +51,11 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "MMICS API is running",
+  });
+});
+
 module.exports = app;

@@ -25,13 +25,28 @@
   --hero-border: #e5e5e5;
   --hero-border-light: #eeeeee;
 
-  --hero-bg: #f7f7f8;
+  --hero-bg: #ffffff;
   --hero-card: #ffffff;
 
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   min-height: 100vh;
+
   padding: 30px;
-  background: var(--hero-bg);
+
+  box-sizing: border-box;
+
+  background: #ffffff;
   color: var(--hero-text);
+
+  overflow-x: hidden;
+}
+
+.mmics-hero-page *,
+.mmics-hero-page *::before,
+.mmics-hero-page *::after {
+  box-sizing: border-box;
 }
 
 
