@@ -1,349 +1,356 @@
-const handleSubmit = async (
-  event
-) => {
-  event.preventDefault();
+import api from "./api";
 
-  if (!form.categoryId) {
-    setError(
-      "Please select a category."
-    );
 
-    return;
-  }
+/* ============================================================
+   NORMALIZE RESPONSE
+============================================================ */
 
-  if (!form.name.trim()) {
-    setError(
-      "Product name is required."
-    );
-
-    return;
-  }
-
-  if (!form.slug.trim()) {
-    setError(
-      "Product slug is required."
-    );
-
-    return;
-  }
-
-  try {
-
-    setSaving(true);
-
-    setError("");
-
-    setSuccessMessage("");
-
-
-    const payload = {
-
-      categoryId:
-        form.categoryId,
-
-      name:
-        form.name.trim(),
-
-      slug:
-        form.slug.trim(),
-
-      description:
-        form.description
-          .trim() ||
-        null,
-
-      status:
-        form.status,
-
-    };
-
-
-    /* =====================================================
-       UPDATE PRODUCT
-    ===================================================== */
-
-    if (editingProduct) {
-
-      await productService.update(
-        editingProduct.id,
-        payload
-      );
-
-
-      setShowModal(false);
-
-      resetForm();
-
-      resetImageUpload();
-
-
-      await fetchProducts();
-
-
-      setSuccessMessage(
-        "Product updated successfully."
-      );
-
-
-      setTimeout(() => {
-
-        setSuccessMessage("");
-
-      }, 3000);
-
-
-      return;
-    }
-
-
-    /* =====================================================
-       CREATE PRODUCT
-    ===================================================== */
-
-    const createResponse =
-      await productService.create(
-        payload
-      );
-
-
-    console.log(
-      "CREATE PRODUCT RESPONSE:",
-      createResponse
-    );
-
-
-    /*
-      Handle different backend
-      response formats safely.
-    */
-
-    const createdProduct =
-
-      createResponse?.product ||
-
-      createResponse?.data
-        ?.product ||
-
-      (
-        createResponse?.id
-          ? createResponse
-          : null
-      ) ||
-
-      (
-        createResponse?.data?.id
-          ? createResponse.data
-          : null
-      );
-
-
-    console.log(
-      "CREATED PRODUCT:",
-      createdProduct
-    );
-
-
-    /* =====================================================
-       IMAGE UPLOAD
-
-       Product creation has already succeeded.
-       Therefore image failure should NOT produce
-       "Unable to save product".
-    ===================================================== */
-
-    if (imageFile) {
-
-      if (
-        !createdProduct?.id
-      ) {
-
-        console.error(
-          "Created product ID missing:",
-          createResponse
-        );
-
-
-        setShowModal(false);
-
-        resetForm();
-
-        resetImageUpload();
-
-
-        await fetchProducts();
-
-
-        setError(
-          "Product was created successfully, but the server did not return the product ID required to upload the image."
-        );
-
-
-        return;
-      }
-
-
-      try {
-
-        console.log(
-          "Uploading image for product:",
-          createdProduct.id
-        );
-
-
-        const imageResponse =
-          await productService.addImage(
-            createdProduct.id,
-            imageFile,
-            imagePrimary
-          );
-
-
-        console.log(
-          "IMAGE UPLOAD RESPONSE:",
-          imageResponse
-        );
-
-
-      } catch (
-        imageError
-      ) {
-
-        console.error(
-          "PRODUCT IMAGE UPLOAD ERROR:",
-          imageError
-        );
-
-
-        console.error(
-          "IMAGE API RESPONSE:",
-          imageError
-            ?.response
-            ?.data
-        );
-
-
-        const imageErrorMessage =
-
-          imageError
-            ?.response
-            ?.data
-            ?.message ||
-
-          imageError
-            ?.message ||
-
-          "Unable to upload product image.";
-
-
-        /*
-          Product already exists.
-
-          So close create modal and
-          refresh the list.
-
-          Do NOT say:
-          "Unable to save product".
-        */
-
-        setShowModal(false);
-
-        resetForm();
-
-        resetImageUpload();
-
-
-        await fetchProducts();
-
-
-        setError(
-          `Product created successfully, but image upload failed: ${imageErrorMessage}`
-        );
-
-
-        return;
-      }
-    }
-
-
-    /* =====================================================
-       SUCCESS
-    ===================================================== */
-
-    setShowModal(false);
-
-
-    resetForm();
-
-    resetImageUpload();
-
-
-    /*
-      Important:
-
-      Refresh only AFTER image upload
-      completes so the product response
-      contains ProductImage records.
-    */
-
-    await fetchProducts();
-
-
-    setSuccessMessage(
-
-      imageFile
-
-        ? "Product and image created successfully."
-
-        : "Product created successfully."
-
-    );
-
-
-    setTimeout(() => {
-
-      setSuccessMessage("");
-
-    }, 3000);
-
-
-  } catch (err) {
-
-    /*
-      This catch now means the actual
-      PRODUCT create/update request failed.
-    */
-
-    console.error(
-      "SAVE PRODUCT ERROR:",
-      err
-    );
-
-
-    console.error(
-      "SAVE PRODUCT API RESPONSE:",
-      err
-        ?.response
-        ?.data
-    );
-
-
-    setError(
-
-      err
-        ?.response
-        ?.data
-        ?.message ||
-
-      err
-        ?.message ||
-
-      "Unable to save product."
-
-    );
-
-  } finally {
-
-    setSaving(false);
-
-  }
+const getResponseData = (response) => {
+  return response?.data ?? response;
 };
+
+
+/* ============================================================
+   PRODUCT SERVICE
+============================================================ */
+
+const productService = {
+
+  /* ==========================================================
+     GET ALL PRODUCTS
+  ========================================================== */
+
+  getAll: async () => {
+    try {
+
+      const response =
+        await api.get(
+          "/products"
+        );
+
+      return getResponseData(
+        response
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Get products error:",
+        error
+      );
+
+      throw error;
+
+    }
+  },
+
+
+  /* ==========================================================
+     GET PRODUCT BY ID
+  ========================================================== */
+
+  getById: async (id) => {
+    try {
+
+      const response =
+        await api.get(
+          `/products/${id}`
+        );
+
+      return getResponseData(
+        response
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Get product error:",
+        error
+      );
+
+      throw error;
+
+    }
+  },
+
+
+  /* ==========================================================
+     CREATE PRODUCT
+  ========================================================== */
+
+  create: async (data) => {
+    try {
+
+      const response =
+        await api.post(
+          "/products",
+          data
+        );
+
+      return getResponseData(
+        response
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Create product error:",
+        error
+      );
+
+      console.error(
+        "Create product response:",
+        error?.response?.data
+      );
+
+      throw error;
+
+    }
+  },
+
+
+  /* ==========================================================
+     UPDATE PRODUCT
+  ========================================================== */
+
+  update: async (
+    id,
+    data
+  ) => {
+    try {
+
+      const response =
+        await api.put(
+          `/products/${id}`,
+          data
+        );
+
+      return getResponseData(
+        response
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Update product error:",
+        error
+      );
+
+      console.error(
+        "Update product response:",
+        error?.response?.data
+      );
+
+      throw error;
+
+    }
+  },
+
+
+  /* ==========================================================
+     UPDATE PRODUCT STATUS
+  ========================================================== */
+
+  updateStatus: async (
+    id,
+    status
+  ) => {
+    try {
+
+      const response =
+        await api.patch(
+          `/products/${id}/status`,
+          {
+            status,
+          }
+        );
+
+      return getResponseData(
+        response
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Update product status error:",
+        error
+      );
+
+      console.error(
+        "Update status response:",
+        error?.response?.data
+      );
+
+      throw error;
+
+    }
+  },
+
+
+  /* ==========================================================
+     DELETE PRODUCT
+  ========================================================== */
+
+  remove: async (id) => {
+    try {
+
+      const response =
+        await api.delete(
+          `/products/${id}`
+        );
+
+      return getResponseData(
+        response
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Delete product error:",
+        error
+      );
+
+      throw error;
+
+    }
+  },
+
+
+  /* ==========================================================
+     ADD PRODUCT IMAGE
+  ========================================================== */
+
+  addImage: async (
+    productId,
+    imageFile,
+    isPrimary = false
+  ) => {
+
+    if (!productId) {
+
+      throw new Error(
+        "Product ID is required."
+      );
+
+    }
+
+
+    if (!imageFile) {
+
+      throw new Error(
+        "Product image is required."
+      );
+
+    }
+
+
+    try {
+
+      const formData =
+        new FormData();
+
+
+      /*
+       * IMPORTANT:
+       *
+       * Your backend multer field
+       * should also be:
+       *
+       * upload.single("image")
+       */
+
+      formData.append(
+        "image",
+        imageFile
+      );
+
+
+      formData.append(
+        "isPrimary",
+        String(
+          Boolean(
+            isPrimary
+          )
+        )
+      );
+
+
+      const response =
+        await api.post(
+          `/products/${productId}/images`,
+          formData
+        );
+
+
+      return getResponseData(
+        response
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Product image upload error:",
+        error
+      );
+
+
+      console.error(
+        "Product image response:",
+        error?.response?.data
+      );
+
+
+      throw error;
+
+    }
+
+  },
+
+
+  /* ==========================================================
+     DELETE PRODUCT IMAGE
+  ========================================================== */
+
+  deleteImage: async (
+    imageId
+  ) => {
+
+    if (!imageId) {
+
+      throw new Error(
+        "Image ID is required."
+      );
+
+    }
+
+
+    try {
+
+      const response =
+        await api.delete(
+          `/products/images/${imageId}`
+        );
+
+
+      return getResponseData(
+        response
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Delete product image error:",
+        error
+      );
+
+      throw error;
+
+    }
+
+  },
+
+};
+
+
+
+export default productService;
