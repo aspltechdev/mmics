@@ -31,9 +31,13 @@ const ProductSection = () => {
   ] = useState("All");
 
 
+  /* =========================================================
+     SERVER BASE URL
+  ========================================================= */
+
   const serverBaseUrl =
     import.meta.env.VITE_API_URL?.replace(
-      "/api",
+      /\/api\/?$/,
       ""
     ) ||
     "http://localhost:5000";
@@ -83,30 +87,68 @@ const ProductSection = () => {
      PRODUCT IMAGE
   ========================================================= */
 
-  const getPrimaryImage = (
-    product
-  ) => {
+  const getPrimaryImage = (product) => {
+    // No images available
     if (
-      !product.images ||
+      !product?.images ||
       product.images.length === 0
     ) {
       return "https://via.placeholder.com/300x200?text=No+Image";
     }
 
 
+    // Find primary image, otherwise use first image
     const primary =
       product.images.find(
         (image) =>
-          image.isPrimary
-      );
+          image?.isPrimary
+      ) ||
+      product.images[0];
 
 
-    return `${serverBaseUrl}${
-      (
-        primary ||
-        product.images[0]
-      ).imageUrl
-    }`;
+    const imageUrl =
+      primary?.imageUrl;
+
+
+    // Image object exists but URL is missing
+    if (!imageUrl) {
+      return "https://via.placeholder.com/300x200?text=No+Image";
+    }
+
+
+    /*
+      IMPORTANT:
+
+      If imageUrl is already a complete URL,
+      such as:
+
+      https://xxxxx.public.blob.vercel-storage.com/...
+      https://res.cloudinary.com/...
+
+      DO NOT prepend the backend URL.
+    */
+
+    if (
+      imageUrl.startsWith("http://") ||
+      imageUrl.startsWith("https://")
+    ) {
+      return imageUrl;
+    }
+
+
+    /*
+      If imageUrl is a relative path such as:
+
+      /uploads/product.jpg
+      uploads/product.jpg
+
+      use the backend server.
+    */
+
+    return `${serverBaseUrl}/${imageUrl.replace(
+      /^\/+/,
+      ""
+    )}`;
   };
 
 
@@ -167,8 +209,7 @@ const ProductSection = () => {
           <button
             type="button"
             className={`tab-btn ${
-              activeTab ===
-              "Best Seller"
+              activeTab === "Best Seller"
                 ? "active"
                 : ""
             }`}
@@ -213,7 +254,15 @@ const ProductSection = () => {
                       src={getPrimaryImage(
                         product
                       )}
-                      alt={product.name}
+                      alt={
+                        product.name ||
+                        "Product"
+                      }
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.src =
+                          "https://via.placeholder.com/300x200?text=No+Image";
+                      }}
                     />
 
                   </div>
@@ -228,12 +277,15 @@ const ProductSection = () => {
 
                     <p>
                       {product.description
-                        ? `${
-                            product.description.substring(
-                              0,
-                              90
-                            )
-                          }...`
+                        ? `${product.description.substring(
+                            0,
+                            90
+                          )}${
+                            product.description.length >
+                            90
+                              ? "..."
+                              : ""
+                          }`
                         : "No description available."}
                     </p>
 
