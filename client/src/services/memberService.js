@@ -128,6 +128,14 @@ const memberService = {
   },
 
   // =========================
+  // PUBLIC WEBSITE - GET MEMBERS
+  // =========================
+  getPublic: async () => {
+    const response = await api.get("/members/public");
+    return response.data;
+  },
+
+  // =========================
   // MEMBER / ADMIN - GET BY ID
   // =========================
   getById: async (id) => {

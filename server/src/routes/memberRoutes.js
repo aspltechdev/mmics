@@ -271,6 +271,7 @@ const fs = require("fs");
 const {
   getMembers,
   getMember,
+  getPublicMembers,
   getMyProfile,
   createMember,
   updateMember,
@@ -390,6 +391,16 @@ const adminOnly = [
  * IMPORTANT:
  * This route must come BEFORE /:id
  */
+
+// =========================================================
+// PUBLIC WEBSITE - GET ACTIVE MEMBERS
+// GET /api/members/public
+// =========================================================
+
+router.get(
+  "/public",
+  getPublicMembers
+);
 
 router.get(
   "/me",

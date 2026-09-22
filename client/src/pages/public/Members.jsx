@@ -143,7 +143,7 @@ const Members = () => {
       setError("");
 
       const response =
-        await memberService.getAll();
+        await memberService.getPublic();
 
       const data =
         normalizeMembers(

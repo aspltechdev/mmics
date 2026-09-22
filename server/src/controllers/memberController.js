@@ -2114,6 +2114,57 @@ const getMembers = async (req, res) => {
   }
 };
 
+// ======================================================
+// GET PUBLIC MEMBERS
+// Used by the public website
+// ======================================================
+
+const getPublicMembers = async (req, res) => {
+  try {
+    const members = await prisma.member.findMany({
+      where: {
+        status: "ACTIVE",
+      },
+
+      select: {
+        id: true,
+        membershipNumber: true,
+        name: true,
+        phone: true,
+        email: true,
+        address: true,
+        profileImage: true,
+        status: true,
+        designation: true,
+        designationOrder: true,
+        createdAt: true,
+      },
+
+      orderBy: [
+        {
+          designationOrder: "asc",
+        },
+        {
+          createdAt: "desc",
+        },
+      ],
+    });
+
+    res.json({
+      success: true,
+      count: members.length,
+      members,
+    });
+  } catch (error) {
+    console.error("Get public members error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Unable to fetch members",
+    });
+  }
+};
+
 /* =========================================================
    GET SINGLE MEMBER
    ADMIN
@@ -2969,6 +3020,7 @@ const deleteMember = async (
 
 module.exports = {
   getMembers,
+  getPublicMembers,
   getMember,
   getMyProfile,
   createMember,
