@@ -2096,7 +2096,7 @@ const Contact = () => {
           <div className="mmics-contact-map-wrapper">
             <iframe
               title="MMICS Location"
-              src="https://www.google.com/maps?q=12.885337,80.094676&z=15&output=embed"
+              src="https://www.google.com/maps?q=Manarang+Manufacturing+Multistate+Industrial+Cooperative+Society+Limited,+No.211,+Ganapathi+Nagar+Colony,+Sattamangalam+Padappai+Rd,+Maraimalai+Nagar,+Siruvanjur,+Tamil+Nadu+603203&output=embed"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
