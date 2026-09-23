@@ -1,13 +1,11 @@
 /* =========================================================
-   MMICS LOGIN
+   MMICS MEMBER LOGIN
 ========================================================= */
 
 .mmics-login-page {
   min-height: 100vh;
-
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
-
   background: #ffffff;
 }
 
@@ -17,50 +15,42 @@
 
 .mmics-login-visual {
   position: relative;
-
   min-height: 100vh;
-
   overflow: hidden;
 
   background:
     linear-gradient(
       135deg,
-      #52101b,
-      #8b1e2d 55%,
-      #651521
+      #063d73,
+      #0857a1 55%,
+      #06457f
     );
 }
 
 .mmics-login-visual::before {
   content: "";
-
   position: absolute;
-
   width: 520px;
   height: 520px;
-
   right: -190px;
   top: -180px;
 
   border: 1px solid
-    rgba(255, 255, 255, 0.12);
+    rgba(255, 255, 255, 0.14);
 
   border-radius: 50%;
 }
 
 .mmics-login-visual::after {
   content: "";
-
   position: absolute;
-
   width: 380px;
   height: 380px;
-
   left: -180px;
   bottom: -180px;
 
   border: 1px solid
-    rgba(255, 255, 255, 0.1);
+    rgba(255, 255, 255, 0.11);
 
   border-radius: 50%;
 }
@@ -72,7 +62,7 @@
   background:
     radial-gradient(
       circle at 70% 35%,
-      rgba(214, 168, 79, 0.18),
+      rgba(244, 143, 40, 0.20),
       transparent 32%
     );
 }
@@ -114,7 +104,7 @@
   border-radius: 11px;
 
   background: #ffffff;
-  color: #8b1e2d;
+  color: #0857a1;
 
   font-size: 20px;
   font-weight: 800;
@@ -133,7 +123,7 @@
 .mmics-login-brand span {
   margin-top: 4px;
 
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.58);
 
   font-size: 8px;
   font-weight: 600;
@@ -147,7 +137,6 @@
 
 .mmics-login-message {
   max-width: 560px;
-
   margin: auto 0;
 }
 
@@ -156,7 +145,7 @@
   align-items: center;
   gap: 10px;
 
-  color: #e2c475;
+  color: #f28c28;
 
   font-size: 10px;
   font-weight: 800;
@@ -169,7 +158,7 @@
   width: 28px;
   height: 2px;
 
-  background: #d6a84f;
+  background: #f28c28;
 }
 
 .mmics-login-message h1 {
@@ -184,7 +173,6 @@
   );
 
   line-height: 1.02;
-
   letter-spacing: -0.045em;
 }
 
@@ -193,7 +181,7 @@
 
   margin-top: 24px;
 
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(255, 255, 255, 0.70);
 
   font-size: 15px;
   line-height: 1.85;
@@ -208,13 +196,13 @@
   align-items: center;
   gap: 9px;
 
-  color: rgba(255, 255, 255, 0.58);
+  color: rgba(255, 255, 255, 0.60);
 
   font-size: 11px;
 }
 
 .mmics-login-trust svg {
-  color: #d6a84f;
+  color: #f28c28;
 }
 
 /* =========================================================
@@ -240,7 +228,7 @@
 ========================================================= */
 
 .mmics-login-heading > span {
-  color: #8b1e2d;
+  color: #0857a1;
 
   font-size: 10px;
   font-weight: 800;
@@ -252,8 +240,9 @@
 
   font-size: 36px;
   line-height: 1.1;
-
   letter-spacing: -0.035em;
+
+  color: #171717;
 }
 
 .mmics-login-heading p {
@@ -270,13 +259,13 @@
 
 .mmics-login-error {
   margin-top: 24px;
+
   padding: 12px 14px;
 
   border: 1px solid #ead0d4;
   border-radius: 8px;
 
   background: #fff6f7;
-
   color: #8b1e2d;
 
   font-size: 12px;
@@ -316,7 +305,7 @@
   position: absolute;
   left: 15px;
 
-  color: #a2a2a2;
+  color: #8a9aaa;
 
   pointer-events: none;
 }
@@ -333,7 +322,6 @@
   outline: none;
 
   background: #ffffff;
-
   color: #222222;
 
   font-size: 13px;
@@ -348,11 +336,11 @@
 }
 
 .mmics-login-input-wrapper input:focus {
-  border-color: #8b1e2d;
+  border-color: #0857a1;
 
   box-shadow:
     0 0 0 3px
-    rgba(139, 30, 45, 0.08);
+    rgba(8, 87, 161, 0.10);
 }
 
 .mmics-login-input-wrapper input:disabled {
@@ -375,13 +363,13 @@
   place-items: center;
 
   border: 0;
-
   background: transparent;
+
   color: #999999;
 }
 
 .mmics-password-toggle:hover {
-  color: #8b1e2d;
+  color: #0857a1;
 }
 
 /* =========================================================
@@ -402,7 +390,7 @@
   border: 0;
   border-radius: 9px;
 
-  background: #8b1e2d;
+  background: #0857a1;
   color: #ffffff;
 
   font-size: 13px;
@@ -410,13 +398,18 @@
 
   transition:
     background 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .mmics-login-submit:hover:not(:disabled) {
-  background: #681520;
+  background: #06477f;
 
   transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 18px
+    rgba(8, 87, 161, 0.18);
 }
 
 .mmics-login-submit:disabled {
@@ -459,17 +452,20 @@
 
   display: flex;
   justify-content: space-between;
-
   gap: 15px;
 
   border-top: 1px solid #eeeeee;
 }
 
 .mmics-login-footer a {
-  color: #8b1e2d;
+  color: #0857a1;
 
   font-size: 11px;
   font-weight: 650;
+}
+
+.mmics-login-footer a:hover {
+  color: #f28c28;
 }
 
 .mmics-login-footer span {
@@ -501,7 +497,6 @@
 
   .mmics-login-form-panel {
     min-height: 100vh;
-
     padding: 35px 25px;
   }
 
@@ -513,7 +508,6 @@
     margin-bottom: 55px;
 
     color: #171717;
-
     text-decoration: none;
   }
 
@@ -521,7 +515,7 @@
     width: 39px;
     height: 39px;
 
-    background: #8b1e2d;
+    background: #0857a1;
     color: #ffffff;
 
     font-size: 18px;
