@@ -5,9 +5,7 @@ import api from "./api";
    RESPONSE HELPER
 ============================================================ */
 
-const getData = (
-  response
-) => {
+const getData = (response) => {
   return (
     response?.data ??
     response
@@ -33,7 +31,6 @@ const productService = {
           "/products"
         );
 
-
       return getData(
         response
       );
@@ -54,16 +51,19 @@ const productService = {
      GET BY ID
   ======================================================== */
 
-  getById: async (
-    id
-  ) => {
+  getById: async (id) => {
     try {
+
+      if (!id) {
+        throw new Error(
+          "Product ID is required."
+        );
+      }
 
       const response =
         await api.get(
           `/products/${id}`
         );
-
 
       return getData(
         response
@@ -82,12 +82,57 @@ const productService = {
 
 
   /* ========================================================
+     GET BY SLUG
+
+     Used by:
+     /products/:slug
+
+     Example:
+     /products/uv-printed-cartons
+  ======================================================== */
+
+  getBySlug: async (slug) => {
+    try {
+
+      if (!slug) {
+        throw new Error(
+          "Product slug is required."
+        );
+      }
+
+      const response =
+        await api.get(
+          `/products/slug/${encodeURIComponent(
+            slug
+          )}`
+        );
+
+      return getData(
+        response
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Get product by slug error:",
+        error
+      );
+
+      console.error(
+        "Get product by slug response:",
+        error?.response?.data
+      );
+
+      throw error;
+    }
+  },
+
+
+  /* ========================================================
      CREATE
   ======================================================== */
 
-  create: async (
-    data
-  ) => {
+  create: async (data) => {
     try {
 
       const response =
@@ -95,7 +140,6 @@ const productService = {
           "/products",
           data
         );
-
 
       return getData(
         response
@@ -108,12 +152,10 @@ const productService = {
         error
       );
 
-
       console.error(
         "Create product response:",
         error?.response?.data
       );
-
 
       throw error;
     }
@@ -130,12 +172,17 @@ const productService = {
   ) => {
     try {
 
+      if (!id) {
+        throw new Error(
+          "Product ID is required."
+        );
+      }
+
       const response =
         await api.put(
           `/products/${id}`,
           data
         );
-
 
       return getData(
         response
@@ -148,12 +195,10 @@ const productService = {
         error
       );
 
-
       console.error(
         "Update product response:",
         error?.response?.data
       );
-
 
       throw error;
     }
@@ -170,6 +215,12 @@ const productService = {
   ) => {
     try {
 
+      if (!id) {
+        throw new Error(
+          "Product ID is required."
+        );
+      }
+
       const response =
         await api.patch(
           `/products/${id}/status`,
@@ -177,7 +228,6 @@ const productService = {
             status,
           }
         );
-
 
       return getData(
         response
@@ -190,12 +240,10 @@ const productService = {
         error
       );
 
-
       console.error(
         "Product status response:",
         error?.response?.data
       );
-
 
       throw error;
     }
@@ -206,16 +254,19 @@ const productService = {
      DELETE PRODUCT
   ======================================================== */
 
-  remove: async (
-    id
-  ) => {
+  remove: async (id) => {
     try {
+
+      if (!id) {
+        throw new Error(
+          "Product ID is required."
+        );
+      }
 
       const response =
         await api.delete(
           `/products/${id}`
         );
-
 
       return getData(
         response
@@ -228,6 +279,11 @@ const productService = {
         error
       );
 
+      console.error(
+        "Delete product response:",
+        error?.response?.data
+      );
+
       throw error;
     }
   },
@@ -236,9 +292,8 @@ const productService = {
   /* ========================================================
      ADD IMAGE
 
-     IMPORTANT:
-     Do NOT manually set multipart Content-Type.
-     Browser/Axios adds the boundary automatically.
+     Do not manually set multipart Content-Type.
+     Axios/browser will add multipart boundary.
   ======================================================== */
 
   addImage: async (
@@ -253,25 +308,21 @@ const productService = {
       );
     }
 
-
     if (!imageFile) {
       throw new Error(
         "Product image is required."
       );
     }
 
-
     try {
 
       const formData =
         new FormData();
 
-
       formData.append(
         "image",
         imageFile
       );
-
 
       formData.append(
         "isPrimary",
@@ -282,13 +333,11 @@ const productService = {
         )
       );
 
-
       const response =
         await api.post(
           `/products/${productId}/images`,
           formData
         );
-
 
       return getData(
         response
@@ -301,12 +350,10 @@ const productService = {
         error
       );
 
-
       console.error(
         "Product image response:",
         error?.response?.data
       );
-
 
       throw error;
     }
@@ -327,14 +374,12 @@ const productService = {
       );
     }
 
-
     try {
 
       const response =
         await api.delete(
           `/products/images/${imageId}`
         );
-
 
       return getData(
         response
@@ -347,6 +392,10 @@ const productService = {
         error
       );
 
+      console.error(
+        "Delete product image response:",
+        error?.response?.data
+      );
 
       throw error;
     }
@@ -355,10 +404,8 @@ const productService = {
 };
 
 
-/*
- * REQUIRED because Products.jsx uses:
- *
- * import productService from "../../services/productService";
- */
+/* ============================================================
+   EXPORT
+============================================================ */
 
 export default productService;
