@@ -193,6 +193,7 @@ enum ProductStatus {
 enum EnquiryType {
   CONTACT
   PRODUCT
+  MEMBERSHIP
 }
 
 enum EnquiryStatus {

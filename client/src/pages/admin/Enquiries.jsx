@@ -1,4 +1,3 @@
-
 import React, {
   useCallback,
   useEffect,
@@ -12,23 +11,21 @@ import {
   Trash2,
   X,
   CheckCircle2,
-  Clock3,
   AlertCircle,
   MessageSquare,
   RefreshCw,
   ChevronDown,
   Mail,
   Phone,
-  User,
   CalendarDays,
-  Building2,
   FileText,
   ArrowUpRight,
   Loader2,
+  Package,
+  Users,
 } from "lucide-react";
 
 import enquiryService from "../../services/enquiryService";
-
 import "./Enquiries.css";
 
 // ============================================================
@@ -36,22 +33,18 @@ import "./Enquiries.css";
 // ============================================================
 
 const STATUS_OPTIONS = [
-  {
-    value: "ALL",
-    label: "All enquiries",
-  },
-  {
-    value: "NEW",
-    label: "New",
-  },
-  {
-    value: "IN_PROGRESS",
-    label: "In Progress",
-  },
-  {
-    value: "RESOLVED",
-    label: "Resolved",
-  },
+  { value: "ALL", label: "All enquiries" },
+  { value: "NEW", label: "New" },
+  { value: "READ", label: "Read" },
+  { value: "REPLIED", label: "Replied" },
+  { value: "CLOSED", label: "Closed" },
+];
+
+const TYPE_OPTIONS = [
+  { value: "ALL", label: "All types" },
+  { value: "PRODUCT", label: "Product" },
+  { value: "MEMBERSHIP", label: "Membership" },
+  { value: "CONTACT", label: "Contact" },
 ];
 
 const STATUS_CONFIG = {
@@ -60,17 +53,38 @@ const STATUS_CONFIG = {
     className: "new",
     icon: AlertCircle,
   },
-
-  IN_PROGRESS: {
-    label: "In Progress",
-    className: "progress",
-    icon: Clock3,
+  READ: {
+    label: "Read",
+    className: "read",
+    icon: Eye,
   },
-
-  RESOLVED: {
-    label: "Resolved",
-    className: "resolved",
+  REPLIED: {
+    label: "Replied",
+    className: "replied",
+    icon: MessageSquare,
+  },
+  CLOSED: {
+    label: "Closed",
+    className: "closed",
     icon: CheckCircle2,
+  },
+};
+
+const TYPE_CONFIG = {
+  PRODUCT: {
+    label: "Product",
+    className: "product",
+    icon: Package,
+  },
+  MEMBERSHIP: {
+    label: "Membership",
+    className: "membership",
+    icon: Users,
+  },
+  CONTACT: {
+    label: "Contact",
+    className: "contact",
+    icon: MessageSquare,
   },
 };
 
@@ -78,123 +92,86 @@ const STATUS_CONFIG = {
 // HELPERS
 // ============================================================
 
-const getStatus = (enquiry) => {
-  return (
-    enquiry?.status ||
-    "NEW"
-  ).toString().toUpperCase();
-};
+const getStatus = (enquiry) =>
+  (enquiry?.status || "NEW").toString().toUpperCase();
 
-const getStatusConfig = (status) => {
-  return (
-    STATUS_CONFIG[status] ||
-    STATUS_CONFIG.NEW
-  );
-};
+const getStatusConfig = (status) =>
+  STATUS_CONFIG[status] || STATUS_CONFIG.NEW;
 
-const getEnquiryName = (enquiry) => {
-  return (
-    enquiry?.name ||
-    enquiry?.fullName ||
-    enquiry?.contactName ||
-    "Unknown"
-  );
-};
+const getEnquiryType = (enquiry) =>
+  (enquiry?.type || "CONTACT").toString().toUpperCase();
 
-const getEnquiryEmail = (enquiry) => {
-  return (
-    enquiry?.email ||
-    enquiry?.emailAddress ||
-    ""
-  );
-};
+const getTypeConfig = (type) =>
+  TYPE_CONFIG[type] || TYPE_CONFIG.CONTACT;
 
-const getEnquiryPhone = (enquiry) => {
-  return (
-    enquiry?.phone ||
-    enquiry?.phoneNumber ||
-    enquiry?.mobile ||
-    ""
-  );
-};
+const getEnquiryName = (enquiry) =>
+  enquiry?.name ||
+  enquiry?.fullName ||
+  enquiry?.contactName ||
+  "Unknown";
 
-const getEnquirySubject = (enquiry) => {
-  return (
-    enquiry?.subject ||
-    enquiry?.title ||
-    enquiry?.enquiryType ||
-    "General Enquiry"
-  );
-};
+const getEnquiryEmail = (enquiry) =>
+  enquiry?.email || enquiry?.emailAddress || "";
 
-const getEnquiryMessage = (enquiry) => {
-  return (
-    enquiry?.message ||
-    enquiry?.description ||
-    enquiry?.query ||
-    ""
-  );
-};
+const getEnquiryPhone = (enquiry) =>
+  enquiry?.phone ||
+  enquiry?.phoneNumber ||
+  enquiry?.mobile ||
+  "";
 
-const getEnquiryCompany = (enquiry) => {
-  return (
-    enquiry?.company ||
-    enquiry?.companyName ||
-    ""
-  );
-};
+const getEnquirySubject = (enquiry) =>
+  enquiry?.subject || enquiry?.title || "General Enquiry";
 
-const getEnquiryDate = (enquiry) => {
-  return (
-    enquiry?.createdAt ||
-    enquiry?.submittedAt ||
-    enquiry?.date ||
-    null
-  );
+const getEnquiryMessage = (enquiry) =>
+  enquiry?.message ||
+  enquiry?.description ||
+  enquiry?.query ||
+  "";
+
+const getEnquiryDate = (enquiry) =>
+  enquiry?.createdAt ||
+  enquiry?.submittedAt ||
+  enquiry?.date ||
+  null;
+
+const getProductName = (enquiry) => {
+  if (enquiry?.product?.name) {
+    return enquiry.product.name;
+  }
+
+  if (getEnquiryType(enquiry) === "PRODUCT") {
+    return "General product enquiry";
+  }
+
+  return "—";
 };
 
 const formatDate = (date) => {
-  if (!date) {
-    return "—";
-  }
+  if (!date) return "—";
 
   const parsedDate = new Date(date);
+  if (Number.isNaN(parsedDate.getTime())) return "—";
 
-  if (Number.isNaN(parsedDate.getTime())) {
-    return "—";
-  }
-
-  return parsedDate.toLocaleDateString(
-    "en-IN",
-    {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }
-  );
+  return parsedDate.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 };
 
 const formatDateTime = (date) => {
-  if (!date) {
-    return "—";
-  }
+  if (!date) return "—";
 
   const parsedDate = new Date(date);
+  if (Number.isNaN(parsedDate.getTime())) return "—";
 
-  if (Number.isNaN(parsedDate.getTime())) {
-    return "—";
-  }
-
-  return parsedDate.toLocaleString(
-    "en-IN",
-    {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    }
-  );
+  return parsedDate.toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 };
 
 // ============================================================
@@ -202,178 +179,136 @@ const formatDateTime = (date) => {
 // ============================================================
 
 const Enquiries = () => {
-  // ----------------------------------------------------------
-  // STATE
-  // ----------------------------------------------------------
+  const [enquiries, setEnquiries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState("");
 
-  const [enquiries, setEnquiries] =
-    useState([]);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [typeFilter, setTypeFilter] = useState("ALL");
 
-  const [loading, setLoading] =
-    useState(true);
+  const [selectedEnquiry, setSelectedEnquiry] = useState(null);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
 
-  const [refreshing, setRefreshing] =
-    useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [statusUpdating, setStatusUpdating] = useState(null);
 
-  const [error, setError] =
-    useState("");
-
-  const [search, setSearch] =
-    useState("");
-
-  const [statusFilter, setStatusFilter] =
-    useState("ALL");
-
-  const [selectedEnquiry, setSelectedEnquiry] =
-    useState(null);
-
-  const [viewModalOpen, setViewModalOpen] =
-    useState(false);
-
-  const [deleteTarget, setDeleteTarget] =
-    useState(null);
-
-  const [deleteLoading, setDeleteLoading] =
-    useState(false);
-
-  const [statusUpdating, setStatusUpdating] =
-    useState(null);
-
-  // ----------------------------------------------------------
+  // ============================================================
   // FETCH
-  // ----------------------------------------------------------
+  // ============================================================
 
-  const fetchEnquiries = useCallback(
-    async (showRefresh = false) => {
-      try {
-        if (showRefresh) {
-          setRefreshing(true);
-        } else {
-          setLoading(true);
-        }
-
-        setError("");
-
-        const response =
-          await enquiryService.getAll();
-
-        const data =
-          response?.enquiries ||
-          response?.data ||
-          [];
-
-        setEnquiries(
-          Array.isArray(data)
-            ? data
-            : []
-        );
-      } catch (err) {
-        console.error(
-          "Fetch enquiries error:",
-          err
-        );
-
-        setError(
-          err?.response?.data?.message ||
-            err?.message ||
-            "Unable to load enquiries."
-        );
-      } finally {
-        setLoading(false);
-        setRefreshing(false);
+  const fetchEnquiries = useCallback(async (showRefresh = false) => {
+    try {
+      if (showRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
       }
-    },
-    []
-  );
+
+      setError("");
+
+      const response = await enquiryService.getAll();
+      const data = response?.enquiries || response?.data || [];
+
+      setEnquiries(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Fetch enquiries error:", err);
+
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Unable to load enquiries."
+      );
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchEnquiries();
   }, [fetchEnquiries]);
 
-  // ----------------------------------------------------------
+  // ============================================================
   // STATS
-  // ----------------------------------------------------------
+  // ============================================================
 
   const stats = useMemo(() => {
     const total = enquiries.length;
 
-    const newCount =
-      enquiries.filter(
-        (item) =>
-          getStatus(item) === "NEW"
-      ).length;
+    const newCount = enquiries.filter(
+      (item) => getStatus(item) === "NEW"
+    ).length;
 
-    const progressCount =
-      enquiries.filter(
-        (item) =>
-          getStatus(item) ===
-          "IN_PROGRESS"
-      ).length;
+    const productCount = enquiries.filter(
+      (item) => getEnquiryType(item) === "PRODUCT"
+    ).length;
 
-    const resolvedCount =
-      enquiries.filter(
-        (item) =>
-          getStatus(item) ===
-          "RESOLVED"
-      ).length;
+    const membershipCount = enquiries.filter(
+      (item) => getEnquiryType(item) === "MEMBERSHIP"
+    ).length;
 
     return {
       total,
       newCount,
-      progressCount,
-      resolvedCount,
+      productCount,
+      membershipCount,
     };
   }, [enquiries]);
 
-  // ----------------------------------------------------------
+  const statusCounts = useMemo(() => {
+    return {
+      NEW: enquiries.filter((item) => getStatus(item) === "NEW").length,
+      READ: enquiries.filter((item) => getStatus(item) === "READ").length,
+      REPLIED: enquiries.filter((item) => getStatus(item) === "REPLIED").length,
+      CLOSED: enquiries.filter((item) => getStatus(item) === "CLOSED").length,
+    };
+  }, [enquiries]);
+
+  // ============================================================
   // FILTER
-  // ----------------------------------------------------------
+  // ============================================================
 
   const filteredEnquiries = useMemo(() => {
-    const query =
-      search.trim().toLowerCase();
+    const query = search.trim().toLowerCase();
 
-    return enquiries.filter(
-      (enquiry) => {
-        const status =
-          getStatus(enquiry);
+    return enquiries.filter((enquiry) => {
+      const status = getStatus(enquiry);
+      const type = getEnquiryType(enquiry);
 
-        if (
-          statusFilter !== "ALL" &&
-          status !== statusFilter
-        ) {
-          return false;
-        }
-
-        if (!query) {
-          return true;
-        }
-
-        const searchableText = [
-          getEnquiryName(enquiry),
-          getEnquiryEmail(enquiry),
-          getEnquiryPhone(enquiry),
-          getEnquirySubject(enquiry),
-          getEnquiryCompany(enquiry),
-          getEnquiryMessage(enquiry),
-        ]
-          .join(" ")
-          .toLowerCase();
-
-        return searchableText.includes(
-          query
-        );
+      if (statusFilter !== "ALL" && status !== statusFilter) {
+        return false;
       }
-    );
-  }, [
-    enquiries,
-    search,
-    statusFilter,
-  ]);
 
-  // ----------------------------------------------------------
+      if (typeFilter !== "ALL" && type !== typeFilter) {
+        return false;
+      }
+
+      if (!query) {
+        return true;
+      }
+
+      const searchableText = [
+        getEnquiryName(enquiry),
+        getEnquiryEmail(enquiry),
+        getEnquiryPhone(enquiry),
+        getEnquirySubject(enquiry),
+        getEnquiryMessage(enquiry),
+        getEnquiryType(enquiry),
+        getProductName(enquiry),
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(query);
+    });
+  }, [enquiries, search, statusFilter, typeFilter]);
+
+  // ============================================================
   // VIEW
-  // ----------------------------------------------------------
+  // ============================================================
 
   const openViewModal = (enquiry) => {
     setSelectedEnquiry(enquiry);
@@ -385,27 +320,19 @@ const Enquiries = () => {
     setSelectedEnquiry(null);
   };
 
-  // ----------------------------------------------------------
+  // ============================================================
   // STATUS UPDATE
-  // ----------------------------------------------------------
+  // ============================================================
 
-  const handleStatusChange = async (
-    enquiry,
-    status
-  ) => {
+  const handleStatusChange = async (enquiry, status) => {
     const id = enquiry?.id;
-
-    if (!id) {
-      return;
-    }
+    if (!id) return;
 
     try {
       setStatusUpdating(id);
+      setError("");
 
-      await enquiryService.updateStatus(
-        id,
-        status
-      );
+      await enquiryService.updateStatus(id, status);
 
       setEnquiries((current) =>
         current.map((item) =>
@@ -427,10 +354,7 @@ const Enquiries = () => {
           : current
       );
     } catch (err) {
-      console.error(
-        "Update enquiry status error:",
-        err
-      );
+      console.error("Update enquiry status error:", err);
 
       setError(
         err?.response?.data?.message ||
@@ -441,57 +365,39 @@ const Enquiries = () => {
     }
   };
 
-  // ----------------------------------------------------------
+  // ============================================================
   // DELETE
-  // ----------------------------------------------------------
+  // ============================================================
 
-  const openDeleteModal = (
-    enquiry
-  ) => {
+  const openDeleteModal = (enquiry) => {
     setDeleteTarget(enquiry);
   };
 
   const closeDeleteModal = () => {
-    if (deleteLoading) {
-      return;
-    }
-
+    if (deleteLoading) return;
     setDeleteTarget(null);
   };
 
   const handleDelete = async () => {
-    if (!deleteTarget?.id) {
-      return;
-    }
+    if (!deleteTarget?.id) return;
 
     try {
       setDeleteLoading(true);
+      setError("");
 
-      await enquiryService.remove(
-        deleteTarget.id
-      );
+      await enquiryService.remove(deleteTarget.id);
 
       setEnquiries((current) =>
-        current.filter(
-          (item) =>
-            item.id !==
-            deleteTarget.id
-        )
+        current.filter((item) => item.id !== deleteTarget.id)
       );
 
-      if (
-        selectedEnquiry?.id ===
-        deleteTarget.id
-      ) {
+      if (selectedEnquiry?.id === deleteTarget.id) {
         closeViewModal();
       }
 
       setDeleteTarget(null);
     } catch (err) {
-      console.error(
-        "Delete enquiry error:",
-        err
-      );
+      console.error("Delete enquiry error:", err);
 
       setError(
         err?.response?.data?.message ||
@@ -502,17 +408,21 @@ const Enquiries = () => {
     }
   };
 
-  // ----------------------------------------------------------
-  // ESCAPE
-  // ----------------------------------------------------------
+  // ============================================================
+  // ESCAPE + BODY SCROLL
+  // ============================================================
 
   useEffect(() => {
+    const modalOpen = viewModalOpen || Boolean(deleteTarget);
+
+    if (modalOpen) {
+      document.body.classList.add("mmics-enquiry-modal-open");
+    } else {
+      document.body.classList.remove("mmics-enquiry-modal-open");
+    }
+
     const handleKeyDown = (event) => {
-      if (
-        event.key !== "Escape"
-      ) {
-        return;
-      }
+      if (event.key !== "Escape") return;
 
       if (deleteTarget) {
         closeDeleteModal();
@@ -524,42 +434,37 @@ const Enquiries = () => {
       }
     };
 
-    window.addEventListener(
-      "keydown",
-      handleKeyDown
-    );
+    window.addEventListener("keydown", handleKeyDown);
 
-    return () =>
-      window.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
-  }, [
-    deleteTarget,
-    viewModalOpen,
-    deleteLoading,
-  ]);
+    return () => {
+      document.body.classList.remove("mmics-enquiry-modal-open");
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [deleteTarget, viewModalOpen, deleteLoading]);
 
-  // ==========================================================
+  // ============================================================
+  // CLEAR FILTERS
+  // ============================================================
+
+  const clearFilters = () => {
+    setSearch("");
+    setStatusFilter("ALL");
+    setTypeFilter("ALL");
+  };
+
+  // ============================================================
   // RENDER
-  // ==========================================================
+  // ============================================================
 
   return (
     <div className="mmics-enquiries">
-      {/* ======================================================
-          HEADER
-      ====================================================== */}
-
+      {/* HEADER */}
       <div className="mmics-enquiries-header">
         <div className="mmics-enquiries-heading">
           <div className="mmics-enquiries-breadcrumb">
             <span>Admin</span>
-            <span className="separator">
-              /
-            </span>
-            <span className="current">
-              Enquiries
-            </span>
+            <span className="separator">/</span>
+            <span className="current">Enquiries</span>
           </div>
 
           <div className="mmics-enquiries-title-row">
@@ -568,13 +473,9 @@ const Enquiries = () => {
             </div>
 
             <div>
-              <h1>
-                Enquiries
-              </h1>
-
+              <h1>Enquiries</h1>
               <p>
-                Manage website enquiries
-                and customer requests.
+                Manage product, membership and website enquiries.
               </p>
             </div>
           </div>
@@ -583,147 +484,77 @@ const Enquiries = () => {
         <button
           type="button"
           className="mmics-enquiries-refresh"
-          onClick={() =>
-            fetchEnquiries(true)
-          }
-          disabled={
-            loading || refreshing
-          }
+          onClick={() => fetchEnquiries(true)}
+          disabled={loading || refreshing}
         >
           {refreshing ? (
-            <Loader2
-              size={17}
-              className="spin"
-            />
+            <Loader2 size={17} className="spin" />
           ) : (
             <RefreshCw size={17} />
           )}
-
-          <span>
-            Refresh
-          </span>
+          <span>Refresh</span>
         </button>
       </div>
 
-      {/* ======================================================
-          ERROR
-      ====================================================== */}
-
+      {/* ERROR */}
       {error && (
         <div className="mmics-enquiries-alert">
           <AlertCircle size={18} />
-
-          <span>
-            {error}
-          </span>
-
-          <button
-            type="button"
-            onClick={() =>
-              setError("")
-            }
-          >
+          <span>{error}</span>
+          <button type="button" onClick={() => setError("")}>
             <X size={16} />
           </button>
         </div>
       )}
 
-      {/* ======================================================
-          STATS
-      ====================================================== */}
-
+      {/* STATS */}
       <div className="mmics-enquiries-stats">
         <div className="mmics-enquiries-stat-card">
           <div className="stat-icon total">
-            <MessageSquare
-              size={20}
-            />
+            <MessageSquare size={20} />
           </div>
-
           <div className="stat-content">
-            <span>
-              Total Enquiries
-            </span>
-
-            <strong>
-              {stats.total}
-            </strong>
-
-            <small>
-              All received enquiries
-            </small>
+            <span>Total Enquiries</span>
+            <strong>{stats.total}</strong>
+            <small>All received enquiries</small>
           </div>
         </div>
 
         <div className="mmics-enquiries-stat-card">
           <div className="stat-icon new">
-            <AlertCircle
-              size={20}
-            />
+            <AlertCircle size={20} />
           </div>
-
           <div className="stat-content">
-            <span>
-              New
-            </span>
-
-            <strong>
-              {stats.newCount}
-            </strong>
-
-            <small>
-              Need attention
-            </small>
+            <span>New</span>
+            <strong>{stats.newCount}</strong>
+            <small>Need attention</small>
           </div>
         </div>
 
         <div className="mmics-enquiries-stat-card">
-          <div className="stat-icon progress">
-            <Clock3 size={20} />
+          <div className="stat-icon product">
+            <Package size={20} />
           </div>
-
           <div className="stat-content">
-            <span>
-              In Progress
-            </span>
-
-            <strong>
-              {stats.progressCount}
-            </strong>
-
-            <small>
-              Currently handling
-            </small>
+            <span>Product</span>
+            <strong>{stats.productCount}</strong>
+            <small>Product enquiries</small>
           </div>
         </div>
 
         <div className="mmics-enquiries-stat-card">
-          <div className="stat-icon resolved">
-            <CheckCircle2
-              size={20}
-            />
+          <div className="stat-icon membership">
+            <Users size={20} />
           </div>
-
           <div className="stat-content">
-            <span>
-              Resolved
-            </span>
-
-            <strong>
-              {stats.resolvedCount}
-            </strong>
-
-            <small>
-              Successfully handled
-            </small>
+            <span>Membership</span>
+            <strong>{stats.membershipCount}</strong>
+            <small>Membership enquiries</small>
           </div>
         </div>
       </div>
 
-      {/* ======================================================
-          TOOLBAR
-      ====================================================== */}
-
+      {/* TOOLBAR */}
       <div className="mmics-enquiries-toolbar">
         <div className="mmics-enquiries-search">
           <Search size={18} />
@@ -731,140 +562,92 @@ const Enquiries = () => {
           <input
             type="text"
             value={search}
-            onChange={(event) =>
-              setSearch(
-                event.target.value
-              )
-            }
+            onChange={(event) => setSearch(event.target.value)}
             placeholder="Search enquiries..."
           />
 
           {search && (
-            <button
-              type="button"
-              onClick={() =>
-                setSearch("")
-              }
-            >
+            <button type="button" onClick={() => setSearch("")}>
               <X size={15} />
             </button>
           )}
         </div>
 
-        <div className="mmics-enquiries-filters">
-          {STATUS_OPTIONS.map(
-            (option) => (
+        <div className="mmics-enquiries-toolbar-right">
+          <div className="mmics-enquiries-type-filter">
+            <select
+              value={typeFilter}
+              onChange={(event) => setTypeFilter(event.target.value)}
+              aria-label="Filter enquiry type"
+            >
+              {TYPE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <ChevronDown size={14} />
+          </div>
+
+          <div className="mmics-enquiries-filters">
+            {STATUS_OPTIONS.map((option) => (
               <button
                 key={option.value}
                 type="button"
                 className={
-                  statusFilter ===
-                  option.value
-                    ? "active"
-                    : ""
+                  statusFilter === option.value ? "active" : ""
                 }
-                onClick={() =>
-                  setStatusFilter(
-                    option.value
-                  )
-                }
+                onClick={() => setStatusFilter(option.value)}
               >
                 {option.label}
 
-                {option.value !==
-                  "ALL" && (
-                  <span>
-                    {option.value ===
-                    "NEW"
-                      ? stats.newCount
-                      : option.value ===
-                        "IN_PROGRESS"
-                      ? stats.progressCount
-                      : stats.resolvedCount}
-                  </span>
+                {option.value !== "ALL" && (
+                  <span>{statusCounts[option.value] || 0}</span>
                 )}
               </button>
-            )
-          )}
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* ======================================================
-          TABLE
-      ====================================================== */}
-
+      {/* TABLE */}
       <div className="mmics-enquiries-table-card">
         <div className="mmics-enquiries-table-header">
           <div>
-            <h2>
-              Enquiry List
-            </h2>
-
+            <h2>Enquiry List</h2>
             <p>
-              {filteredEnquiries.length}{" "}
-              result
-              {filteredEnquiries.length !==
-              1
-                ? "s"
-                : ""}
+              {filteredEnquiries.length} result
+              {filteredEnquiries.length !== 1 ? "s" : ""}
             </p>
           </div>
 
           <div className="table-header-meta">
-            <MessageSquare
-              size={17}
-            />
-
-            <span>
-              {filteredEnquiries.length}
-            </span>
+            <MessageSquare size={17} />
+            <span>{filteredEnquiries.length}</span>
           </div>
         </div>
 
         {loading ? (
           <div className="mmics-enquiries-loading">
-            <Loader2
-              size={30}
-              className="spin"
-            />
-
-            <p>
-              Loading enquiries...
-            </p>
+            <Loader2 size={30} className="spin" />
+            <p>Loading enquiries...</p>
           </div>
-        ) : filteredEnquiries.length ===
-          0 ? (
+        ) : filteredEnquiries.length === 0 ? (
           <div className="mmics-enquiries-empty">
             <div className="empty-icon">
-              <MessageSquare
-                size={28}
-              />
+              <MessageSquare size={28} />
             </div>
 
-            <h3>
-              No enquiries found
-            </h3>
+            <h3>No enquiries found</h3>
 
             <p>
-              {search ||
-              statusFilter !==
-                "ALL"
-                ? "Try changing your search or filter."
+              {search || statusFilter !== "ALL" || typeFilter !== "ALL"
+                ? "Try changing your search or filters."
                 : "Website enquiries will appear here."}
             </p>
 
-            {(search ||
-              statusFilter !==
-                "ALL") && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearch("");
-                  setStatusFilter(
-                    "ALL"
-                  );
-                }}
-              >
+            {(search || statusFilter !== "ALL" || typeFilter !== "ALL") && (
+              <button type="button" onClick={clearFilters}>
                 Clear filters
               </button>
             )}
@@ -874,545 +657,327 @@ const Enquiries = () => {
             <table className="mmics-enquiries-table">
               <thead>
                 <tr>
-                  <th>
-                    Contact
-                  </th>
-
-                  <th>
-                    Enquiry
-                  </th>
-
-                  <th>
-                    Company
-                  </th>
-
-                  <th>
-                    Date
-                  </th>
-
-                  <th>
-                    Status
-                  </th>
-
-                  <th className="action-column">
-                    Actions
-                  </th>
+                  <th>Contact</th>
+                  <th>Type</th>
+                  <th>Enquiry</th>
+                  <th>Product</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th className="action-column">Actions</th>
                 </tr>
               </thead>
 
               <tbody>
-                {filteredEnquiries.map(
-                  (enquiry) => {
-                    const status =
-                      getStatus(
-                        enquiry
-                      );
+                {filteredEnquiries.map((enquiry) => {
+                  const status = getStatus(enquiry);
+                  const statusConfig = getStatusConfig(status);
+                  const StatusIcon = statusConfig.icon;
 
-                    const config =
-                      getStatusConfig(
-                        status
-                      );
+                  const type = getEnquiryType(enquiry);
+                  const typeConfig = getTypeConfig(type);
+                  const TypeIcon = typeConfig.icon;
 
-                    const StatusIcon =
-                      config.icon;
-
-                    return (
-                      <tr
-                        key={
-                          enquiry.id
-                        }
-                      >
-                        {/* CONTACT */}
-
-                        <td>
-                          <div className="enquiry-contact">
-                            <div className="contact-avatar">
-                              {getEnquiryName(
-                                enquiry
-                              )
-                                .charAt(
-                                  0
-                                )
-                                .toUpperCase()}
-                            </div>
-
-                            <div className="contact-info">
-                              <strong>
-                                {getEnquiryName(
-                                  enquiry
-                                )}
-                              </strong>
-
-                              <span>
-                                {getEnquiryEmail(
-                                  enquiry
-                                ) ||
-                                  "No email"}
-                              </span>
-                            </div>
+                  return (
+                    <tr key={enquiry.id}>
+                      {/* CONTACT */}
+                      <td>
+                        <div className="enquiry-contact">
+                          <div className="contact-avatar">
+                            {getEnquiryName(enquiry).charAt(0).toUpperCase()}
                           </div>
-                        </td>
 
-                        {/* ENQUIRY */}
-
-                        <td>
-                          <div className="enquiry-subject">
-                            <strong>
-                              {getEnquirySubject(
-                                enquiry
-                              )}
-                            </strong>
-
+                          <div className="contact-info">
+                            <strong>{getEnquiryName(enquiry)}</strong>
                             <span>
-                              {getEnquiryMessage(
-                                enquiry
-                              ) ||
-                                "No message"}
+                              {getEnquiryEmail(enquiry) || "No email"}
                             </span>
                           </div>
-                        </td>
+                        </div>
+                      </td>
 
-                        {/* COMPANY */}
+                      {/* TYPE */}
+                      <td>
+                        <div
+                          className={`enquiry-type ${typeConfig.className}`}
+                        >
+                          <TypeIcon size={14} />
+                          <span>{typeConfig.label}</span>
+                        </div>
+                      </td>
 
-                        <td>
-                          <div className="company-cell">
-                            {getEnquiryCompany(
-                              enquiry
-                            ) ? (
-                              <>
-                                <Building2
-                                  size={15}
-                                />
+                      {/* ENQUIRY */}
+                      <td>
+                        <div className="enquiry-subject">
+                          <strong>{getEnquirySubject(enquiry)}</strong>
+                          <span>
+                            {getEnquiryMessage(enquiry) || "No message"}
+                          </span>
+                        </div>
+                      </td>
 
-                                <span>
-                                  {getEnquiryCompany(
-                                    enquiry
-                                  )}
-                                </span>
-                              </>
-                            ) : (
-                              <span className="muted">
-                                —
-                              </span>
-                            )}
+                      {/* PRODUCT */}
+                      <td>
+                        <div className="product-cell">
+                          {type === "PRODUCT" ? (
+                            <>
+                              <Package size={15} />
+                              <span>{getProductName(enquiry)}</span>
+                            </>
+                          ) : (
+                            <span className="muted">—</span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* DATE */}
+                      <td>
+                        <div className="date-cell">
+                          <CalendarDays size={15} />
+                          <span>{formatDate(getEnquiryDate(enquiry))}</span>
+                        </div>
+                      </td>
+
+                      {/* STATUS */}
+                      <td>
+                        <div className="status-wrapper">
+                          <div
+                            className={`enquiry-status ${statusConfig.className}`}
+                          >
+                            <StatusIcon size={14} />
+                            <span>{statusConfig.label}</span>
                           </div>
-                        </td>
 
-                        {/* DATE */}
-
-                        <td>
-                          <div className="date-cell">
-                            <CalendarDays
-                              size={15}
-                            />
-
-                            <span>
-                              {formatDate(
-                                getEnquiryDate(
-                                  enquiry
-                                )
-                              )}
-                            </span>
-                          </div>
-                        </td>
-
-                        {/* STATUS */}
-
-                        <td>
-                          <div className="status-wrapper">
-                            <div
-                              className={`enquiry-status ${config.className}`}
-                            >
-                              <StatusIcon
-                                size={14}
-                              />
-
-                              <span>
-                                {
-                                  config.label
-                                }
-                              </span>
-                            </div>
-
-                            <div className="status-select-wrapper">
-                              <select
-                                value={
-                                  status
-                                }
-                                disabled={
-                                  statusUpdating ===
-                                  enquiry.id
-                                }
-                                onChange={(
-                                  event
-                                ) =>
-                                  handleStatusChange(
-                                    enquiry,
-                                    event
-                                      .target
-                                      .value
-                                  )
-                                }
-                              >
-                                <option value="NEW">
-                                  New
-                                </option>
-
-                                <option value="IN_PROGRESS">
-                                  In Progress
-                                </option>
-
-                                <option value="RESOLVED">
-                                  Resolved
-                                </option>
-                              </select>
-
-                              <ChevronDown
-                                size={13}
-                              />
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* ACTIONS */}
-
-                        <td>
-                          <div className="enquiry-actions">
-                            <button
-                              type="button"
-                              className="view"
-                              title="View enquiry"
-                              onClick={() =>
-                                openViewModal(
-                                  enquiry
+                          <div className="status-select-wrapper">
+                            <select
+                              value={status}
+                              disabled={statusUpdating === enquiry.id}
+                              onChange={(event) =>
+                                handleStatusChange(
+                                  enquiry,
+                                  event.target.value
                                 )
                               }
                             >
-                              <Eye
-                                size={16}
-                              />
-                            </button>
-
-                            <button
-                              type="button"
-                              className="delete"
-                              title="Delete enquiry"
-                              onClick={() =>
-                                openDeleteModal(
-                                  enquiry
-                                )
-                              }
-                            >
-                              <Trash2
-                                size={16}
-                              />
-                            </button>
+                              <option value="NEW">New</option>
+                              <option value="READ">Read</option>
+                              <option value="REPLIED">Replied</option>
+                              <option value="CLOSED">Closed</option>
+                            </select>
+                            <ChevronDown size={13} />
                           </div>
-                        </td>
-                      </tr>
-                    );
-                  }
-                )}
+                        </div>
+                      </td>
+
+                      {/* ACTIONS */}
+                      <td>
+                        <div className="enquiry-actions">
+                          <button
+                            type="button"
+                            className="view"
+                            title="View enquiry"
+                            onClick={() => openViewModal(enquiry)}
+                          >
+                            <Eye size={16} />
+                          </button>
+
+                          <button
+                            type="button"
+                            className="delete"
+                            title="Delete enquiry"
+                            onClick={() => openDeleteModal(enquiry)}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         )}
       </div>
 
-      {/* ======================================================
-          VIEW MODAL
-      ====================================================== */}
-
-      {viewModalOpen &&
-        selectedEnquiry && (
-          <div
-            className="mmics-enquiries-modal-backdrop"
-            onMouseDown={(
-              event
-            ) => {
-              if (
-                event.target ===
-                event.currentTarget
-              ) {
-                closeViewModal();
-              }
-            }}
-          >
-            <div className="mmics-enquiries-view-modal">
-              <div className="view-modal-header">
-                <div>
-                  <div className="view-modal-kicker">
-                    ENQUIRY DETAILS
-                  </div>
-
-                  <h2>
-                    {getEnquirySubject(
-                      selectedEnquiry
-                    )}
-                  </h2>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={
-                    closeViewModal
-                  }
-                >
-                  <X size={19} />
-                </button>
+      {/* VIEW MODAL */}
+      {viewModalOpen && selectedEnquiry && (
+        <div
+          className="mmics-enquiries-modal-backdrop"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              closeViewModal();
+            }
+          }}
+        >
+          <div className="mmics-enquiries-view-modal">
+            <div className="view-modal-header">
+              <div>
+                <div className="view-modal-kicker">ENQUIRY DETAILS</div>
+                <h2>{getEnquirySubject(selectedEnquiry)}</h2>
               </div>
 
-              <div className="view-modal-body">
-                {/* CONTACT CARD */}
+              <button type="button" onClick={closeViewModal}>
+                <X size={19} />
+              </button>
+            </div>
 
-                <div className="enquiry-detail-contact">
-                  <div className="large-avatar">
-                    {getEnquiryName(
-                      selectedEnquiry
-                    )
-                      .charAt(0)
-                      .toUpperCase()}
-                  </div>
-
-                  <div>
-                    <strong>
-                      {getEnquiryName(
-                        selectedEnquiry
-                      )}
-                    </strong>
-
-                    <span>
-                      {getEnquiryCompany(
-                        selectedEnquiry
-                      ) ||
-                        "Website enquiry"}
-                    </span>
-                  </div>
+            <div className="view-modal-body">
+              <div className="enquiry-detail-contact">
+                <div className="large-avatar">
+                  {getEnquiryName(selectedEnquiry).charAt(0).toUpperCase()}
                 </div>
 
-                {/* DETAILS */}
-
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <span>
-                      <Mail
-                        size={15}
-                      />
-                      Email
-                    </span>
-
-                    {getEnquiryEmail(
-                      selectedEnquiry
-                    ) ? (
-                      <a
-                        href={`mailto:${getEnquiryEmail(
-                          selectedEnquiry
-                        )}`}
-                      >
-                        {
-                          getEnquiryEmail(
-                            selectedEnquiry
-                          )
-                        }
-
-                        <ArrowUpRight
-                          size={13}
-                        />
-                      </a>
-                    ) : (
-                      <strong>
-                        —
-                      </strong>
-                    )}
-                  </div>
-
-                  <div className="detail-item">
-                    <span>
-                      <Phone
-                        size={15}
-                      />
-                      Phone
-                    </span>
-
-                    {getEnquiryPhone(
-                      selectedEnquiry
-                    ) ? (
-                      <a
-                        href={`tel:${getEnquiryPhone(
-                          selectedEnquiry
-                        )}`}
-                      >
-                        {
-                          getEnquiryPhone(
-                            selectedEnquiry
-                          )
-                        }
-
-                        <ArrowUpRight
-                          size={13}
-                        />
-                      </a>
-                    ) : (
-                      <strong>
-                        —
-                      </strong>
-                    )}
-                  </div>
-
-                  <div className="detail-item">
-                    <span>
-                      <Building2
-                        size={15}
-                      />
-                      Company
-                    </span>
-
-                    <strong>
-                      {getEnquiryCompany(
-                        selectedEnquiry
-                      ) ||
-                        "—"}
-                    </strong>
-                  </div>
-
-                  <div className="detail-item">
-                    <span>
-                      <CalendarDays
-                        size={15}
-                      />
-                      Submitted
-                    </span>
-
-                    <strong>
-                      {formatDateTime(
-                        getEnquiryDate(
-                          selectedEnquiry
-                        )
-                      )}
-                    </strong>
-                  </div>
+                <div className="enquiry-detail-contact-main">
+                  <strong>{getEnquiryName(selectedEnquiry)}</strong>
+                  <span>{getEnquiryEmail(selectedEnquiry) || "Website enquiry"}</span>
                 </div>
 
-                {/* MESSAGE */}
+                {(() => {
+                  const typeConfig = getTypeConfig(
+                    getEnquiryType(selectedEnquiry)
+                  );
+                  const TypeIcon = typeConfig.icon;
 
-                <div className="message-section">
-                  <div className="section-label">
-                    <FileText
-                      size={16}
-                    />
-
-                    <span>
-                      Message
-                    </span>
-                  </div>
-
-                  <div className="message-box">
-                    {getEnquiryMessage(
-                      selectedEnquiry
-                    ) || (
-                      <span className="muted">
-                        No message provided.
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* STATUS */}
-
-                <div className="view-status-section">
-                  <div>
-                    <span>
-                      Current status
-                    </span>
-
-                    <strong>
-                      {
-                        getStatusConfig(
-                          getStatus(
-                            selectedEnquiry
-                          )
-                        ).label
-                      }
-                    </strong>
-                  </div>
-
-                  <select
-                    value={getStatus(
-                      selectedEnquiry
-                    )}
-                    disabled={
-                      statusUpdating ===
-                      selectedEnquiry.id
-                    }
-                    onChange={(
-                      event
-                    ) =>
-                      handleStatusChange(
-                        selectedEnquiry,
-                        event
-                          .target
-                          .value
-                      )
-                    }
-                  >
-                    <option value="NEW">
-                      New
-                    </option>
-
-                    <option value="IN_PROGRESS">
-                      In Progress
-                    </option>
-
-                    <option value="RESOLVED">
-                      Resolved
-                    </option>
-                  </select>
-                </div>
+                  return (
+                    <div
+                      className={`enquiry-type ${typeConfig.className} modal-type`}
+                    >
+                      <TypeIcon size={14} />
+                      <span>{typeConfig.label}</span>
+                    </div>
+                  );
+                })()}
               </div>
 
-              <div className="view-modal-footer">
-                <button
-                  type="button"
-                  className="secondary"
-                  onClick={
-                    closeViewModal
-                  }
-                >
-                  Close
-                </button>
+              <div className="detail-grid">
+                <div className="detail-item">
+                  <span>
+                    <Mail size={15} />
+                    Email
+                  </span>
 
-                {getEnquiryEmail(
-                  selectedEnquiry
-                ) && (
-                  <a
-                    className="primary"
-                    href={`mailto:${getEnquiryEmail(
-                      selectedEnquiry
-                    )}`}
-                  >
-                    <Mail size={16} />
-                    Reply by Email
-                  </a>
+                  {getEnquiryEmail(selectedEnquiry) ? (
+                    <a href={`mailto:${getEnquiryEmail(selectedEnquiry)}`}>
+                      {getEnquiryEmail(selectedEnquiry)}
+                      <ArrowUpRight size={13} />
+                    </a>
+                  ) : (
+                    <strong>—</strong>
+                  )}
+                </div>
+
+                <div className="detail-item">
+                  <span>
+                    <Phone size={15} />
+                    Phone
+                  </span>
+
+                  {getEnquiryPhone(selectedEnquiry) ? (
+                    <a href={`tel:${getEnquiryPhone(selectedEnquiry)}`}>
+                      {getEnquiryPhone(selectedEnquiry)}
+                      <ArrowUpRight size={13} />
+                    </a>
+                  ) : (
+                    <strong>—</strong>
+                  )}
+                </div>
+
+                <div className="detail-item">
+                  <span>
+                    <MessageSquare size={15} />
+                    Enquiry Type
+                  </span>
+                  <strong>
+                    {getTypeConfig(getEnquiryType(selectedEnquiry)).label}
+                  </strong>
+                </div>
+
+                <div className="detail-item">
+                  <span>
+                    <CalendarDays size={15} />
+                    Submitted
+                  </span>
+                  <strong>
+                    {formatDateTime(getEnquiryDate(selectedEnquiry))}
+                  </strong>
+                </div>
+
+                {getEnquiryType(selectedEnquiry) === "PRODUCT" && (
+                  <div className="detail-item detail-item-full">
+                    <span>
+                      <Package size={15} />
+                      Product
+                    </span>
+                    <strong>{getProductName(selectedEnquiry)}</strong>
+                  </div>
                 )}
               </div>
+
+              <div className="message-section">
+                <div className="section-label">
+                  <FileText size={16} />
+                  <span>Message</span>
+                </div>
+
+                <div className="message-box">
+                  {getEnquiryMessage(selectedEnquiry) || (
+                    <span className="muted">No message provided.</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="view-status-section">
+                <div>
+                  <span>Current status</span>
+                  <strong>
+                    {getStatusConfig(getStatus(selectedEnquiry)).label}
+                  </strong>
+                </div>
+
+                <select
+                  value={getStatus(selectedEnquiry)}
+                  disabled={statusUpdating === selectedEnquiry.id}
+                  onChange={(event) =>
+                    handleStatusChange(selectedEnquiry, event.target.value)
+                  }
+                >
+                  <option value="NEW">New</option>
+                  <option value="READ">Read</option>
+                  <option value="REPLIED">Replied</option>
+                  <option value="CLOSED">Closed</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="view-modal-footer">
+              <button
+                type="button"
+                className="secondary"
+                onClick={closeViewModal}
+              >
+                Close
+              </button>
+
+              {getEnquiryEmail(selectedEnquiry) && (
+                <a
+                  className="primary"
+                  href={`mailto:${getEnquiryEmail(selectedEnquiry)}`}
+                >
+                  <Mail size={16} />
+                  Reply by Email
+                </a>
+              )}
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-      {/* ======================================================
-          DELETE MODAL
-      ====================================================== */}
-
+      {/* DELETE MODAL */}
       {deleteTarget && (
         <div
           className="mmics-enquiries-modal-backdrop"
-          onMouseDown={(
-            event
-          ) => {
-            if (
-              event.target ===
-              event.currentTarget
-            ) {
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
               closeDeleteModal();
             }
           }}
@@ -1422,27 +987,17 @@ const Enquiries = () => {
               <Trash2 size={23} />
             </div>
 
-            <h2>
-              Delete enquiry?
-            </h2>
+            <h2>Delete enquiry?</h2>
 
             <p>
-              This will permanently
-              remove the enquiry from
-              your admin portal.
+              This will permanently remove the enquiry from your admin portal.
             </p>
 
             <div className="delete-preview">
-              <strong>
-                {getEnquiryName(
-                  deleteTarget
-                )}
-              </strong>
-
+              <strong>{getEnquiryName(deleteTarget)}</strong>
               <span>
-                {getEnquirySubject(
-                  deleteTarget
-                )}
+                {getTypeConfig(getEnquiryType(deleteTarget)).label} ·{" "}
+                {getEnquirySubject(deleteTarget)}
               </span>
             </div>
 
@@ -1450,12 +1005,8 @@ const Enquiries = () => {
               <button
                 type="button"
                 className="cancel"
-                onClick={
-                  closeDeleteModal
-                }
-                disabled={
-                  deleteLoading
-                }
+                onClick={closeDeleteModal}
+                disabled={deleteLoading}
               >
                 Cancel
               </button>
@@ -1463,28 +1014,17 @@ const Enquiries = () => {
               <button
                 type="button"
                 className="confirm"
-                onClick={
-                  handleDelete
-                }
-                disabled={
-                  deleteLoading
-                }
+                onClick={handleDelete}
+                disabled={deleteLoading}
               >
                 {deleteLoading ? (
                   <>
-                    <Loader2
-                      size={16}
-                      className="spin"
-                    />
-
+                    <Loader2 size={16} className="spin" />
                     Deleting...
                   </>
                 ) : (
                   <>
-                    <Trash2
-                      size={16}
-                    />
-
+                    <Trash2 size={16} />
                     Delete Enquiry
                   </>
                 )}
@@ -1498,4 +1038,3 @@ const Enquiries = () => {
 };
 
 export default Enquiries;
-

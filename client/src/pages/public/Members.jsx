@@ -24,6 +24,7 @@ import memberHero from "../../assets/memberhero.png";
 import memberCta from "../../assets/membercta.png";
 
 
+
 // ============================================================
 // SERVER URL
 // ============================================================
@@ -155,9 +156,9 @@ const Members = () => {
         data.filter(
           (member) =>
             member.status ===
-              undefined ||
+            undefined ||
             member.status ===
-              "ACTIVE"
+            "ACTIVE"
         );
 
       setMembers(
@@ -253,7 +254,7 @@ const Members = () => {
           const matchesDesignation =
             designation === "all" ||
             member.designation ===
-              designation;
+            designation;
 
           return (
             matchesSearch &&
@@ -322,7 +323,7 @@ const Members = () => {
           alt="MMICS packaging and industrial solutions"
           className="mmics-member-hero-image"
         />
-                
+
         <div className="mmics-member-hero-overlay" />
 
         <div className="mmics-members-hero-content">
@@ -539,7 +540,7 @@ const Members = () => {
           {!loading &&
             !error &&
             filteredMembers.length ===
-              0 && (
+            0 && (
 
               <div className="mmics-members-state">
 
@@ -556,18 +557,18 @@ const Members = () => {
 
                 {(search ||
                   designation !==
-                    "all") && (
+                  "all") && (
 
-                  <button
-                    type="button"
-                    onClick={
-                      clearSearch
-                    }
-                  >
-                    Clear Filters
-                  </button>
+                    <button
+                      type="button"
+                      onClick={
+                        clearSearch
+                      }
+                    >
+                      Clear Filters
+                    </button>
 
-                )}
+                  )}
 
               </div>
 
@@ -581,7 +582,7 @@ const Members = () => {
           {!loading &&
             !error &&
             filteredMembers.length >
-              0 && (
+            0 && (
 
               <div className="mmics-members-grid">
 
@@ -591,10 +592,9 @@ const Members = () => {
                     index
                   ) => {
 
-                    const image =
-                      getImageUrl(
-                        member.profileImage
-                      );
+                    const image = member.profileImage
+                      ? getImageUrl(member.profileImage)
+                      : "/profile.jpg";
 
                     return (
 
@@ -611,9 +611,9 @@ const Members = () => {
                         <div className="mmics-member-image">
 
                           {image &&
-                          !imageErrors[
+                            !imageErrors[
                             member.id
-                          ] ? (
+                            ] ? (
 
                             <img
                               src={image}
@@ -787,34 +787,18 @@ const Members = () => {
 
 
             {/* MODAL IMAGE */}
-
             <div className="mmics-member-modal-image">
-
-              {selectedMember.profileImage &&
-              !imageErrors[
-                selectedMember.id
-              ] ? (
-
-                <img
-                  src={getImageUrl(
-                    selectedMember.profileImage
-                  )}
-                  alt={
-                    selectedMember.name
-                  }
-                  onError={() =>
-                    handleImageError(
-                      selectedMember.id
-                    )
-                  }
-                />
-
-              ) : (
-
-                <UserRound />
-
-              )}
-
+              <img
+                src={
+                  selectedMember.profileImage
+                    ? getImageUrl(selectedMember.profileImage)
+                    : "/default-avatar.png"
+                }
+                alt={selectedMember.name}
+                onError={() =>
+                  handleImageError(selectedMember.id)
+                }
+              />
             </div>
 
 
