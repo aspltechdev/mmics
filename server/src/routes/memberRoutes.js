@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // const express = require("express");
 
 // const {
@@ -266,11 +267,15 @@ const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+=======
+const express = require("express");
+const multer = require("multer");
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
 
 const {
+  getPublicMembers,
   getMembers,
   getMember,
-  getPublicMembers,
   getMyProfile,
   createMember,
   updateMember,
@@ -278,12 +283,18 @@ const {
   deleteMember,
 } = require("../controllers/memberController");
 
-const authMiddleware = require("../middleware/authMiddleware");
-const roleMiddleware = require("../middleware/roleMiddleware");
+const authMiddleware = require(
+  "../middleware/authMiddleware"
+);
+
+const roleMiddleware = require(
+  "../middleware/roleMiddleware"
+);
 
 const router = express.Router();
 
 /* =========================================================
+<<<<<<< HEAD
    MULTER CONFIGURATION
 ========================================================= */
 
@@ -339,11 +350,78 @@ const upload = multer({
         )
       );
     }
+=======
+   MEMBER IMAGE UPLOAD
+
+   IMPORTANT:
+   Use MEMORY STORAGE.
+
+   Do NOT use:
+   multer.diskStorage()
+
+   Vercel cannot permanently write into /var/task.
+========================================================= */
+
+const storage = multer.memoryStorage();
+
+/* =========================================================
+   FILE FILTER
+========================================================= */
+
+const fileFilter = (
+  req,
+  file,
+  cb
+) => {
+  const allowedTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+  ];
+
+  if (
+    allowedTypes.includes(
+      file.mimetype
+    )
+  ) {
+    return cb(
+      null,
+      true
+    );
+  }
+
+  return cb(
+    new Error(
+      "Only JPG, JPEG, PNG and WEBP images are allowed."
+    ),
+    false
+  );
+};
+
+/* =========================================================
+   MULTER
+========================================================= */
+
+const upload = multer({
+  storage,
+
+  fileFilter,
+
+  limits: {
+    // Keep safely below Vercel request-body limit
+    fileSize:
+      4 * 1024 * 1024,
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
   },
 });
 
 /* =========================================================
+<<<<<<< HEAD
    ADMIN AUTH
+=======
+   ADMIN MIDDLEWARE
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
 ========================================================= */
 
 const adminOnly = [
@@ -353,7 +431,13 @@ const adminOnly = [
 
 /* =========================================================
    PUBLIC MEMBERS
+<<<<<<< HEAD
    IMPORTANT: KEEP THIS BEFORE /:id
+=======
+
+   IMPORTANT:
+   Must be before /:id
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
 ========================================================= */
 
 router.get(
@@ -362,7 +446,13 @@ router.get(
 );
 
 /* =========================================================
+<<<<<<< HEAD
    LOGGED-IN MEMBER PROFILE
+=======
+   MEMBER OWN PROFILE
+
+   Must also be before /:id
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
 ========================================================= */
 
 router.get(
@@ -372,7 +462,11 @@ router.get(
 );
 
 /* =========================================================
+<<<<<<< HEAD
    ADMIN - GET ALL MEMBERS
+=======
+   ADMIN - GET ALL
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
 ========================================================= */
 
 router.get(
@@ -382,7 +476,11 @@ router.get(
 );
 
 /* =========================================================
+<<<<<<< HEAD
    ADMIN - GET SINGLE MEMBER
+=======
+   ADMIN - GET SINGLE
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
 ========================================================= */
 
 router.get(
@@ -392,7 +490,11 @@ router.get(
 );
 
 /* =========================================================
+<<<<<<< HEAD
    ADMIN - CREATE MEMBER
+=======
+   ADMIN - CREATE
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
 ========================================================= */
 
 router.post(
@@ -403,7 +505,11 @@ router.post(
 );
 
 /* =========================================================
+<<<<<<< HEAD
    ADMIN - UPDATE MEMBER
+=======
+   ADMIN - UPDATE
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
 ========================================================= */
 
 router.put(
@@ -414,7 +520,11 @@ router.put(
 );
 
 /* =========================================================
+<<<<<<< HEAD
    ADMIN - CHANGE MEMBER STATUS
+=======
+   ADMIN - STATUS
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
 ========================================================= */
 
 router.patch(
@@ -424,7 +534,11 @@ router.patch(
 );
 
 /* =========================================================
+<<<<<<< HEAD
    ADMIN - DELETE MEMBER
+=======
+   ADMIN - DELETE
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
 ========================================================= */
 
 router.delete(
@@ -434,10 +548,11 @@ router.delete(
 );
 
 /* =========================================================
-   MULTER ERROR HANDLER
+   UPLOAD ERROR HANDLER
 ========================================================= */
 
 router.use(
+<<<<<<< HEAD
   (error, req, res, next) => {
     if (error instanceof multer.MulterError) {
       if (error.code === "LIMIT_FILE_SIZE") {
@@ -459,6 +574,50 @@ router.use(
         success: false,
         message: error.message,
       });
+=======
+  (
+    error,
+    req,
+    res,
+    next
+  ) => {
+    if (
+      error instanceof
+      multer.MulterError
+    ) {
+      if (
+        error.code ===
+        "LIMIT_FILE_SIZE"
+      ) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message:
+              "Profile photo must be less than 4MB",
+          });
+      }
+
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message:
+            error.message ||
+            "Profile photo upload failed",
+        });
+    }
+
+    if (error) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message:
+            error.message ||
+            "Profile photo upload failed",
+        });
+>>>>>>> 6bc6eb4dee1139ddc8bdbedd72d2596bf9598149
     }
 
     next();
