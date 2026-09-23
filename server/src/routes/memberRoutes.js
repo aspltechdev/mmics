@@ -262,11 +262,10 @@
 
 // module.exports = router;
 
-
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
 const fs = require("fs");
+const path = require("path");
 
 const {
   getMembers,
@@ -285,7 +284,7 @@ const roleMiddleware = require("../middleware/roleMiddleware");
 const router = express.Router();
 
 /* =========================================================
-   MEMBER PHOTO UPLOAD CONFIG
+   MULTER CONFIGURATION
 ========================================================= */
 
 const uploadDir = path.join(
@@ -293,19 +292,9 @@ const uploadDir = path.join(
   "../../uploads/members"
 );
 
-/* =========================================================
-   CREATE UPLOAD DIRECTORY
-========================================================= */
-
 if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, {
-    recursive: true,
-  });
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
-
-/* =========================================================
-   MULTER STORAGE
-========================================================= */
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -326,38 +315,6 @@ const storage = multer.diskStorage({
   },
 });
 
-/* =========================================================
-   FILE FILTER
-========================================================= */
-
-const fileFilter = (req, file, cb) => {
-  const allowedMimeTypes = [
-    "image/jpeg",
-    "image/jpg",
-    "image/png",
-    "image/webp",
-  ];
-
-  if (
-    allowedMimeTypes.includes(
-      file.mimetype
-    )
-  ) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error(
-        "Only JPG, JPEG, PNG and WebP images are allowed"
-      ),
-      false
-    );
-  }
-};
-
-/* =========================================================
-   MULTER UPLOAD
-========================================================= */
-
 const upload = multer({
   storage,
 
@@ -365,11 +322,28 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024,
   },
 
-  fileFilter,
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+    ];
+
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(
+        new Error(
+          "Only JPG, JPEG, PNG and WEBP images are allowed"
+        )
+      );
+    }
+  },
 });
 
 /* =========================================================
-   ADMIN ONLY MIDDLEWARE
+   ADMIN AUTH
 ========================================================= */
 
 const adminOnly = [
@@ -378,29 +352,18 @@ const adminOnly = [
 ];
 
 /* =========================================================
-   LOGGED-IN MEMBER
+   PUBLIC MEMBERS
+   IMPORTANT: KEEP THIS BEFORE /:id
 ========================================================= */
-
-/*
- * GET /api/members/me
- *
- * Used by:
- * Member Dashboard
- * Member Profile
- *
- * IMPORTANT:
- * This route must come BEFORE /:id
- */
-
-// =========================================================
-// PUBLIC WEBSITE - GET ACTIVE MEMBERS
-// GET /api/members/public
-// =========================================================
 
 router.get(
   "/public",
   getPublicMembers
 );
+
+/* =========================================================
+   LOGGED-IN MEMBER PROFILE
+========================================================= */
 
 router.get(
   "/me",
@@ -410,7 +373,6 @@ router.get(
 
 /* =========================================================
    ADMIN - GET ALL MEMBERS
-   GET /api/members
 ========================================================= */
 
 router.get(
@@ -421,7 +383,6 @@ router.get(
 
 /* =========================================================
    ADMIN - GET SINGLE MEMBER
-   GET /api/members/:id
 ========================================================= */
 
 router.get(
@@ -432,11 +393,6 @@ router.get(
 
 /* =========================================================
    ADMIN - CREATE MEMBER
-   POST /api/members
-
-   multipart/form-data
-
-   profileImage = actual local image file
 ========================================================= */
 
 router.post(
@@ -448,11 +404,6 @@ router.post(
 
 /* =========================================================
    ADMIN - UPDATE MEMBER
-   PUT /api/members/:id
-
-   multipart/form-data
-
-   profileImage = optional new local image
 ========================================================= */
 
 router.put(
@@ -464,7 +415,6 @@ router.put(
 
 /* =========================================================
    ADMIN - CHANGE MEMBER STATUS
-   PATCH /api/members/:id/status
 ========================================================= */
 
 router.patch(
@@ -475,7 +425,6 @@ router.patch(
 
 /* =========================================================
    ADMIN - DELETE MEMBER
-   DELETE /api/members/:id
 ========================================================= */
 
 router.delete(
@@ -490,42 +439,30 @@ router.delete(
 
 router.use(
   (error, req, res, next) => {
-    if (
-      error instanceof multer.MulterError
-    ) {
-      if (
-        error.code === "LIMIT_FILE_SIZE"
-      ) {
+    if (error instanceof multer.MulterError) {
+      if (error.code === "LIMIT_FILE_SIZE") {
         return res.status(400).json({
           success: false,
           message:
-            "Profile photo must be less than 5MB",
+            "Profile image must be 5 MB or smaller",
         });
       }
 
       return res.status(400).json({
         success: false,
-        message:
-          error.message ||
-          "Profile photo upload failed",
+        message: error.message,
       });
     }
 
     if (error) {
       return res.status(400).json({
         success: false,
-        message:
-          error.message ||
-          "File upload failed",
+        message: error.message,
       });
     }
 
     next();
   }
 );
-
-/* =========================================================
-   EXPORT ROUTER
-========================================================= */
 
 module.exports = router;

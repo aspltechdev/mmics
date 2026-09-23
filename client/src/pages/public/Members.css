@@ -548,6 +548,9 @@
 /* ============================================================
    MEMBER IMAGE
    ============================================================ */
+/* ============================================================
+   MEMBER IMAGE
+   ============================================================ */
 
 .mmics-member-image {
   width: 100%;
@@ -562,6 +565,11 @@
       #edf1f4,
       #f7f8f9
     );
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
 }
 
 .mmics-member-image img {
@@ -570,7 +578,7 @@
 
   display: block;
 
-  object-fit: cover;
+  object-fit: contain;
 
   object-position: center;
 
@@ -580,10 +588,8 @@
 
 .mmics-member-card:hover
   .mmics-member-image img {
-  transform:
-    scale(1.035);
+  transform: scale(1.015);
 }
-
 
 /* ============================================================
    PLACEHOLDER
