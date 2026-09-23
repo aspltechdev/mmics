@@ -1,7 +1,5 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
 
 const {
   getPublicMembers,
@@ -24,62 +22,30 @@ const roleMiddleware = require(
 
 const router = express.Router();
 
-// =========================================================
-// MEMBER IMAGE DIRECTORY
-// =========================================================
+/* =========================================================
+   MEMBER IMAGE UPLOAD
 
-const uploadDir = path.join(
-  __dirname,
-  "../../uploads/members"
-);
+   IMPORTANT:
+   Use MEMORY STORAGE.
 
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, {
-    recursive: true,
-  });
-}
+   Do NOT use:
+   multer.diskStorage()
 
-// =========================================================
-// MULTER STORAGE
-// =========================================================
+   Vercel cannot permanently write into /var/task.
+========================================================= */
 
-const storage = multer.diskStorage({
-  destination: (
-    req,
-    file,
-    cb
-  ) => {
-    cb(null, uploadDir);
-  },
+const storage = multer.memoryStorage();
 
-  filename: (
-    req,
-    file,
-    cb
-  ) => {
-    const extension = path
-      .extname(file.originalname)
-      .toLowerCase();
-
-    const filename =
-      `member-${Date.now()}-${Math.round(
-        Math.random() * 1e9
-      )}${extension}`;
-
-    cb(null, filename);
-  },
-});
-
-// =========================================================
-// FILE FILTER
-// =========================================================
+/* =========================================================
+   FILE FILTER
+========================================================= */
 
 const fileFilter = (
   req,
   file,
   cb
 ) => {
-  const allowedMimeTypes = [
+  const allowedTypes = [
     "image/jpeg",
     "image/jpg",
     "image/png",
@@ -87,64 +53,66 @@ const fileFilter = (
   ];
 
   if (
-    allowedMimeTypes.includes(
+    allowedTypes.includes(
       file.mimetype
     )
   ) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error(
-        "Only JPG, JPEG, PNG and WebP images are allowed"
-      ),
-      false
+    return cb(
+      null,
+      true
     );
   }
+
+  return cb(
+    new Error(
+      "Only JPG, JPEG, PNG and WEBP images are allowed."
+    ),
+    false
+  );
 };
 
-// =========================================================
-// MULTER
-// =========================================================
+/* =========================================================
+   MULTER
+========================================================= */
 
 const upload = multer({
   storage,
 
-  limits: {
-    fileSize:
-      5 * 1024 * 1024,
-  },
-
   fileFilter,
+
+  limits: {
+    // Keep safely below Vercel request-body limit
+    fileSize:
+      4 * 1024 * 1024,
+  },
 });
 
-// =========================================================
-// ADMIN MIDDLEWARE
-// =========================================================
+/* =========================================================
+   ADMIN MIDDLEWARE
+========================================================= */
 
 const adminOnly = [
   authMiddleware,
   roleMiddleware("ADMIN"),
 ];
 
-// =========================================================
-// PUBLIC MEMBERS
-//
-// IMPORTANT:
-// NO AUTH MIDDLEWARE HERE.
-//
-// MUST BE BEFORE "/:id"
-// =========================================================
+/* =========================================================
+   PUBLIC MEMBERS
+
+   IMPORTANT:
+   Must be before /:id
+========================================================= */
 
 router.get(
   "/public",
   getPublicMembers
 );
 
-// =========================================================
-// LOGGED-IN MEMBER PROFILE
-//
-// MUST ALSO BE BEFORE "/:id"
-// =========================================================
+/* =========================================================
+   MEMBER OWN PROFILE
+
+   Must also be before /:id
+========================================================= */
 
 router.get(
   "/me",
@@ -152,9 +120,9 @@ router.get(
   getMyProfile
 );
 
-// =========================================================
-// ADMIN - GET ALL MEMBERS
-// =========================================================
+/* =========================================================
+   ADMIN - GET ALL
+========================================================= */
 
 router.get(
   "/",
@@ -162,9 +130,9 @@ router.get(
   getMembers
 );
 
-// =========================================================
-// ADMIN - GET SINGLE MEMBER
-// =========================================================
+/* =========================================================
+   ADMIN - GET SINGLE
+========================================================= */
 
 router.get(
   "/:id",
@@ -172,35 +140,31 @@ router.get(
   getMember
 );
 
-// =========================================================
-// ADMIN - CREATE MEMBER
-// =========================================================
+/* =========================================================
+   ADMIN - CREATE
+========================================================= */
 
 router.post(
   "/",
   ...adminOnly,
-  upload.single(
-    "profileImage"
-  ),
+  upload.single("profileImage"),
   createMember
 );
 
-// =========================================================
-// ADMIN - UPDATE MEMBER
-// =========================================================
+/* =========================================================
+   ADMIN - UPDATE
+========================================================= */
 
 router.put(
   "/:id",
   ...adminOnly,
-  upload.single(
-    "profileImage"
-  ),
+  upload.single("profileImage"),
   updateMember
 );
 
-// =========================================================
-// ADMIN - UPDATE MEMBER STATUS
-// =========================================================
+/* =========================================================
+   ADMIN - STATUS
+========================================================= */
 
 router.patch(
   "/:id/status",
@@ -208,9 +172,9 @@ router.patch(
   changeMemberStatus
 );
 
-// =========================================================
-// ADMIN - DELETE MEMBER
-// =========================================================
+/* =========================================================
+   ADMIN - DELETE
+========================================================= */
 
 router.delete(
   "/:id",
@@ -218,9 +182,9 @@ router.delete(
   deleteMember
 );
 
-// =========================================================
-// MULTER ERROR HANDLER
-// =========================================================
+/* =========================================================
+   UPLOAD ERROR HANDLER
+========================================================= */
 
 router.use(
   (
@@ -241,9 +205,8 @@ router.use(
           .status(400)
           .json({
             success: false,
-
             message:
-              "Profile photo must be less than 5MB",
+              "Profile photo must be less than 4MB",
           });
       }
 
@@ -251,7 +214,6 @@ router.use(
         .status(400)
         .json({
           success: false,
-
           message:
             error.message ||
             "Profile photo upload failed",
@@ -263,10 +225,9 @@ router.use(
         .status(400)
         .json({
           success: false,
-
           message:
             error.message ||
-            "File upload failed",
+            "Profile photo upload failed",
         });
     }
 

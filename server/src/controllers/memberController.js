@@ -1,560 +1,611 @@
 const bcrypt = require("bcryptjs");
-const fs = require("fs");
+const fs = require("fs/promises");
 const path = require("path");
-const prisma = require("../config/database");
 
-// =========================================================
-// PROFILE IMAGE PATH
-// =========================================================
+const prisma = require(
+  "../config/database"
+);
 
-const getProfileImagePath = (file) => {
-  if (!file) return null;
+/* ============================================================
+   VERCEL BLOB
 
-  return `/uploads/members/${file.filename}`;
+   Same storage used by Products and Gallery.
+============================================================ */
+
+const getBlobSdk = () =>
+  import("@vercel/blob");
+
+/* ============================================================
+   SAFE FILE NAME
+============================================================ */
+
+const createSafeFilename = (
+  originalName = "member.jpg"
+) => {
+  const cleaned =
+    String(originalName)
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(
+        /[^a-z0-9._-]/g,
+        "-"
+      )
+      .replace(/-+/g, "-");
+
+  return (
+    cleaned ||
+    "member.jpg"
+  );
 };
 
-// =========================================================
-// DELETE PROFILE IMAGE
-// =========================================================
+/* ============================================================
+   STORAGE MODE
 
-const deleteProfileImage = (imagePath) => {
-  if (!imagePath) return;
+   LOCALHOST:
+   uploads/members/
 
-  try {
-    const cleanPath = imagePath.replace(/^\/+/, "");
+   VERCEL:
+   Vercel Blob
+============================================================ */
 
-    const filePath = path.join(
-      __dirname,
-      "../../",
-      cleanPath
-    );
+const shouldUseBlob = () => {
+  return Boolean(
+    process.env.VERCEL ||
+    process.env
+      .BLOB_READ_WRITE_TOKEN ||
+    process.env
+      .VERCEL_OIDC_TOKEN
+  );
+};
 
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+/* ============================================================
+   UPLOAD MEMBER IMAGE
+
+   Same concept as Products/Gallery.
+============================================================ */
+
+const uploadMemberImage =
+  async (file) => {
+    if (!file) {
+      return null;
     }
-  } catch (error) {
-    console.error(
-      "Unable to delete profile image:",
-      error
+
+    if (!file.buffer) {
+      throw new Error(
+        "Member image upload requires memory storage."
+      );
+    }
+
+    const safeFilename =
+      createSafeFilename(
+        file.originalname
+      );
+
+    /* ========================================================
+       VERCEL BLOB
+    ======================================================== */
+
+    if (shouldUseBlob()) {
+      const {
+        put,
+      } = await getBlobSdk();
+
+      const pathname =
+        `members/${Date.now()}-${safeFilename}`;
+
+      const blob =
+        await put(
+          pathname,
+          file.buffer,
+          {
+            access:
+              "public",
+
+            addRandomSuffix:
+              true,
+
+            contentType:
+              file.mimetype,
+          }
+        );
+
+      return blob.url;
+    }
+
+    /* ========================================================
+       LOCALHOST STORAGE
+    ======================================================== */
+
+    const uploadDirectory =
+      path.join(
+        process.cwd(),
+        "uploads",
+        "members"
+      );
+
+    await fs.mkdir(
+      uploadDirectory,
+      {
+        recursive: true,
+      }
     );
-  }
-};
 
-// =========================================================
-// PUBLIC - GET ACTIVE MEMBERS
-//
-// GET /api/members/public
-//
-// NO LOGIN REQUIRED
-// =========================================================
+    const filename =
+      `${Date.now()}-${safeFilename}`;
 
-const getPublicMembers = async (req, res) => {
-  try {
-    const members = await prisma.member.findMany({
-      where: {
-        status: "ACTIVE",
-      },
+    const filePath =
+      path.join(
+        uploadDirectory,
+        filename
+      );
 
-      select: {
-        id: true,
-        membershipNumber: true,
-        name: true,
-        phone: true,
-        email: true,
-        address: true,
-        profileImage: true,
-        designation: true,
-        designationOrder: true,
-        status: true,
-      },
-
-      orderBy: [
-        {
-          designationOrder: "asc",
-        },
-        {
-          name: "asc",
-        },
-      ],
-    });
-
-    return res.status(200).json({
-      success: true,
-      count: members.length,
-      members,
-    });
-  } catch (error) {
-    console.error(
-      "Get public members error:",
-      error
+    await fs.writeFile(
+      filePath,
+      file.buffer
     );
 
-    return res.status(500).json({
-      success: false,
-      message: "Unable to fetch members",
-    });
-  }
-};
+    return (
+      `/uploads/members/${filename}`
+    );
+  };
 
-// =========================================================
-// ADMIN - GET ALL MEMBERS
-// =========================================================
+/* ============================================================
+   DELETE STORED MEMBER IMAGE
+============================================================ */
 
-const getMembers = async (req, res) => {
-  try {
-    const members = await prisma.member.findMany({
-      include: {
-        user: {
+const deleteStoredMemberImage =
+  async (imageUrl) => {
+    if (!imageUrl) {
+      return;
+    }
+
+    try {
+      /* ======================================================
+         VERCEL BLOB
+      ====================================================== */
+
+      if (
+        imageUrl.includes(
+          "vercel-storage.com"
+        )
+      ) {
+        const {
+          del,
+        } = await getBlobSdk();
+
+        await del(
+          imageUrl
+        );
+
+        return;
+      }
+
+      /* ======================================================
+         LOCAL IMAGE
+      ====================================================== */
+
+      if (
+        imageUrl.startsWith(
+          "/uploads/"
+        )
+      ) {
+        const relativePath =
+          imageUrl.replace(
+            /^\/+/,
+            ""
+          );
+
+        const filePath =
+          path.join(
+            process.cwd(),
+            relativePath
+          );
+
+        await fs
+          .unlink(filePath)
+          .catch(() => {
+            /*
+             * Image may already
+             * be deleted.
+             */
+          });
+      }
+    } catch (error) {
+      console.error(
+        "Delete stored member image error:",
+        error
+      );
+    }
+  };
+
+/* ============================================================
+   PUBLIC - GET ACTIVE MEMBERS
+
+   GET /api/members/public
+============================================================ */
+
+const getPublicMembers =
+  async (
+    req,
+    res
+  ) => {
+    try {
+      const members =
+        await prisma.member.findMany({
+          where: {
+            status:
+              "ACTIVE",
+          },
+
           select: {
             id: true,
+
+            membershipNumber:
+              true,
+
+            name: true,
+
+            phone: true,
+
             email: true,
-            role: true,
-            isActive: true,
+
+            address: true,
+
+            profileImage:
+              true,
+
+            designation:
+              true,
+
+            designationOrder:
+              true,
+
+            status: true,
           },
-        },
-      },
 
-      orderBy: [
-        {
-          designationOrder: "asc",
-        },
-        {
-          createdAt: "desc",
-        },
-      ],
-    });
-
-    return res.status(200).json({
-      success: true,
-      count: members.length,
-      members,
-    });
-  } catch (error) {
-    console.error(
-      "Get members error:",
-      error
-    );
-
-    return res.status(500).json({
-      success: false,
-      message: "Unable to fetch members",
-    });
-  }
-};
-
-// =========================================================
-// ADMIN - GET SINGLE MEMBER
-// =========================================================
-
-const getMember = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const member =
-      await prisma.member.findUnique({
-        where: {
-          id,
-        },
-
-        include: {
-          user: {
-            select: {
-              id: true,
-              email: true,
-              role: true,
-              isActive: true,
+          orderBy: [
+            {
+              designationOrder:
+                "asc",
             },
-          },
-        },
-      });
 
-    if (!member) {
-      return res.status(404).json({
-        success: false,
-        message: "Member not found",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      member,
-    });
-  } catch (error) {
-    console.error(
-      "Get member error:",
-      error
-    );
-
-    return res.status(500).json({
-      success: false,
-      message: "Unable to fetch member",
-    });
-  }
-};
-
-// =========================================================
-// MEMBER - GET OWN PROFILE
-//
-// GET /api/members/me
-// =========================================================
-
-const getMyProfile = async (req, res) => {
-  try {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required",
-      });
-    }
-
-    const member =
-      await prisma.member.findUnique({
-        where: {
-          userId: req.user.id,
-        },
-
-        include: {
-          user: {
-            select: {
-              id: true,
-              email: true,
-              role: true,
-              isActive: true,
+            {
+              name:
+                "asc",
             },
-          },
-        },
-      });
+          ],
+        });
 
-    if (!member) {
-      return res.status(404).json({
-        success: false,
-        message:
-          "Member profile not found for this account",
-      });
-    }
+      return res
+        .status(200)
+        .json({
+          success: true,
 
-    return res.status(200).json({
-      success: true,
-      member,
-    });
-  } catch (error) {
-    console.error(
-      "Get my member profile error:",
-      error
-    );
+          count:
+            members.length,
 
-    return res.status(500).json({
-      success: false,
-      message:
-        "Unable to load member profile",
-    });
-  }
-};
-
-// =========================================================
-// ADMIN - CREATE MEMBER
-// =========================================================
-
-const createMember = async (req, res) => {
-  try {
-    const {
-      name,
-      email,
-      phone,
-      address,
-      membershipNumber,
-      password,
-      designation,
-      designationOrder,
-    } = req.body;
-
-    // -----------------------------------------------------
-    // VALIDATION
-    // -----------------------------------------------------
-
-    if (
-      !name ||
-      !email ||
-      !phone ||
-      !membershipNumber ||
-      !password
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Name, email, phone, membership number and password are required",
-      });
-    }
-
-    // -----------------------------------------------------
-    // CHECK EMAIL
-    // -----------------------------------------------------
-
-    const existingUser =
-      await prisma.user.findUnique({
-        where: {
-          email: email.trim(),
-        },
-      });
-
-    if (existingUser) {
-      return res.status(409).json({
-        success: false,
-        message: "Email already exists",
-      });
-    }
-
-    // -----------------------------------------------------
-    // CHECK MEMBERSHIP NUMBER
-    // -----------------------------------------------------
-
-    const existingMembership =
-      await prisma.member.findUnique({
-        where: {
-          membershipNumber:
-            membershipNumber.trim(),
-        },
-      });
-
-    if (existingMembership) {
-      return res.status(409).json({
-        success: false,
-        message:
-          "Membership number already exists",
-      });
-    }
-
-    // -----------------------------------------------------
-    // DESIGNATION ORDER
-    // -----------------------------------------------------
-
-    const parsedDesignationOrder =
-      designationOrder !== undefined &&
-      designationOrder !== null &&
-      designationOrder !== ""
-        ? Number(designationOrder)
-        : 0;
-
-    if (
-      !Number.isInteger(
-        parsedDesignationOrder
-      ) ||
-      parsedDesignationOrder < 0
-    ) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Designation order must be a valid positive number",
-      });
-    }
-
-    // -----------------------------------------------------
-    // PASSWORD
-    // -----------------------------------------------------
-
-    const hashedPassword =
-      await bcrypt.hash(password, 12);
-
-    // -----------------------------------------------------
-    // IMAGE
-    // -----------------------------------------------------
-
-    const profileImage =
-      getProfileImagePath(req.file);
-
-    // -----------------------------------------------------
-    // CREATE USER + MEMBER
-    // -----------------------------------------------------
-
-    const result =
-      await prisma.$transaction(
-        async (tx) => {
-          const user =
-            await tx.user.create({
-              data: {
-                name: name.trim(),
-
-                email: email.trim(),
-
-                password:
-                  hashedPassword,
-
-                role: "MEMBER",
-
-                isActive: true,
-              },
-            });
-
-          const member =
-            await tx.member.create({
-              data: {
-                userId: user.id,
-
-                membershipNumber:
-                  membershipNumber.trim(),
-
-                name: name.trim(),
-
-                phone: phone.trim(),
-
-                email: email.trim(),
-
-                address:
-                  address?.trim() ||
-                  null,
-
-                profileImage,
-
-                designation:
-                  designation?.trim() ||
-                  null,
-
-                designationOrder:
-                  parsedDesignationOrder,
-
-                status: "ACTIVE",
-              },
-            });
-
-          return {
-            user,
-            member,
-          };
-        }
+          members,
+        });
+    } catch (error) {
+      console.error(
+        "Get public members error:",
+        error
       );
 
-    return res.status(201).json({
-      success: true,
+      return res
+        .status(500)
+        .json({
+          success: false,
 
-      message:
-        "Member created successfully",
+          message:
+            "Unable to fetch members",
+        });
+    }
+  };
 
-      member: {
-        id: result.member.id,
+/* ============================================================
+   ADMIN - GET ALL MEMBERS
+============================================================ */
 
-        membershipNumber:
-          result.member
-            .membershipNumber,
+const getMembers =
+  async (
+    req,
+    res
+  ) => {
+    try {
+      const members =
+        await prisma.member.findMany({
+          include: {
+            user: {
+              select: {
+                id: true,
 
-        name: result.member.name,
+                email:
+                  true,
 
-        email: result.member.email,
+                role:
+                  true,
 
-        phone: result.member.phone,
+                isActive:
+                  true,
+              },
+            },
+          },
 
-        address:
-          result.member.address,
+          orderBy: [
+            {
+              designationOrder:
+                "asc",
+            },
 
-        profileImage:
-          result.member.profileImage,
+            {
+              createdAt:
+                "desc",
+            },
+          ],
+        });
 
-        designation:
-          result.member.designation,
+      return res
+        .status(200)
+        .json({
+          success: true,
 
-        designationOrder:
-          result.member
-            .designationOrder,
+          count:
+            members.length,
 
-        status: result.member.status,
-
-        userId: result.user.id,
-      },
-    });
-  } catch (error) {
-    console.error(
-      "Create member error:",
-      error
-    );
-
-    if (req.file) {
-      deleteProfileImage(
-        getProfileImagePath(
-          req.file
-        )
+          members,
+        });
+    } catch (error) {
+      console.error(
+        "Get members error:",
+        error
       );
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            "Unable to fetch members",
+        });
     }
+  };
 
-    return res.status(500).json({
-      success: false,
-      message: "Unable to create member",
-    });
-  }
-};
+/* ============================================================
+   ADMIN - GET SINGLE MEMBER
+============================================================ */
 
-// =========================================================
-// ADMIN - UPDATE MEMBER
-// =========================================================
+const getMember =
+  async (
+    req,
+    res
+  ) => {
+    try {
+      const {
+        id,
+      } = req.params;
 
-const updateMember = async (req, res) => {
-  try {
-    const { id } = req.params;
+      const member =
+        await prisma.member.findUnique({
+          where: {
+            id,
+          },
 
-    const {
-      name,
-      email,
-      phone,
-      address,
-      membershipNumber,
-      designation,
-      designationOrder,
-      password,
-    } = req.body;
+          include: {
+            user: {
+              select: {
+                id: true,
 
-    // -----------------------------------------------------
-    // FIND MEMBER
-    // -----------------------------------------------------
+                email:
+                  true,
 
-    const member =
-      await prisma.member.findUnique({
-        where: {
-          id,
-        },
-      });
+                role:
+                  true,
 
-    if (!member) {
-      return res.status(404).json({
-        success: false,
-        message: "Member not found",
-      });
+                isActive:
+                  true,
+              },
+            },
+          },
+        });
+
+      if (!member) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Member not found",
+          });
+      }
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          member,
+        });
+    } catch (error) {
+      console.error(
+        "Get member error:",
+        error
+      );
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            "Unable to fetch member",
+        });
     }
+  };
 
-    // -----------------------------------------------------
-    // EMAIL DUPLICATE CHECK
-    // -----------------------------------------------------
+/* ============================================================
+   MEMBER - GET MY PROFILE
 
-    if (
-      email &&
-      email.trim() !== member.email
-    ) {
+   GET /api/members/me
+============================================================ */
+
+const getMyProfile =
+  async (
+    req,
+    res
+  ) => {
+    try {
+      if (
+        !req.user ||
+        !req.user.id
+      ) {
+        return res
+          .status(401)
+          .json({
+            success: false,
+
+            message:
+              "Authentication required",
+          });
+      }
+
+      const member =
+        await prisma.member.findUnique({
+          where: {
+            userId:
+              req.user.id,
+          },
+
+          include: {
+            user: {
+              select: {
+                id: true,
+
+                email:
+                  true,
+
+                role:
+                  true,
+
+                isActive:
+                  true,
+              },
+            },
+          },
+        });
+
+      if (!member) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Member profile not found for this account",
+          });
+      }
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          member,
+        });
+    } catch (error) {
+      console.error(
+        "Get my member profile error:",
+        error
+      );
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            "Unable to load member profile",
+        });
+    }
+  };
+
+/* ============================================================
+   ADMIN - CREATE MEMBER
+============================================================ */
+
+const createMember =
+  async (
+    req,
+    res
+  ) => {
+    let uploadedImageUrl =
+      null;
+
+    try {
+      const {
+        name,
+        email,
+        phone,
+        address,
+        membershipNumber,
+        password,
+        designation,
+        designationOrder,
+      } = req.body;
+
+      /* ======================================================
+         VALIDATION
+      ====================================================== */
+
+      if (
+        !name ||
+        !email ||
+        !phone ||
+        !membershipNumber ||
+        !password
+      ) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Name, email, phone, membership number and password are required",
+          });
+      }
+
+      /* ======================================================
+         EMAIL CHECK
+      ====================================================== */
+
       const existingUser =
         await prisma.user.findUnique({
           where: {
-            email: email.trim(),
+            email:
+              email.trim(),
           },
         });
 
       if (
-        existingUser &&
-        existingUser.id !==
-          member.userId
+        existingUser
       ) {
-        return res.status(409).json({
-          success: false,
-          message:
-            "Email already exists",
-        });
+        return res
+          .status(409)
+          .json({
+            success: false,
+
+            message:
+              "Email already exists",
+          });
       }
-    }
 
-    // -----------------------------------------------------
-    // MEMBERSHIP NUMBER DUPLICATE CHECK
-    // -----------------------------------------------------
+      /* ======================================================
+         MEMBERSHIP CHECK
+      ====================================================== */
 
-    if (
-      membershipNumber &&
-      membershipNumber.trim() !==
-        member.membershipNumber
-    ) {
       const existingMembership =
         await prisma.member.findUnique({
           where: {
@@ -564,362 +615,777 @@ const updateMember = async (req, res) => {
         });
 
       if (
-        existingMembership &&
-        existingMembership.id !==
-          member.id
+        existingMembership
       ) {
-        return res.status(409).json({
-          success: false,
-          message:
-            "Membership number already exists",
-        });
+        return res
+          .status(409)
+          .json({
+            success: false,
+
+            message:
+              "Membership number already exists",
+          });
       }
-    }
 
-    // -----------------------------------------------------
-    // DESIGNATION ORDER
-    // -----------------------------------------------------
+      /* ======================================================
+         DISPLAY ORDER
+      ====================================================== */
 
-    let parsedDesignationOrder;
-
-    if (
-      designationOrder !== undefined &&
-      designationOrder !== null &&
-      designationOrder !== ""
-    ) {
-      parsedDesignationOrder =
-        Number(designationOrder);
+      const parsedDesignationOrder =
+        designationOrder !==
+          undefined &&
+        designationOrder !==
+          null &&
+        designationOrder !==
+          ""
+          ? Number(
+              designationOrder
+            )
+          : 0;
 
       if (
         !Number.isInteger(
           parsedDesignationOrder
         ) ||
-        parsedDesignationOrder < 0
+        parsedDesignationOrder <
+          0
       ) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "Designation order must be a valid positive number",
-        });
+        return res
+          .status(400)
+          .json({
+            success: false,
+
+            message:
+              "Designation order must be a valid positive number",
+          });
       }
-    }
 
-    // -----------------------------------------------------
-    // NEW IMAGE
-    // -----------------------------------------------------
+      /* ======================================================
+         HASH PASSWORD
+      ====================================================== */
 
-    const newProfileImage =
-      req.file
-        ? getProfileImagePath(
+      const hashedPassword =
+        await bcrypt.hash(
+          password,
+          12
+        );
+
+      /* ======================================================
+         UPLOAD PROFILE IMAGE
+      ====================================================== */
+
+      if (
+        req.file
+      ) {
+        uploadedImageUrl =
+          await uploadMemberImage(
             req.file
-          )
-        : undefined;
+          );
+      }
 
-    // -----------------------------------------------------
-    // MEMBER DATA
-    // -----------------------------------------------------
+      /* ======================================================
+         CREATE USER + MEMBER
+      ====================================================== */
 
-    const memberData = {
-      ...(name !== undefined && {
-        name: name.trim(),
-      }),
+      const result =
+        await prisma.$transaction(
+          async (
+            tx
+          ) => {
+            const user =
+              await tx.user.create({
+                data: {
+                  name:
+                    name.trim(),
 
-      ...(email !== undefined && {
-        email: email.trim(),
-      }),
+                  email:
+                    email.trim(),
 
-      ...(phone !== undefined && {
-        phone: phone.trim(),
-      }),
+                  password:
+                    hashedPassword,
 
-      ...(address !== undefined && {
-        address:
-          address?.trim() || null,
-      }),
+                  role:
+                    "MEMBER",
 
-      ...(membershipNumber !==
-        undefined && {
-        membershipNumber:
-          membershipNumber.trim(),
-      }),
+                  isActive:
+                    true,
+                },
+              });
 
-      ...(designation !==
-        undefined && {
-        designation:
-          designation?.trim() ||
-          null,
-      }),
+            const member =
+              await tx.member.create({
+                data: {
+                  userId:
+                    user.id,
 
-      ...(parsedDesignationOrder !==
-        undefined && {
-        designationOrder:
-          parsedDesignationOrder,
-      }),
+                  membershipNumber:
+                    membershipNumber.trim(),
 
-      ...(newProfileImage !==
-        undefined && {
-        profileImage:
-          newProfileImage,
-      }),
-    };
+                  name:
+                    name.trim(),
 
-    // -----------------------------------------------------
-    // UPDATE USER + MEMBER
-    // -----------------------------------------------------
+                  phone:
+                    phone.trim(),
 
-    const result =
-      await prisma.$transaction(
-        async (tx) => {
-          const updatedMember =
-            await tx.member.update({
-              where: {
-                id,
-              },
+                  email:
+                    email.trim(),
 
-              data: memberData,
-            });
+                  address:
+                    address?.trim() ||
+                    null,
 
-          const userData = {
-            ...(name !== undefined && {
-              name: name.trim(),
-            }),
+                  profileImage:
+                    uploadedImageUrl,
 
-            ...(email !== undefined && {
-              email: email.trim(),
-            }),
-          };
+                  designation:
+                    designation?.trim() ||
+                    null,
 
-          // -------------------------------------------------
-          // PASSWORD UPDATE
-          // -------------------------------------------------
+                  designationOrder:
+                    parsedDesignationOrder,
 
-          if (
-            password &&
-            password.trim()
-          ) {
-            userData.password =
-              await bcrypt.hash(
-                password.trim(),
-                12
-              );
+                  status:
+                    "ACTIVE",
+                },
+              });
+
+            return {
+              user,
+              member,
+            };
           }
+        );
 
-          const updatedUser =
-            await tx.user.update({
-              where: {
-                id: member.userId,
-              },
+      return res
+        .status(201)
+        .json({
+          success: true,
 
-              data: userData,
-            });
+          message:
+            "Member created successfully",
 
-          return {
-            member: updatedMember,
-            user: updatedUser,
-          };
-        }
+          member: {
+            id:
+              result.member.id,
+
+            membershipNumber:
+              result.member
+                .membershipNumber,
+
+            name:
+              result.member.name,
+
+            email:
+              result.member.email,
+
+            phone:
+              result.member.phone,
+
+            address:
+              result.member.address,
+
+            profileImage:
+              result.member
+                .profileImage,
+
+            designation:
+              result.member
+                .designation,
+
+            designationOrder:
+              result.member
+                .designationOrder,
+
+            status:
+              result.member.status,
+
+            userId:
+              result.user.id,
+          },
+        });
+    } catch (error) {
+      console.error(
+        "Create member error:",
+        error
       );
 
-    // -----------------------------------------------------
-    // REMOVE OLD IMAGE
-    // -----------------------------------------------------
+      /*
+       * If Blob/local image was created
+       * but DB creation failed,
+       * remove the image.
+       */
 
-    if (
-      newProfileImage &&
-      member.profileImage
-    ) {
-      deleteProfileImage(
-        member.profileImage
-      );
+      if (
+        uploadedImageUrl
+      ) {
+        await deleteStoredMemberImage(
+          uploadedImageUrl
+        );
+      }
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            error.message ||
+            "Unable to create member",
+        });
     }
+  };
 
-    return res.status(200).json({
-      success: true,
+/* ============================================================
+   ADMIN - UPDATE MEMBER
+============================================================ */
 
-      message:
-        "Member updated successfully",
+const updateMember =
+  async (
+    req,
+    res
+  ) => {
+    let newProfileImageUrl;
 
-      member: result.member,
-    });
-  } catch (error) {
-    console.error(
-      "Update member error:",
-      error
-    );
-
-    if (req.file) {
-      deleteProfileImage(
-        getProfileImagePath(
-          req.file
-        )
-      );
-    }
-
-    return res.status(500).json({
-      success: false,
-      message: "Unable to update member",
-    });
-  }
-};
-
-// =========================================================
-// ADMIN - CHANGE MEMBER STATUS
-// =========================================================
-
-const changeMemberStatus = async (
-  req,
-  res
-) => {
-  try {
-    const { id } = req.params;
-
-    const { status } = req.body;
-
-    if (
-      ![
-        "ACTIVE",
-        "INACTIVE",
-      ].includes(status)
-    ) {
-      return res.status(400).json({
-        success: false,
-
-        message:
-          "Status must be ACTIVE or INACTIVE",
-      });
-    }
-
-    const member =
-      await prisma.member.findUnique({
-        where: {
-          id,
-        },
-      });
-
-    if (!member) {
-      return res.status(404).json({
-        success: false,
-        message: "Member not found",
-      });
-    }
-
-    const result =
-      await prisma.$transaction(
-        async (tx) => {
-          const updatedMember =
-            await tx.member.update({
-              where: {
-                id,
-              },
-
-              data: {
-                status,
-              },
-            });
-
-          const updatedUser =
-            await tx.user.update({
-              where: {
-                id: member.userId,
-              },
-
-              data: {
-                isActive:
-                  status ===
-                  "ACTIVE",
-              },
-            });
-
-          return {
-            member: updatedMember,
-            user: updatedUser,
-          };
-        }
-      );
-
-    return res.status(200).json({
-      success: true,
-
-      message: `Member ${status.toLowerCase()} successfully`,
-
-      member: result.member,
-    });
-  } catch (error) {
-    console.error(
-      "Change member status error:",
-      error
-    );
-
-    return res.status(500).json({
-      success: false,
-
-      message:
-        "Unable to change member status",
-    });
-  }
-};
-
-// =========================================================
-// ADMIN - DELETE MEMBER
-// =========================================================
-
-const deleteMember = async (
-  req,
-  res
-) => {
-  try {
-    const { id } = req.params;
-
-    const member =
-      await prisma.member.findUnique({
-        where: {
-          id,
-        },
-      });
-
-    if (!member) {
-      return res.status(404).json({
-        success: false,
-        message: "Member not found",
-      });
-    }
-
-    await prisma.member.delete({
-      where: {
+    try {
+      const {
         id,
-      },
-    });
+      } = req.params;
 
-    if (member.profileImage) {
-      deleteProfileImage(
+      const {
+        name,
+        email,
+        phone,
+        address,
+        membershipNumber,
+        designation,
+        designationOrder,
+        password,
+      } = req.body;
+
+      /* ======================================================
+         FIND MEMBER
+      ====================================================== */
+
+      const member =
+        await prisma.member.findUnique({
+          where: {
+            id,
+          },
+        });
+
+      if (!member) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Member not found",
+          });
+      }
+
+      /* ======================================================
+         EMAIL DUPLICATE
+      ====================================================== */
+
+      if (
+        email &&
+        email.trim() !==
+          member.email
+      ) {
+        const existingUser =
+          await prisma.user.findUnique({
+            where: {
+              email:
+                email.trim(),
+            },
+          });
+
+        if (
+          existingUser &&
+          existingUser.id !==
+            member.userId
+        ) {
+          return res
+            .status(409)
+            .json({
+              success: false,
+
+              message:
+                "Email already exists",
+            });
+        }
+      }
+
+      /* ======================================================
+         MEMBERSHIP NUMBER DUPLICATE
+      ====================================================== */
+
+      if (
+        membershipNumber &&
+        membershipNumber.trim() !==
+          member.membershipNumber
+      ) {
+        const existingMembership =
+          await prisma.member.findUnique({
+            where: {
+              membershipNumber:
+                membershipNumber.trim(),
+            },
+          });
+
+        if (
+          existingMembership &&
+          existingMembership.id !==
+            member.id
+        ) {
+          return res
+            .status(409)
+            .json({
+              success: false,
+
+              message:
+                "Membership number already exists",
+            });
+        }
+      }
+
+      /* ======================================================
+         DISPLAY ORDER
+      ====================================================== */
+
+      let parsedDesignationOrder;
+
+      if (
+        designationOrder !==
+          undefined &&
+        designationOrder !==
+          null &&
+        designationOrder !==
+          ""
+      ) {
+        parsedDesignationOrder =
+          Number(
+            designationOrder
+          );
+
+        if (
+          !Number.isInteger(
+            parsedDesignationOrder
+          ) ||
+          parsedDesignationOrder <
+            0
+        ) {
+          return res
+            .status(400)
+            .json({
+              success: false,
+
+              message:
+                "Designation order must be a valid positive number",
+            });
+        }
+      }
+
+      /* ======================================================
+         UPLOAD NEW PROFILE IMAGE
+      ====================================================== */
+
+      if (
+        req.file
+      ) {
+        newProfileImageUrl =
+          await uploadMemberImage(
+            req.file
+          );
+      }
+
+      /* ======================================================
+         MEMBER UPDATE DATA
+      ====================================================== */
+
+      const memberData = {
+        ...(name !==
+          undefined && {
+          name:
+            name.trim(),
+        }),
+
+        ...(email !==
+          undefined && {
+          email:
+            email.trim(),
+        }),
+
+        ...(phone !==
+          undefined && {
+          phone:
+            phone.trim(),
+        }),
+
+        ...(address !==
+          undefined && {
+          address:
+            address?.trim() ||
+            null,
+        }),
+
+        ...(membershipNumber !==
+          undefined && {
+          membershipNumber:
+            membershipNumber.trim(),
+        }),
+
+        ...(designation !==
+          undefined && {
+          designation:
+            designation?.trim() ||
+            null,
+        }),
+
+        ...(parsedDesignationOrder !==
+          undefined && {
+          designationOrder:
+            parsedDesignationOrder,
+        }),
+
+        ...(newProfileImageUrl !==
+          undefined && {
+          profileImage:
+            newProfileImageUrl,
+        }),
+      };
+
+      /* ======================================================
+         UPDATE MEMBER + USER
+      ====================================================== */
+
+      const result =
+        await prisma.$transaction(
+          async (
+            tx
+          ) => {
+            const updatedMember =
+              await tx.member.update({
+                where: {
+                  id,
+                },
+
+                data:
+                  memberData,
+              });
+
+            const userData = {
+              ...(name !==
+                undefined && {
+                name:
+                  name.trim(),
+              }),
+
+              ...(email !==
+                undefined && {
+                email:
+                  email.trim(),
+              }),
+            };
+
+            if (
+              password &&
+              password.trim()
+            ) {
+              userData.password =
+                await bcrypt.hash(
+                  password.trim(),
+                  12
+                );
+            }
+
+            const updatedUser =
+              await tx.user.update({
+                where: {
+                  id:
+                    member.userId,
+                },
+
+                data:
+                  userData,
+              });
+
+            return {
+              member:
+                updatedMember,
+
+              user:
+                updatedUser,
+            };
+          }
+        );
+
+      /* ======================================================
+         DELETE OLD IMAGE
+
+         Only after database update succeeds.
+      ====================================================== */
+
+      if (
+        newProfileImageUrl &&
         member.profileImage
+      ) {
+        await deleteStoredMemberImage(
+          member.profileImage
+        );
+      }
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          message:
+            "Member updated successfully",
+
+          member:
+            result.member,
+        });
+    } catch (error) {
+      console.error(
+        "Update member error:",
+        error
       );
+
+      /*
+       * New image uploaded but
+       * DB update failed:
+       * delete the new image.
+       */
+
+      if (
+        newProfileImageUrl
+      ) {
+        await deleteStoredMemberImage(
+          newProfileImageUrl
+        );
+      }
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            error.message ||
+            "Unable to update member",
+        });
     }
+  };
 
-    return res.status(200).json({
-      success: true,
+/* ============================================================
+   ADMIN - CHANGE STATUS
+============================================================ */
 
-      message:
-        "Member deleted successfully",
-    });
-  } catch (error) {
-    console.error(
-      "Delete member error:",
-      error
-    );
+const changeMemberStatus =
+  async (
+    req,
+    res
+  ) => {
+    try {
+      const {
+        id,
+      } = req.params;
 
-    return res.status(500).json({
-      success: false,
+      const {
+        status,
+      } = req.body;
 
-      message:
-        "Unable to delete member",
-    });
-  }
-};
+      if (
+        ![
+          "ACTIVE",
+          "INACTIVE",
+        ].includes(
+          status
+        )
+      ) {
+        return res
+          .status(400)
+          .json({
+            success: false,
 
-// =========================================================
-// EXPORTS
-// =========================================================
+            message:
+              "Status must be ACTIVE or INACTIVE",
+          });
+      }
+
+      const member =
+        await prisma.member.findUnique({
+          where: {
+            id,
+          },
+        });
+
+      if (!member) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Member not found",
+          });
+      }
+
+      const result =
+        await prisma.$transaction(
+          async (
+            tx
+          ) => {
+            const updatedMember =
+              await tx.member.update({
+                where: {
+                  id,
+                },
+
+                data: {
+                  status,
+                },
+              });
+
+            const updatedUser =
+              await tx.user.update({
+                where: {
+                  id:
+                    member.userId,
+                },
+
+                data: {
+                  isActive:
+                    status ===
+                    "ACTIVE",
+                },
+              });
+
+            return {
+              member:
+                updatedMember,
+
+              user:
+                updatedUser,
+            };
+          }
+        );
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          message:
+            `Member ${status.toLowerCase()} successfully`,
+
+          member:
+            result.member,
+        });
+    } catch (error) {
+      console.error(
+        "Change member status error:",
+        error
+      );
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            "Unable to change member status",
+        });
+    }
+  };
+
+/* ============================================================
+   ADMIN - DELETE MEMBER
+============================================================ */
+
+const deleteMember =
+  async (
+    req,
+    res
+  ) => {
+    try {
+      const {
+        id,
+      } = req.params;
+
+      const member =
+        await prisma.member.findUnique({
+          where: {
+            id,
+          },
+        });
+
+      if (!member) {
+        return res
+          .status(404)
+          .json({
+            success: false,
+
+            message:
+              "Member not found",
+          });
+      }
+
+      /* ======================================================
+         DELETE MEMBER
+
+         User deletion behavior remains
+         based on your Prisma relation.
+      ====================================================== */
+
+      await prisma.member.delete({
+        where: {
+          id,
+        },
+      });
+
+      /* ======================================================
+         DELETE PROFILE IMAGE
+      ====================================================== */
+
+      if (
+        member.profileImage
+      ) {
+        await deleteStoredMemberImage(
+          member.profileImage
+        );
+      }
+
+      return res
+        .status(200)
+        .json({
+          success: true,
+
+          message:
+            "Member deleted successfully",
+        });
+    } catch (error) {
+      console.error(
+        "Delete member error:",
+        error
+      );
+
+      return res
+        .status(500)
+        .json({
+          success: false,
+
+          message:
+            "Unable to delete member",
+        });
+    }
+  };
+
+/* ============================================================
+   EXPORTS
+============================================================ */
 
 module.exports = {
   getPublicMembers,
