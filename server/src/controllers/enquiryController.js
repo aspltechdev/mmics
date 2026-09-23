@@ -1,7 +1,7 @@
 const prisma = require("../config/database");
 
 // =====================================================
-// CREATE ENQUIRY - PUBLIC CONTACT / PRODUCT FORM
+// CREATE ENQUIRY - PUBLIC CONTACT / PRODUCT / MEMBERSHIP
 // =====================================================
 
 const createEnquiry = async (req, res) => {
@@ -16,6 +16,10 @@ const createEnquiry = async (req, res) => {
       productId,
     } = req.body;
 
+    // =====================================================
+    // REQUIRED FIELD VALIDATION
+    // =====================================================
+
     if (!name || !email || !message) {
       return res.status(400).json({
         success: false,
@@ -23,10 +27,29 @@ const createEnquiry = async (req, res) => {
       });
     }
 
-    const enquiryType =
-      type === "PRODUCT" ? "PRODUCT" : "CONTACT";
+    // =====================================================
+    // ENQUIRY TYPE
+    // =====================================================
 
-    // If product enquiry, verify product exists
+    const allowedTypes = [
+      "CONTACT",
+      "PRODUCT",
+      "MEMBERSHIP",
+    ];
+
+    const enquiryType = allowedTypes.includes(type)
+      ? type
+      : "CONTACT";
+
+    // =====================================================
+    // PRODUCT ID
+    //
+    // Product ID should only be saved when enquiry type
+    // is PRODUCT.
+    // =====================================================
+
+    let validProductId = null;
+
     if (enquiryType === "PRODUCT" && productId) {
       const product = await prisma.product.findUnique({
         where: {
@@ -40,18 +63,37 @@ const createEnquiry = async (req, res) => {
           message: "Product not found",
         });
       }
+
+      validProductId = productId;
     }
+
+    // =====================================================
+    // CREATE ENQUIRY
+    // =====================================================
 
     const enquiry = await prisma.enquiry.create({
       data: {
-        name,
-        email,
-        phone: phone || null,
-        subject: subject || null,
-        message,
+        name: name.trim(),
+
+        email: email.trim(),
+
+        phone:
+          phone && phone.trim()
+            ? phone.trim()
+            : null,
+
+        subject:
+          subject && subject.trim()
+            ? subject.trim()
+            : null,
+
+        message: message.trim(),
+
         type: enquiryType,
+
         status: "NEW",
-        productId: productId || null,
+
+        productId: validProductId,
       },
 
       include: {
@@ -65,25 +107,46 @@ const createEnquiry = async (req, res) => {
       },
     });
 
-    res.status(201).json({
+    // =====================================================
+    // SUCCESS RESPONSE
+    // =====================================================
+
+    return res.status(201).json({
       success: true,
+
       message: "Enquiry submitted successfully",
+
       enquiry: {
         id: enquiry.id,
+
         name: enquiry.name,
+
         email: enquiry.email,
+
+        phone: enquiry.phone,
+
+        subject: enquiry.subject,
+
+        message: enquiry.message,
+
         type: enquiry.type,
+
         status: enquiry.status,
+
         product: enquiry.product,
+
         createdAt: enquiry.createdAt,
       },
     });
   } catch (error) {
     console.error("Create enquiry error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Unable to submit enquiry",
+
+      message:
+        error.message ||
+        "Unable to submit enquiry",
     });
   }
 };
@@ -99,6 +162,55 @@ const getEnquiries = async (req, res) => {
       type,
       productId,
     } = req.query;
+
+    // =====================================================
+    // VALID STATUS FILTER
+    // =====================================================
+
+    const allowedStatuses = [
+      "NEW",
+      "READ",
+      "REPLIED",
+      "CLOSED",
+    ];
+
+    if (
+      status &&
+      !allowedStatuses.includes(status)
+    ) {
+      return res.status(400).json({
+        success: false,
+
+        message:
+          "Status must be NEW, READ, REPLIED or CLOSED",
+      });
+    }
+
+    // =====================================================
+    // VALID TYPE FILTER
+    // =====================================================
+
+    const allowedTypes = [
+      "CONTACT",
+      "PRODUCT",
+      "MEMBERSHIP",
+    ];
+
+    if (
+      type &&
+      !allowedTypes.includes(type)
+    ) {
+      return res.status(400).json({
+        success: false,
+
+        message:
+          "Type must be CONTACT, PRODUCT or MEMBERSHIP",
+      });
+    }
+
+    // =====================================================
+    // FETCH ENQUIRIES
+    // =====================================================
 
     const enquiries = await prisma.enquiry.findMany({
       where: {
@@ -130,17 +242,22 @@ const getEnquiries = async (req, res) => {
       },
     });
 
-    res.json({
+    return res.status(200).json({
       success: true,
+
       count: enquiries.length,
+
       enquiries,
     });
   } catch (error) {
     console.error("Get enquiries error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Unable to fetch enquiries",
+
+      message:
+        error.message ||
+        "Unable to fetch enquiries",
     });
   }
 };
@@ -152,6 +269,10 @@ const getEnquiries = async (req, res) => {
 const getEnquiry = async (req, res) => {
   try {
     const { id } = req.params;
+
+    // =====================================================
+    // FIND ENQUIRY
+    // =====================================================
 
     const enquiry = await prisma.enquiry.findUnique({
       where: {
@@ -169,23 +290,36 @@ const getEnquiry = async (req, res) => {
       },
     });
 
+    // =====================================================
+    // NOT FOUND
+    // =====================================================
+
     if (!enquiry) {
       return res.status(404).json({
         success: false,
+
         message: "Enquiry not found",
       });
     }
 
-    res.json({
+    // =====================================================
+    // RESPONSE
+    // =====================================================
+
+    return res.status(200).json({
       success: true,
+
       enquiry,
     });
   } catch (error) {
     console.error("Get enquiry error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Unable to fetch enquiry",
+
+      message:
+        error.message ||
+        "Unable to fetch enquiry",
     });
   }
 };
@@ -197,7 +331,12 @@ const getEnquiry = async (req, res) => {
 const updateEnquiryStatus = async (req, res) => {
   try {
     const { id } = req.params;
+
     const { status } = req.body;
+
+    // =====================================================
+    // ALLOWED STATUS
+    // =====================================================
 
     const allowedStatuses = [
       "NEW",
@@ -209,10 +348,15 @@ const updateEnquiryStatus = async (req, res) => {
     if (!allowedStatuses.includes(status)) {
       return res.status(400).json({
         success: false,
+
         message:
           "Status must be NEW, READ, REPLIED or CLOSED",
       });
     }
+
+    // =====================================================
+    // CHECK ENQUIRY EXISTS
+    // =====================================================
 
     const existingEnquiry =
       await prisma.enquiry.findUnique({
@@ -224,9 +368,14 @@ const updateEnquiryStatus = async (req, res) => {
     if (!existingEnquiry) {
       return res.status(404).json({
         success: false,
+
         message: "Enquiry not found",
       });
     }
+
+    // =====================================================
+    // UPDATE STATUS
+    // =====================================================
 
     const enquiry = await prisma.enquiry.update({
       where: {
@@ -248,9 +397,12 @@ const updateEnquiryStatus = async (req, res) => {
       },
     });
 
-    res.json({
+    return res.status(200).json({
       success: true,
-      message: "Enquiry status updated successfully",
+
+      message:
+        "Enquiry status updated successfully",
+
       enquiry,
     });
   } catch (error) {
@@ -259,9 +411,12 @@ const updateEnquiryStatus = async (req, res) => {
       error
     );
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Unable to update enquiry status",
+
+      message:
+        error.message ||
+        "Unable to update enquiry status",
     });
   }
 };
@@ -274,6 +429,10 @@ const deleteEnquiry = async (req, res) => {
   try {
     const { id } = req.params;
 
+    // =====================================================
+    // CHECK ENQUIRY EXISTS
+    // =====================================================
+
     const enquiry = await prisma.enquiry.findUnique({
       where: {
         id,
@@ -283,9 +442,14 @@ const deleteEnquiry = async (req, res) => {
     if (!enquiry) {
       return res.status(404).json({
         success: false,
+
         message: "Enquiry not found",
       });
     }
+
+    // =====================================================
+    // DELETE
+    // =====================================================
 
     await prisma.enquiry.delete({
       where: {
@@ -293,19 +457,27 @@ const deleteEnquiry = async (req, res) => {
       },
     });
 
-    res.json({
+    return res.status(200).json({
       success: true,
+
       message: "Enquiry deleted successfully",
     });
   } catch (error) {
     console.error("Delete enquiry error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Unable to delete enquiry",
+
+      message:
+        error.message ||
+        "Unable to delete enquiry",
     });
   }
 };
+
+// =====================================================
+// EXPORTS
+// =====================================================
 
 module.exports = {
   createEnquiry,
