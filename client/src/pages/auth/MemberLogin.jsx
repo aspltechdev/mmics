@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 import { useAuth } from "../../context/AuthContext";
-
+import mmicsLogo from "../../assets/mmics-logo.png";
 import "./MemberLogin.css";
 
 const MemberLogin = () => {
@@ -103,22 +103,13 @@ const MemberLogin = () => {
         <div className="mmics-login-visual-overlay" />
 
         <div className="mmics-login-visual-content">
-
-          <Link
-            to="/"
-            className="mmics-login-brand"
-          >
-            <div className="mmics-login-brand-mark">
-              M
-            </div>
-
-            <div>
-              <strong>MMICS</strong>
-
-              <span>
-                Integrated Digital Portal
-              </span>
-            </div>
+          
+          {/* Logo sits on the bright spotlight created in CSS */}
+          <Link to="/" className="mmics-login-brand">
+            <img
+              src={mmicsLogo}
+              alt="Manarang Manufacturing Multistate Industrial Cooperative Society Limited"
+            />
           </Link>
 
           <div className="mmics-login-message">
@@ -165,15 +156,12 @@ const MemberLogin = () => {
 
         <div className="mmics-login-form-wrapper">
 
-          <Link
-            to="/"
-            className="mmics-login-mobile-brand"
-          >
-            <div className="mmics-login-brand-mark">
-              M
-            </div>
-
-            <strong>MMICS</strong>
+          {/* Mobile Logo */}
+          <Link to="/" className="mmics-login-mobile-brand">
+            <img
+              src={mmicsLogo}
+              alt="Manarang Manufacturing Multistate Industrial Cooperative Society Limited"
+            />
           </Link>
 
           <div className="mmics-login-heading">

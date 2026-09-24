@@ -10,7 +10,7 @@
 }
 
 /* =========================================================
-   VISUAL PANEL
+   LEFT VISUAL PANEL (LIGHT BACKGROUND - KEEPS LOGO VISIBLE)
 ========================================================= */
 
 .mmics-login-visual {
@@ -18,39 +18,41 @@
   min-height: 100vh;
   overflow: hidden;
 
-  background:
-    linear-gradient(
-      135deg,
-      #063d73,
-      #0857a1 55%,
-      #06457f
-    );
+  /* Light, soft background exactly as you liked it */
+  background: linear-gradient(
+    135deg,
+    #f8fafc 0%,
+    #eef2f6 40%,
+    #e2e8f0 100%
+  );
 }
 
+/* Soft decorative circle in the top right */
 .mmics-login-visual::before {
   content: "";
   position: absolute;
-  width: 520px;
-  height: 520px;
-  right: -190px;
-  top: -180px;
+  width: 600px;
+  height: 600px;
+  right: -200px;
+  top: -200px;
 
   border: 1px solid
-    rgba(255, 255, 255, 0.14);
+    rgba(8, 87, 161, 0.08);
 
   border-radius: 50%;
 }
 
+/* Soft decorative circle in the bottom left */
 .mmics-login-visual::after {
   content: "";
   position: absolute;
-  width: 380px;
-  height: 380px;
-  left: -180px;
-  bottom: -180px;
+  width: 400px;
+  height: 400px;
+  left: -150px;
+  bottom: -150px;
 
   border: 1px solid
-    rgba(255, 255, 255, 0.11);
+    rgba(8, 87, 161, 0.06);
 
   border-radius: 50%;
 }
@@ -59,11 +61,12 @@
   position: absolute;
   inset: 0;
 
+  /* Soft warm glow in the center */
   background:
     radial-gradient(
-      circle at 70% 35%,
-      rgba(244, 143, 40, 0.20),
-      transparent 32%
+      circle at 60% 40%,
+      rgba(242, 140, 40, 0.08),
+      transparent 50%
     );
 }
 
@@ -80,59 +83,41 @@
 }
 
 /* =========================================================
-   BRAND
+   BRAND (CLEAN, NO BOX, FULLY VISIBLE ON LIGHT BG)
 ========================================================= */
 
 .mmics-login-brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
 
   width: fit-content;
-
-  color: #ffffff;
   text-decoration: none;
+  
+  transition: transform 0.3s ease;
 }
 
-.mmics-login-brand-mark {
-  width: 43px;
-  height: 43px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 11px;
-
-  background: #ffffff;
-  color: #0857a1;
-
-  font-size: 20px;
-  font-weight: 800;
+.mmics-login-brand:hover {
+  transform: translateY(-2px);
 }
 
-.mmics-login-brand > div:last-child {
-  display: flex;
-  flex-direction: column;
+.mmics-login-brand img {
+  height: 90px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  
+  /* Subtle shadow to give the logo depth against the light background */
+  filter: drop-shadow(0 4px 12px rgba(8, 87, 161, 0.12));
+  
+  transition: filter 0.3s ease;
 }
 
-.mmics-login-brand strong {
-  font-size: 19px;
-  letter-spacing: 0.06em;
-}
-
-.mmics-login-brand span {
-  margin-top: 4px;
-
-  color: rgba(255, 255, 255, 0.58);
-
-  font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.mmics-login-brand:hover img {
+  filter: drop-shadow(0 8px 20px rgba(8, 87, 161, 0.2));
 }
 
 /* =========================================================
-   MESSAGE
+   MESSAGE (DARK TEXT FOR LIGHT BACKGROUND)
 ========================================================= */
 
 .mmics-login-message {
@@ -145,7 +130,7 @@
   align-items: center;
   gap: 10px;
 
-  color: #f28c28;
+  color: #d97706; /* Warm amber for contrast on light bg */
 
   font-size: 10px;
   font-weight: 800;
@@ -158,13 +143,13 @@
   width: 28px;
   height: 2px;
 
-  background: #f28c28;
+  background: #d97706;
 }
 
 .mmics-login-message h1 {
   margin-top: 19px;
 
-  color: #ffffff;
+  color: #0f172a; /* Dark slate for high readability */
 
   font-size: clamp(
     42px,
@@ -181,7 +166,7 @@
 
   margin-top: 24px;
 
-  color: rgba(255, 255, 255, 0.70);
+  color: #475569; /* Medium slate for paragraph */
 
   font-size: 15px;
   line-height: 1.85;
@@ -196,17 +181,17 @@
   align-items: center;
   gap: 9px;
 
-  color: rgba(255, 255, 255, 0.60);
+  color: #64748b; /* Muted slate */
 
   font-size: 11px;
 }
 
 .mmics-login-trust svg {
-  color: #f28c28;
+  color: #d97706;
 }
 
 /* =========================================================
-   FORM PANEL
+   RIGHT FORM PANEL (DARK BLUE BACKGROUND AS REQUESTED)
 ========================================================= */
 
 .mmics-login-form-panel {
@@ -217,6 +202,14 @@
   justify-content: center;
 
   padding: 50px;
+
+  /* The premium dark blue gradient */
+  background: linear-gradient(
+    135deg,
+    #063d73 0%,
+    #0857a1 55%,
+    #06457f 100%
+  );
 }
 
 .mmics-login-form-wrapper {
@@ -224,11 +217,11 @@
 }
 
 /* =========================================================
-   HEADING
+   HEADING (WHITE TEXT FOR DARK BLUE BACKGROUND)
 ========================================================= */
 
 .mmics-login-heading > span {
-  color: #0857a1;
+  color: #f28c28; /* Brand orange */
 
   font-size: 10px;
   font-weight: 800;
@@ -242,13 +235,13 @@
   line-height: 1.1;
   letter-spacing: -0.035em;
 
-  color: #171717;
+  color: #ffffff;
 }
 
 .mmics-login-heading p {
   margin-top: 10px;
 
-  color: #777777;
+  color: rgba(255, 255, 255, 0.7);
 
   font-size: 13px;
 }
@@ -262,17 +255,17 @@
 
   padding: 12px 14px;
 
-  border: 1px solid #ead0d4;
+  border: 1px solid #fca5a5;
   border-radius: 8px;
 
-  background: #fff6f7;
-  color: #8b1e2d;
+  background: rgba(254, 226, 226, 0.1);
+  color: #fca5a5;
 
   font-size: 12px;
 }
 
 /* =========================================================
-   FORM
+   FORM (INPUTS STAY WHITE TO POP ON BLUE)
 ========================================================= */
 
 .mmics-login-form {
@@ -288,7 +281,7 @@
 
   margin-bottom: 8px;
 
-  color: #333333;
+  color: #ffffff;
 
   font-size: 12px;
   font-weight: 650;
@@ -316,7 +309,7 @@
 
   padding: 0 46px;
 
-  border: 1px solid #dedede;
+  border: 1px solid transparent;
   border-radius: 9px;
 
   outline: none;
@@ -336,11 +329,11 @@
 }
 
 .mmics-login-input-wrapper input:focus {
-  border-color: #0857a1;
+  border-color: #f28c28;
 
   box-shadow:
     0 0 0 3px
-    rgba(8, 87, 161, 0.10);
+    rgba(242, 140, 40, 0.3);
 }
 
 .mmics-login-input-wrapper input:disabled {
@@ -373,7 +366,7 @@
 }
 
 /* =========================================================
-   SUBMIT
+   SUBMIT (INVERTED TO STAND OUT ON BLUE BACKGROUND)
 ========================================================= */
 
 .mmics-login-submit {
@@ -390,8 +383,9 @@
   border: 0;
   border-radius: 9px;
 
-  background: #0857a1;
-  color: #ffffff;
+  /* White button with blue text */
+  background: #ffffff;
+  color: #0857a1;
 
   font-size: 13px;
   font-weight: 700;
@@ -403,13 +397,13 @@
 }
 
 .mmics-login-submit:hover:not(:disabled) {
-  background: #06477f;
+  background: #f0f4f8;
 
   transform: translateY(-1px);
 
   box-shadow:
     0 7px 18px
-    rgba(8, 87, 161, 0.18);
+    rgba(0, 0, 0, 0.2);
 }
 
 .mmics-login-submit:disabled {
@@ -426,9 +420,9 @@
   height: 16px;
 
   border: 2px solid
-    rgba(255, 255, 255, 0.35);
+    rgba(8, 87, 161, 0.3);
 
-  border-top-color: #ffffff;
+  border-top-color: #0857a1;
 
   border-radius: 50%;
 
@@ -443,7 +437,7 @@
 }
 
 /* =========================================================
-   FOOTER
+   FOOTER (WHITE TEXT FOR DARK BACKGROUND)
 ========================================================= */
 
 .mmics-login-footer {
@@ -454,14 +448,17 @@
   justify-content: space-between;
   gap: 15px;
 
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid
+    rgba(255, 255, 255, 0.15);
 }
 
 .mmics-login-footer a {
-  color: #0857a1;
+  color: #ffffff;
 
   font-size: 11px;
   font-weight: 650;
+
+  text-decoration: underline;
 }
 
 .mmics-login-footer a:hover {
@@ -469,7 +466,7 @@
 }
 
 .mmics-login-footer span {
-  color: #aaaaaa;
+  color: rgba(255, 255, 255, 0.5);
 
   font-size: 10px;
 }
@@ -495,35 +492,79 @@
     display: none;
   }
 
+  /* On mobile, switch the background back to white for readability */
   .mmics-login-form-panel {
     min-height: 100vh;
     padding: 35px 25px;
+    background: #ffffff;
   }
 
   .mmics-login-mobile-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
 
-    margin-bottom: 55px;
+    margin-bottom: 45px;
 
-    color: #171717;
     text-decoration: none;
   }
 
-  .mmics-login-mobile-brand .mmics-login-brand-mark {
-    width: 39px;
-    height: 39px;
-
-    background: #0857a1;
-    color: #ffffff;
-
-    font-size: 18px;
+  .mmics-login-mobile-brand img {
+    height: 80px;
+    width: auto;
+    
+    /* Subtle shadow for the light background */
+    filter: drop-shadow(0 4px 12px rgba(8, 87, 161, 0.15));
   }
 
-  .mmics-login-mobile-brand strong {
-    font-size: 18px;
-    letter-spacing: 0.05em;
+  /* Reset text colors for mobile */
+  .mmics-login-heading > span {
+    color: #0857a1;
+  }
+
+  .mmics-login-heading h2 {
+    color: #171717;
+  }
+
+  .mmics-login-heading p {
+    color: #777777;
+  }
+
+  .mmics-login-field label {
+    color: #333333;
+  }
+
+  .mmics-login-error {
+    border: 1px solid #ead0d4;
+    background: #fff6f7;
+    color: #8b1e2d;
+  }
+
+  .mmics-login-submit {
+    background: #0857a1;
+    color: #ffffff;
+  }
+
+  .mmics-login-submit:hover:not(:disabled) {
+    background: #06477f;
+    box-shadow: 0 7px 18px rgba(8, 87, 161, 0.18);
+  }
+
+  .mmics-login-spinner {
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #ffffff;
+  }
+
+  .mmics-login-footer {
+    border-top: 1px solid #eeeeee;
+  }
+
+  .mmics-login-footer a {
+    color: #0857a1;
+    text-decoration: none;
+  }
+
+  .mmics-login-footer span {
+    color: #aaaaaa;
   }
 }
 
@@ -537,7 +578,7 @@
   }
 
   .mmics-login-mobile-brand {
-    margin-bottom: 42px;
+    margin-bottom: 32px;
   }
 
   .mmics-login-heading h2 {

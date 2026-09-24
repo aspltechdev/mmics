@@ -669,23 +669,7 @@ const Members = () => {
                           )}
 
 
-                          <div className="mmics-member-divider" />
-
-
-                          <button
-                            type="button"
-                            className="mmics-member-view"
-                            onClick={() =>
-                              setSelectedMember(
-                                member
-                              )
-                            }
-                          >
-                            View Profile
-
-                            <ArrowRight />
-
-                          </button>
+                         
 
                         </div>
 
@@ -786,20 +770,21 @@ const Members = () => {
             </button>
 
 
-            {/* MODAL IMAGE */}
-            <div className="mmics-member-modal-image">
-              <img
-                src={
-                  selectedMember.profileImage
-                    ? getImageUrl(selectedMember.profileImage)
-                    : "/default-avatar.png"
-                }
-                alt={selectedMember.name}
-                onError={() =>
-                  handleImageError(selectedMember.id)
-                }
-              />
-            </div>
+           {/* MODAL IMAGE */}
+<div className="mmics-member-modal-image">
+  <img
+    src={
+      selectedMember.profileImage &&
+      !imageErrors[selectedMember.id]
+        ? getImageUrl(selectedMember.profileImage)
+        : "/profile.jpg"
+    }
+    alt={selectedMember.name}
+    onError={(event) => {
+      event.currentTarget.src = "/default-avatar.png";
+    }}
+  />
+</div>
 
 
             {/* MODAL CONTENT */}
