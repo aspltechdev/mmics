@@ -1,144 +1,457 @@
 // client/src/components/home/Hero.jsx
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle } from 'lucide-react';
-import heroSlideService from '../../services/heroSlideService';
-import './Hero.css';
 
-const DEFAULT_SLIDES = [
-  {
-    id: 'default-1',
-    title: 'Packaging Solutions Built for Growing Industries',
-    subtitle: 'SUSTAINABLE PACKAGING & INDUSTRIAL SOLUTIONS',
-    description:
-      'Reliable, practical and sustainable packaging solutions designed to meet the evolving needs of businesses, industries and organizations.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1595079676339-1534801ad6cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    buttonText: 'Request a Quote',
-    buttonUrl: '/contact',
-    isDefault: true,
-  },
-  {
-    id: 'default-2',
-    title: 'Industrial Packaging Built to Last',
-    subtitle: 'STRENGTH · DURABILITY · RELIABILITY',
-    description:
-      'Heavy-duty corrugated boxes, wooden pallets and industrial-grade solutions designed for safe transport and long-term storage.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    buttonText: 'Explore Products',
-    buttonUrl: '/products',
-    isDefault: true,
-  },
-  {
-    id: 'default-3',
-    title: 'Eco-Friendly Packaging for a Better Tomorrow',
-    subtitle: 'SUSTAINABLE · RECYCLABLE · RESPONSIBLE',
-    description:
-      'Biodegradable and recyclable packaging alternatives that help your business reduce its environmental footprint without compromising quality.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1610348725531-843dff563e2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    buttonText: 'Learn More',
-    buttonUrl: '/about',
-    isDefault: true,
-  },
-];
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import { Link } from "react-router-dom";
+
+import {
+  ArrowRight,
+  CheckCircle,
+} from "lucide-react";
+
+import heroSlideService from "../../services/heroSlideService";
+
+import "./Hero.css";
+
 
 const Hero = () => {
-  const [slides, setSlides] = useState(DEFAULT_SLIDES); // start with defaults so UI never breaks
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [slides, setSlides] =
+    useState([]);
 
-  const serverBaseUrl =
-    import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
+  const [currentSlide, setCurrentSlide] =
+    useState(0);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
+
+
+  /* ============================================================
+     SERVER BASE URL
+
+     VITE_API_URL example:
+
+     Local:
+     http://localhost:5000/api
+
+     Production:
+     https://your-server.vercel.app/api
+     ============================================================ */
+
+  const serverBaseUrl = (
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5000/api"
+  ).replace(/\/api\/?$/, "");
+
+
+  /* ============================================================
+     IMAGE URL
+     Supports:
+     - Vercel Blob full URL
+     - Any HTTPS URL
+     - Local /uploads path
+     ============================================================ */
+
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) {
+      return "";
+    }
+
+    if (
+      imageUrl.startsWith("http://") ||
+      imageUrl.startsWith("https://")
+    ) {
+      return imageUrl;
+    }
+
+    if (imageUrl.startsWith("/")) {
+      return `${serverBaseUrl}${imageUrl}`;
+    }
+
+    return `${serverBaseUrl}/${imageUrl}`;
+  };
+
+
+  /* ============================================================
+     FETCH HERO SLIDES FROM BACKEND
+     ============================================================ */
 
   useEffect(() => {
+    let mounted = true;
+
     const fetchSlides = async () => {
       try {
-        const data = await heroSlideService.getAll();
-        const fetched = Array.isArray(data?.slides) ? data.slides : [];
+        setLoading(true);
+        setError("");
 
-        // Use API slides only if there are 2 or more; otherwise keep defaults
-        if (fetched.length >= 2) {
-          setSlides(fetched);
+        const response =
+          await heroSlideService.getAll();
+
+        console.log(
+          "Public hero response:",
+          response
+        );
+
+
+        /*
+          Supports backend responses like:
+
+          [ ... ]
+
+          OR
+
+          {
+            slides: [...]
+          }
+
+          OR
+
+          {
+            data: [...]
+          }
+        */
+
+        let fetchedSlides = [];
+
+        if (Array.isArray(response)) {
+          fetchedSlides = response;
+        } else if (
+          Array.isArray(response?.slides)
+        ) {
+          fetchedSlides =
+            response.slides;
+        } else if (
+          Array.isArray(response?.data)
+        ) {
+          fetchedSlides =
+            response.data;
         }
-      } catch (error) {
-        console.error('Failed to load hero slides, using defaults:', error);
+
+
+        /* ======================================================
+           ACTIVE SLIDES ONLY
+           ====================================================== */
+
+        const activeSlides =
+          fetchedSlides
+            .filter(
+              (slide) =>
+                slide &&
+                slide.isActive !== false
+            )
+            .sort(
+              (a, b) =>
+                Number(
+                  a.sortOrder ?? 0
+                ) -
+                Number(
+                  b.sortOrder ?? 0
+                )
+            );
+
+
+        if (!mounted) {
+          return;
+        }
+
+        setSlides(activeSlides);
+
+        setCurrentSlide(0);
+      } catch (err) {
+        console.error(
+          "Failed to load hero slides:",
+          err
+        );
+
+        if (!mounted) {
+          return;
+        }
+
+        /*
+          IMPORTANT:
+          Do NOT show default slides.
+
+          Admin/DB is now the only source.
+        */
+
+        setSlides([]);
+
+        setError(
+          err?.response?.data?.message ||
+            "Failed to load hero slides."
+        );
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
+
+
     fetchSlides();
+
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  // Auto-advance every 5 seconds
+
+  /* ============================================================
+     AUTO SLIDER
+     ============================================================ */
+
   useEffect(() => {
-    if (slides.length <= 1) return;
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [slides]);
+    if (slides.length <= 1) {
+      return undefined;
+    }
+
+    const interval =
+      setInterval(() => {
+        setCurrentSlide(
+          (previous) =>
+            (previous + 1) %
+            slides.length
+        );
+      }, 5000);
+
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [slides.length]);
+
+
+  /* ============================================================
+     PROTECT CURRENT INDEX
+     ============================================================ */
+
+  useEffect(() => {
+    if (
+      currentSlide >= slides.length &&
+      slides.length > 0
+    ) {
+      setCurrentSlide(0);
+    }
+  }, [
+    currentSlide,
+    slides.length,
+  ]);
+
+
+  /* ============================================================
+     LOADING
+     ============================================================ */
 
   if (loading) {
-    return <div className="hero-section" style={{ minHeight: '560px' }} />;
+    return (
+      <section
+        className="hero-section"
+        style={{
+          minHeight: "560px",
+        }}
+      />
+    );
   }
 
-  const slide = slides[currentSlide];
-  if (!slide) return null;
 
-  const imageSrc = slide.isDefault
-    ? slide.imageUrl
-    : `${serverBaseUrl}${slide.imageUrl}`;
+  /* ============================================================
+     NO HERO CONTENT
 
-  const renderTitle = (title) => {
-    if (!title) return null;
-    const parts = title.split('Solutions');
-    if (parts.length < 2) return title;
-    return (
-      <>
-        {parts[0]}Solutions <span className="highlight">{parts[1].trim()}</span>
-      </>
+     No hardcoded fallback.
+     ============================================================ */
+
+  if (
+    error ||
+    slides.length === 0
+  ) {
+    if (error) {
+      console.error(
+        "Hero unavailable:",
+        error
+      );
+    }
+
+    return null;
+  }
+
+
+  /* ============================================================
+     CURRENT SLIDE
+     ============================================================ */
+
+  const slide =
+    slides[currentSlide];
+
+  if (!slide) {
+    return null;
+  }
+
+
+  const imageSrc =
+    getImageUrl(
+      slide.imageUrl ||
+        slide.image
     );
-  };
+
+
+  /* ============================================================
+     BUTTON
+     ============================================================ */
+
+  const hasButton =
+    Boolean(
+      slide.buttonText?.trim()
+    ) &&
+    Boolean(
+      slide.buttonUrl?.trim()
+    );
+
+
+  /* ============================================================
+     RENDER
+     ============================================================ */
 
   return (
     <section className="hero-section">
-      <div className="hero-content" key={slide.id}>
-        <div className="hero-badge">
-          <CheckCircle size={14} />{' '}
-          {slide.subtitle || 'SUSTAINABLE PACKAGING & INDUSTRIAL SOLUTIONS'}
-        </div>
 
-        <h1 className="hero-title">{renderTitle(slide.title)}</h1>
+      {/* ======================================================
+          CONTENT
+      ====================================================== */}
 
-        <p className="hero-subtitle">{slide.description}</p>
+      <div
+        className="hero-content"
+        key={`content-${slide.id}`}
+      >
 
-        <div className="hero-buttons">
-          <Link to={slide.buttonUrl || '/contact'} className="btn-primary">
-            {slide.buttonText || 'Request a Quote'}
-          </Link>
-          <Link to="/products" className="btn-secondary">
-            Explore Products <ArrowRight size={18} />
-          </Link>
-        </div>
+        {/* SUBTITLE */}
+
+        {slide.subtitle && (
+          <div className="hero-badge">
+
+            <CheckCircle size={14} />
+
+            <span>
+              {slide.subtitle}
+            </span>
+
+          </div>
+        )}
+
+
+        {/* TITLE */}
+
+        {slide.title && (
+          <h1 className="hero-title">
+            {slide.title}
+          </h1>
+        )}
+
+
+        {/* DESCRIPTION */}
+
+        {slide.description && (
+          <p className="hero-subtitle">
+            {slide.description}
+          </p>
+        )}
+
+
+        {/* BUTTON */}
+
+        {hasButton && (
+          <div className="hero-buttons">
+
+            <Link
+              to={slide.buttonUrl}
+              className="btn-primary"
+            >
+              {slide.buttonText}
+
+              <ArrowRight size={17} />
+            </Link>
+
+          </div>
+        )}
+
       </div>
 
-      <div className="hero-image" key={`img-${slide.id}`}>
-        <img src={imageSrc} alt={slide.title} />
-      </div>
 
-      {/* DOTS — always show since we always have >= 3 slides */}
-      <div className="hero-dots">
-        {slides.map((_, idx) => (
-          <div
-            key={idx}
-            className={`dot ${idx === currentSlide ? 'active' : ''}`}
-            onClick={() => setCurrentSlide(idx)}
-            aria-label={`Go to slide ${idx + 1}`}
+      {/* ======================================================
+          HERO IMAGE
+      ====================================================== */}
+
+      {imageSrc && (
+        <div
+          className="hero-image"
+          key={`image-${slide.id}`}
+        >
+
+          <img
+            src={imageSrc}
+            alt={
+              slide.title ||
+              "MMICS hero"
+            }
+            loading="eager"
+            onError={(event) => {
+              console.error(
+                "Hero image failed:",
+                imageSrc
+              );
+
+              event.currentTarget.style.display =
+                "none";
+            }}
           />
-        ))}
-      </div>
+
+        </div>
+      )}
+
+
+      {/* ======================================================
+          SLIDER DOTS
+
+          Only display if more than one slide
+      ====================================================== */}
+
+      {slides.length > 1 && (
+        <div className="hero-dots">
+
+          {slides.map(
+            (item, index) => (
+              <button
+                key={
+                  item.id ||
+                  `hero-dot-${index}`
+                }
+                type="button"
+                className={`dot ${
+                  index === currentSlide
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  setCurrentSlide(index)
+                }
+                aria-label={`Go to slide ${
+                  index + 1
+                }`}
+              />
+            )
+          )}
+
+        </div>
+      )}
+
     </section>
   );
 };
+
 
 export default Hero;
