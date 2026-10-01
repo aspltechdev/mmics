@@ -191,7 +191,7 @@ const ProductSection = () => {
 
         <div className="products-tabs">
 
-          <button
+          {/* <button
             type="button"
             className={`tab-btn ${
               activeTab === "All"
@@ -203,10 +203,10 @@ const ProductSection = () => {
             }
           >
             All
-          </button>
+          </button> */}
 
 
-          <button
+          {/* <button
             type="button"
             className={`tab-btn ${
               activeTab === "Best Seller"
@@ -220,7 +220,7 @@ const ProductSection = () => {
             }
           >
             Best Seller
-          </button>
+          </button> */}
 
         </div>
 

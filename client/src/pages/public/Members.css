@@ -368,7 +368,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 5px solid #ffffff;
+  border: 3px solid #ffffff;
   box-shadow: 
     0 0 0 1px #cbd5e1,
     0 12px 28px rgba(47, 93, 145, 0.15);
@@ -1112,4 +1112,818 @@
   .mmics-member-modal-content {
     padding: 24px 18px;
   }
+}
+
+/* ============================================================
+   MEMBER BENEFITS SECTION
+============================================================ */
+
+.mmics-member-benefits {
+  width: 100%;
+
+  padding:
+    90px 0
+    100px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fffef3 0%,
+      #ffffff 100%
+    );
+}
+
+
+.mmics-member-benefits-container {
+  width:
+    calc(
+      100% - 60px
+    );
+
+  max-width: 1180px;
+
+  margin:
+    0 auto;
+}
+
+
+/* ============================================================
+   HEADING
+============================================================ */
+
+.mmics-member-benefits-heading {
+  max-width: 780px;
+
+  margin:
+    0 auto
+    65px;
+
+  text-align: center;
+}
+
+
+.mmics-member-benefits-heading > span {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: #2f5d91;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  letter-spacing: 0.8px;
+}
+
+
+.mmics-member-benefits-heading h2 {
+  margin: 0;
+
+  color: #111111;
+
+  font-size:
+    clamp(
+      31px,
+      3vw,
+      42px
+    );
+
+  line-height: 1.12;
+
+  font-weight: 600;
+
+  letter-spacing: -1px;
+}
+
+
+.mmics-member-benefits-heading h2 strong {
+  color: #ff6900;
+  font-weight: 600;
+}
+
+
+.mmics-member-benefits-heading p {
+  max-width: 620px;
+
+  margin:
+    16px auto
+    0;
+
+  color: #747474;
+
+  font-size: 15px;
+
+  line-height: 1.7;
+}
+
+
+/* ============================================================
+   CONTENT GRID
+============================================================ */
+
+.mmics-member-benefits-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(
+      0,
+      1fr
+    )
+    minmax(
+      0,
+      0.9fr
+    );
+
+  align-items: center;
+
+  gap: 65px;
+
+  margin-bottom: 95px;
+}
+
+
+/* ============================================================
+   LEFT CONTENT
+============================================================ */
+
+.mmics-member-benefits-content {
+  min-width: 0;
+}
+
+
+.mmics-member-benefits-label {
+  display: block;
+
+  margin-bottom: 12px;
+
+  color: #2f5d91;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+}
+
+
+.mmics-member-benefits-content h3 {
+  margin:
+    0 0
+    24px;
+
+  color: #111111;
+
+  font-size:
+    clamp(
+      31px,
+      3vw,
+      42px
+    );
+
+  line-height: 1.16;
+
+  font-weight: 700;
+
+  letter-spacing: -0.9px;
+}
+
+
+.mmics-member-benefits-content h3 strong {
+  color: #ff6900;
+
+  font-weight: 700;
+}
+
+
+.mmics-member-benefits-content > p {
+  margin:
+    0 0
+    17px;
+
+  color: #606060;
+
+  font-size: 15px;
+
+  line-height: 1.8;
+}
+
+
+/* ============================================================
+   BENEFIT LIST
+============================================================ */
+
+.mmics-member-benefit-list {
+  margin-top: 30px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 15px;
+}
+
+
+.mmics-member-benefit-item {
+  min-width: 0;
+
+  padding: 17px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 12px;
+
+  border:
+    1px solid
+    #e6e8ec;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+
+.mmics-member-benefit-item:hover {
+  transform:
+    translateY(-4px);
+
+  border-color:
+    rgba(
+      255,
+      105,
+      0,
+      0.3
+    );
+
+  box-shadow:
+    0 14px 32px
+    rgba(
+      15,
+      23,
+      42,
+      0.07
+    );
+}
+
+
+.mmics-member-benefit-item > span {
+  width: 31px;
+
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      105,
+      0,
+      0.1
+    );
+
+  color: #ff6900;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+.mmics-member-benefit-item h4 {
+  margin:
+    1px 0
+    5px;
+
+  color: #111111;
+
+  font-size: 14px;
+
+  line-height: 1.4;
+
+  font-weight: 700;
+}
+
+
+.mmics-member-benefit-item p {
+  margin: 0;
+
+  color: #7a7a7a;
+
+  font-size: 12.5px;
+
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   BENEFITS IMAGE
+============================================================ */
+
+.mmics-member-benefits-image {
+  position: relative;
+
+  width: 100%;
+
+  height: 570px;
+
+  overflow: hidden;
+
+  border-radius: 22px;
+
+  background: #e9edf1;
+
+  box-shadow:
+    0 22px 55px
+    rgba(
+      31,
+      61,
+      94,
+      0.15
+    );
+}
+
+
+.mmics-member-benefits-image > img {
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  transition:
+    transform 0.6s ease;
+}
+
+
+.mmics-member-benefits-image:hover
+> img {
+  transform:
+    scale(1.04);
+}
+
+
+.mmics-member-benefits-image-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(
+        15,
+        23,
+        42,
+        0
+      )
+      45%,
+      rgba(
+        21,
+        48,
+        80,
+        0.78
+      )
+      100%
+    );
+}
+
+
+/* ============================================================
+   IMAGE TEXT
+============================================================ */
+
+.mmics-member-benefits-image-text {
+  position: absolute;
+
+  z-index: 2;
+
+  left: 28px;
+
+  right: 28px;
+
+  bottom: 28px;
+
+  color: #ffffff;
+}
+
+
+.mmics-member-benefits-image-text > span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #ff8a35;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+}
+
+
+.mmics-member-benefits-image-text h3 {
+  margin:
+    0 0
+    7px;
+
+  color: #ffffff;
+
+  font-size: 28px;
+
+  line-height: 1.15;
+}
+
+
+.mmics-member-benefits-image-text p {
+  max-width: 330px;
+
+  margin: 0;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.86
+    );
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* ============================================================
+   VIDEO HEADING
+============================================================ */
+
+.mmics-member-video-heading {
+  max-width: 700px;
+
+  margin:
+    0 auto
+    40px;
+
+  text-align: center;
+}
+
+
+.mmics-member-video-heading > span {
+  display: block;
+
+  margin-bottom: 11px;
+
+  color: #2f5d91;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+}
+
+
+.mmics-member-video-heading h3 {
+  margin: 0;
+
+  color: #111111;
+
+  font-size:
+    clamp(
+      28px,
+      3vw,
+      40px
+    );
+
+  line-height: 1.15;
+
+  font-weight: 700;
+}
+
+
+.mmics-member-video-heading p {
+  max-width: 580px;
+
+  margin:
+    14px auto
+    0;
+
+  color: #747474;
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* ============================================================
+   VIDEO GRID
+============================================================ */
+
+.mmics-member-video-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 26px;
+}
+
+
+/* ============================================================
+   VIDEO CARD
+============================================================ */
+
+.mmics-member-video-card {
+  width: 100%;
+
+  padding: 8px;
+
+  border:
+    1px solid
+    #e5e7eb;
+
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 14px 38px
+    rgba(
+      15,
+      23,
+      42,
+      0.08
+    );
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+
+.mmics-member-video-card:hover {
+  transform:
+    translateY(-5px);
+
+  box-shadow:
+    0 22px 50px
+    rgba(
+      15,
+      23,
+      42,
+      0.12
+    );
+}
+
+
+/* ============================================================
+   VIDEO
+============================================================ */
+
+.mmics-member-video-wrapper {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  border-radius: 12px;
+
+  background: #111827;
+}
+
+
+.mmics-member-video-wrapper iframe,
+.mmics-member-video-wrapper video {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+
+  border: 0;
+
+  object-fit: cover;
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media (max-width: 1000px) {
+
+  .mmics-member-benefits {
+    padding:
+      75px 0
+      85px;
+  }
+
+
+  .mmics-member-benefits-container {
+    width:
+      calc(
+        100% - 44px
+      );
+  }
+
+
+  .mmics-member-benefits-grid {
+    gap: 42px;
+  }
+
+
+  .mmics-member-benefits-image {
+    height: 500px;
+  }
+
+
+  .mmics-member-benefit-list {
+    grid-template-columns:
+      1fr;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL TABLET
+============================================================ */
+
+@media (max-width: 800px) {
+
+  .mmics-member-benefits-grid {
+    grid-template-columns:
+      1fr;
+
+    margin-bottom: 75px;
+  }
+
+
+  .mmics-member-benefits-image {
+    height: 450px;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+============================================================ */
+
+@media (max-width: 700px) {
+
+  .mmics-member-benefits {
+    padding:
+      58px 0
+      65px;
+  }
+
+
+  .mmics-member-benefits-container {
+    width:
+      calc(
+        100% - 30px
+      );
+  }
+
+
+  .mmics-member-benefits-heading {
+    margin-bottom: 42px;
+  }
+
+
+  .mmics-member-benefits-heading h2 {
+    font-size: 31px;
+  }
+
+
+  .mmics-member-benefits-heading p {
+    font-size: 14px;
+  }
+
+
+  .mmics-member-benefits-content h3 {
+    font-size: 29px;
+  }
+
+
+  .mmics-member-benefits-content > p {
+    font-size: 14px;
+  }
+
+
+  .mmics-member-benefits-image {
+    height: 360px;
+
+    border-radius: 17px;
+  }
+
+
+  .mmics-member-benefits-image-text {
+    left: 20px;
+
+    right: 20px;
+
+    bottom: 20px;
+  }
+
+
+  .mmics-member-benefits-image-text h3 {
+    font-size: 23px;
+  }
+
+
+  .mmics-member-video-grid {
+    grid-template-columns:
+      1fr;
+
+    gap: 20px;
+  }
+
+
+  .mmics-member-video-heading {
+    margin-bottom: 28px;
+  }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+============================================================ */
+
+@media (max-width: 420px) {
+
+  .mmics-member-benefits-container {
+    width:
+      calc(
+        100% - 24px
+      );
+  }
+
+
+  .mmics-member-benefits-heading h2 {
+    font-size: 28px;
+  }
+
+
+  .mmics-member-benefits-content h3 {
+    font-size: 26px;
+  }
+
+
+  .mmics-member-benefits-image {
+    height: 310px;
+  }
+
+
+  .mmics-member-benefits-image-text h3 {
+    font-size: 21px;
+  }
+
 }

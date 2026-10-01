@@ -7,6 +7,7 @@ import Hero from "../../components/home/Hero";
 import AboutSection from "../../components/home/AboutSection";
 import WhyMmmicsSection from "../../components/home/WhyMmmicsSection";
 import ProductSection from "../../components/home/ProductSection";
+import Partners from "../../components/home/Partners";
 import IndustriesSection from "../../components/home/IndustriesSection";
 import CertificationsSection from "../../components/home/CertificationsSection";
 import ProcessSection from "../../components/home/ProcessSection";
@@ -31,6 +32,8 @@ const Home = () => {
 
       {/* 4. Our Solutions (Products) */}
       <ProductSection />
+
+      <Partners />
 
       {/* 5. Industries We Serve */}
       <IndustriesSection />

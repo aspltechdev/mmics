@@ -7,16 +7,16 @@ const BenefitsVideoSection = () => {
       <div className="mmics-benefits-video-container">
 
         <div className="mmics-benefits-video-heading">
-          <span>WHY MMICS</span>
+          <span>WHY MMMICS</span>
 
           <h2>
             Benefits of Becoming a{" "}
-            <strong>Member of MMICS</strong>
+            <strong>Member of MMMICS</strong>
           </h2>
 
           <p>
             Discover the benefits and opportunities available
-            through MMICS membership and participation.
+            through MMMICS membership and participation.
           </p>
         </div>
 

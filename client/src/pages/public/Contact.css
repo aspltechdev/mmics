@@ -1,185 +1,75 @@
 /* ============================================================
-   MMICS CONTACT PAGE
-   Production-Level Responsive Stylesheet
-   Breakpoints: 320 · 480 · 640 · 768 · 900 · 1024 · 1280 · 1440 · 1920
-   ============================================================ */
-
-
-/* ============================================================
-   ROOT TOKENS
-   ============================================================ */
+   MMMICS CONTACT PAGE
+============================================================ */
 
 .mmics-contact-page {
-  --mmics-blue: #2f5d91;
-  --mmics-blue-dark: #264e7c;
-  --mmics-blue-soft: rgba(47, 93, 145, 0.08);
+  --mmics-blue: #465da2;
+  --mmics-blue-dark: #354b89;
+  --mmics-navy: #172342;
+
   --mmics-orange: #ff6900;
-  --mmics-navy: #1e3a5f;
-  --mmics-green: #22c55e;
 
-  --mmics-bg: #ffffff;
-  --mmics-card-bg: #eef1f5;
-  --mmics-input-bg: #f1f1f1;
-  --mmics-input-focus-bg: #ffffff;
-  --mmics-border: #eeeeee;
-  --mmics-border-strong: #e2e8f0;
+  --mmics-cream: #fffdf0;
+  --mmics-cream-card: #fff7e8;
 
-  --mmics-text: #111111;
-  --mmics-text-soft: #353535;
-  --mmics-muted: #777777;
-  --mmics-placeholder: #aaaaaa;
+  --mmics-white: #ffffff;
 
-  --mmics-success-bg: #edf8f0;
-  --mmics-success-text: #28723d;
-  --mmics-error-bg: #fff0ef;
-  --mmics-error-text: #a23731;
-  --mmics-error-field: #c53030;
+  --mmics-text: #111827;
+  --mmics-text-soft: #50545c;
+  --mmics-muted: #7c7c7c;
 
-  --mmics-radius-sm: 3px;
-  --mmics-radius-md: 5px;
-  --mmics-radius-lg: 8px;
+  --mmics-border: rgba(90, 75, 45, 0.14);
 
-  --mmics-shadow-sm:
-    0 1px 3px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  min-height: 100vh;
 
-  --mmics-shadow-md:
-    0 5px 16px rgba(0, 0, 0, 0.08);
+  overflow-x: hidden;
 
-  --mmics-shadow-lg:
-    0 12px 32px rgba(0, 0, 0, 0.1);
+  background: var(--mmics-cream);
 
-  --mmics-transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+  color: var(--mmics-text);
 
-  --mmics-font:
+  font-family:
     "Inter",
     "Segoe UI",
     Arial,
     Helvetica,
     sans-serif;
+}
 
-
-  /* ========================================================
-     FLUID TYPOGRAPHY
-     ======================================================== */
-
-  --fs-hero-kicker:
-    clamp(9px, 0.65vw, 11px);
-
-  --fs-hero-title:
-    clamp(26px, 3.4vw, 44px);
-
-  --fs-hero-desc:
-    clamp(10px, 0.75vw, 13px);
-
-  --fs-section-kicker:
-    clamp(9px, 0.6vw, 11px);
-
-  --fs-section-title:
-    clamp(20px, 2vw, 30px);
-
-  --fs-section-desc:
-    clamp(10px, 0.75vw, 12px);
-
-  --fs-card-title:
-    clamp(11px, 0.85vw, 14px);
-
-  --fs-card-desc:
-    clamp(9px, 0.65vw, 11px);
-
-  --fs-label:
-    clamp(9px, 0.65vw, 11px);
-
-  --fs-input:
-    clamp(11px, 0.75vw, 13px);
-
-  --fs-button:
-    clamp(11px, 0.75vw, 13px);
-
-
-  /* ========================================================
-     FLUID SPACING
-     ======================================================== */
-
-  --space-xs:
-    clamp(6px, 0.5vw, 8px);
-
-  --space-sm:
-    clamp(10px, 0.8vw, 14px);
-
-  --space-md:
-    clamp(14px, 1.1vw, 20px);
-
-  --space-lg:
-    clamp(22px, 1.8vw, 32px);
-
-  --space-xl:
-    clamp(32px, 2.6vw, 48px);
-
-
-  width: 100%;
-
-  background:
-    var(--mmics-bg);
-
-  color:
-    var(--mmics-text);
-
-  font-family:
-    var(--mmics-font);
-
-  -webkit-font-smoothing:
-    antialiased;
-
-  -moz-osx-font-smoothing:
-    grayscale;
-
-  overflow-x:
-    hidden;
+.mmics-contact-page *,
+.mmics-contact-page *::before,
+.mmics-contact-page *::after {
+  box-sizing: border-box;
 }
 
 
 /* ============================================================
    HERO
-   ============================================================ */
+============================================================ */
 
 .mmics-contact-hero {
   position: relative;
 
   width: 100%;
 
-  height:
-    clamp(
-      340px,
-      42vw,
-      460px
-    );
+  height: clamp(
+    340px,
+    42vw,
+    460px
+  );
 
   overflow: hidden;
-
-  background:
-    #111111;
 }
-
 
 .mmics-contact-hero-image {
   position: relative;
 
   width: 100%;
-
   height: 100%;
 
   overflow: hidden;
 }
-
-
-/* ============================================================
-   HERO BOTTOM ACCENT
-   ============================================================ */
 
 .mmics-contact-hero-image::after {
   content: "";
@@ -187,251 +77,837 @@
   position: absolute;
 
   left: 0;
-
+  right: 0;
   bottom: 0;
 
-  width: 100%;
+  z-index: 5;
 
   height: 4px;
 
-  background:
-    #1595ed;
-
-  z-index: 5;
+  background: var(--mmics-blue);
 }
 
-
-.mmics-contact-hero-image img {
+.mmics-contact-hero-image > img {
   width: 100%;
-
   height: 100%;
 
   display: block;
 
   object-fit: cover;
-
   object-position: center;
 }
-
-
-/* ============================================================
-   HERO OVERLAY
-   ============================================================ */
 
 .mmics-contact-hero-overlay {
   position: absolute;
 
   inset: 0;
 
+  z-index: 1;
+
   background:
     linear-gradient(
       90deg,
-      rgba(0, 0, 0, 0.62) 0%,
-      rgba(0, 0, 0, 0.32) 45%,
-      rgba(0, 0, 0, 0.1) 100%
+      rgba(10, 18, 35, 0.78) 0%,
+      rgba(20, 39, 70, 0.48) 50%,
+      rgba(10, 18, 35, 0.1) 100%
     );
-
-  z-index: 1;
 }
-
-
-/* ============================================================
-   HERO CONTENT
-   ============================================================ */
 
 .mmics-contact-hero-content {
   position: absolute;
 
-  left:
-    max(
-      24px,
-      calc(
-        (100vw - 1180px) / 2
-      )
-    );
+  z-index: 3;
 
   top: 50%;
 
-  transform:
-    translateY(-50%);
+  left: max(
+    30px,
+    calc((100vw - 1180px) / 2)
+  );
 
-  width:
-    min(
-      480px,
-      55vw
-    );
+  width: min(
+    500px,
+    56vw
+  );
 
-  z-index: 3;
+  transform: translateY(-50%);
 
-  color:
-    #ffffff;
+  color: #ffffff;
 }
-
 
 .mmics-contact-kicker {
-  display:
-    inline-block;
+  display: inline-block;
 
-  margin-bottom:
-    clamp(
-      10px,
-      0.9vw,
-      14px
-    );
+  margin-bottom: 12px;
 
-  color:
-    #ffffff;
+  color: #ffffff;
 
-  font-size:
-    var(--fs-hero-kicker);
+  font-size: 11px;
 
-  line-height:
-    1;
+  font-weight: 700;
 
-  font-weight:
-    600;
+  letter-spacing: 1.2px;
 
-  letter-spacing:
-    1px;
-
-  text-transform:
-    uppercase;
-
-  opacity:
-    0.9;
+  text-transform: uppercase;
 }
-
 
 .mmics-contact-hero-content h1 {
-  margin:
-    0;
+  max-width: 530px;
 
-  color:
-    #ff6900;
+  margin: 0;
 
-  font-size:
-    var(--fs-hero-title);
+  color: var(--mmics-orange);
 
-  line-height:
-    1.08;
+  font-size: clamp(
+    34px,
+    4vw,
+    52px
+  );
 
-  font-weight:
-    700;
+  line-height: 1.05;
 
-  letter-spacing:
-    -1.2px;
+  font-weight: 800;
 
-  max-width:
-    520px;
+  letter-spacing: -1.5px;
 }
 
-
 .mmics-contact-hero-content p {
-  width:
-    min(
-      420px,
-      100%
-    );
+  max-width: 440px;
 
-  margin:
-    clamp(
-      12px,
-      1vw,
-      18px
-    )
-    0
-    clamp(
-      16px,
-      1.3vw,
-      22px
-    );
+  margin: 18px 0 23px;
 
   color:
     rgba(
       255,
       255,
       255,
-      0.88
+      0.9
     );
 
-  font-size:
-    var(--fs-hero-desc);
+  font-size: 14px;
 
-  line-height:
-    1.6;
-
-  font-weight:
-    400;
+  line-height: 1.7;
 }
 
 
 /* ============================================================
-   GALLERY BUTTON
-   ============================================================ */
+   HERO BUTTON
+============================================================ */
 
 .mmics-contact-gallery-btn {
-  display:
-    inline-flex;
+  min-height: 42px;
 
-  align-items:
-    center;
+  padding: 0 20px;
 
-  justify-content:
-    center;
+  display: inline-flex;
 
-  gap:
-    7px;
+  align-items: center;
+  justify-content: center;
 
-  min-width:
-    120px;
+  gap: 9px;
 
-  height:
-    36px;
+  border-radius: 6px;
 
-  padding:
-    0 18px;
+  background: #ffffff;
 
-  border-radius:
-    var(--mmics-radius-md);
+  color: var(--mmics-text);
 
-  background:
-    #ffffff;
+  text-decoration: none;
 
-  color:
-    #151515;
+  font-size: 13px;
 
-  text-decoration:
-    none;
-
-  font-size:
-    var(--fs-button);
-
-  font-weight:
-    600;
-
-  transition:
-    var(--mmics-transition);
+  font-weight: 700;
 
   box-shadow:
-    0 4px 14px
+    0 8px 20px
     rgba(
       0,
       0,
       0,
-      0.15
+      0.16
+    );
+
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.mmics-contact-gallery-btn:hover {
+  color: var(--mmics-orange);
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 12px 28px
+    rgba(
+      0,
+      0,
+      0,
+      0.2
+    );
+}
+
+.mmics-contact-gallery-btn svg {
+  transition:
+    transform 0.3s ease;
+}
+
+.mmics-contact-gallery-btn:hover svg {
+  transform:
+    translateX(4px);
+}
+
+
+/* ============================================================
+   NETWORK SECTION
+============================================================ */
+
+.mmics-network-section {
+  width: 100%;
+
+  padding:
+    75px 0
+    90px;
+
+  background:
+    var(--mmics-cream);
+}
+
+.mmics-network-container {
+  width:
+    calc(
+      100% - 48px
+    );
+
+  max-width: 1240px;
+
+  margin:
+    0 auto;
+}
+
+
+/* ============================================================
+   NETWORK HEADING
+============================================================ */
+
+.mmics-network-heading {
+  max-width: 700px;
+
+  margin:
+    0 auto
+    42px;
+
+  text-align: center;
+}
+
+.mmics-network-heading > span {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color:
+    var(--mmics-blue);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.3px;
+
+  text-transform: uppercase;
+}
+
+.mmics-network-heading h2 {
+  margin: 0;
+
+  color:
+    var(--mmics-text);
+
+  font-size: clamp(
+    30px,
+    3.2vw,
+    44px
+  );
+
+  line-height: 1.1;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+}
+
+.mmics-network-heading h2 strong {
+  color:
+    var(--mmics-orange);
+
+  font-weight: 800;
+}
+
+.mmics-network-heading p {
+  max-width: 570px;
+
+  margin:
+    15px auto
+    0;
+
+  color:
+    var(--mmics-muted);
+
+  font-size: 14px;
+
+  line-height: 1.7;
+}
+
+
+/* ============================================================
+   NETWORK LAYOUT
+============================================================ */
+
+.mmics-network-layout {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.75fr)
+    minmax(300px, 0.65fr);
+
+  gap: 30px;
+
+  align-items: stretch;
+}
+
+
+/* ============================================================
+   NETWORK MAP
+============================================================ */
+
+.mmics-network-map {
+  position: relative;
+
+  min-width: 0;
+
+  min-height: 570px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: #111827;
+
+  border-radius: 4px;
+}
+
+
+/* ============================================================
+   BACKGROUND IMAGE
+============================================================ */
+
+.mmics-network-background-image {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+
+  transform:
+    scale(1.02);
+}
+
+
+/* ============================================================
+   BACKGROUND OVERLAY
+============================================================ */
+
+.mmics-network-background-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(7, 16, 32, 0.72) 0%,
+      rgba(19, 37, 65, 0.67) 52%,
+      rgba(7, 16, 32, 0.75) 100%
     );
 }
 
 
-.mmics-contact-gallery-btn:hover {
-  background:
-    #f0f0f0;
+/* ============================================================
+   COMPANY LOGO
+   TOP LEFT
+============================================================ */
 
-  transform:
-    translateY(-2px);
+.mmics-network-brand-logo {
+  position: absolute;
+
+  z-index: 12;
+
+  top: 20px;
+  left: 22px;
+
+  right: auto;
+
+  width: clamp(
+    120px,
+    12vw,
+    160px
+  );
+
+  height: auto;
+
+  min-height: 0;
+
+  margin: 0;
+  padding: 0;
+
+  display: block;
+
+  border: none;
+
+  border-radius: 0;
+
+  outline: none;
+
+  background: transparent;
+
+  box-shadow: none;
+
+  backdrop-filter: none;
+
+  -webkit-backdrop-filter: none;
+
+  pointer-events: none;
+}
+
+.mmics-network-brand-logo img {
+  width: 100%;
+
+  height: auto;
+
+  max-width: none;
+  max-height: none;
+
+  display: block;
+
+  margin: 0;
+  padding: 0;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  background: transparent;
+
+  border: none;
+
+  border-radius: 0;
+
+  box-shadow: none;
+
+  filter:
+    drop-shadow(
+      0 5px 12px
+      rgba(
+        0,
+        0,
+        0,
+        0.26
+      )
+    );
+}
+
+
+/* ============================================================
+   MAP DESCRIPTION — BOTTOM RIGHT
+============================================================ */
+
+.mmics-network-map-description {
+  position: absolute;
+
+  z-index: 10;
+
+  right: 27px;
+
+  bottom: 26px;
+
+  width: min(
+    290px,
+    36%
+  );
+
+  padding:
+    17px 18px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.15
+    );
+
+  border-radius: 12px;
+
+  background:
+    rgba(
+      9,
+      18,
+      34,
+      0.68
+    );
+
+  color: #ffffff;
 
   box-shadow:
-    0 8px 22px
+    0 12px 32px
+    rgba(
+      0,
+      0,
+      0,
+      0.18
+    );
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+}
+
+.mmics-network-map-description > span {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color:
+    var(--mmics-orange);
+
+  font-size: 9px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: 1.15px;
+
+  text-transform: uppercase;
+}
+
+.mmics-network-map-description h3 {
+  margin:
+    0 0
+    7px;
+
+  color: #ffffff;
+
+  font-size: 18px;
+
+  line-height: 1.2;
+
+  font-weight: 800;
+
+  letter-spacing: -0.3px;
+}
+
+.mmics-network-map-description p {
+  margin: 0;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.8
+    );
+
+  font-size: 10px;
+
+  line-height: 1.65;
+}
+
+
+/* ============================================================
+   MAP CANVAS
+============================================================ */
+
+.mmics-network-map-canvas {
+  position: relative;
+
+  z-index: 3;
+
+  width: 100%;
+
+  max-width: 834px;
+
+  aspect-ratio:
+    834 / 548;
+
+  margin: auto;
+
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   INDIA MAP
+============================================================ */
+
+.mmics-india-map {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  opacity: 0.93;
+
+  filter:
+    brightness(0)
+    invert(1)
+    drop-shadow(
+      0 8px 20px
+      rgba(
+        0,
+        0,
+        0,
+        0.28
+      )
+    );
+
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   ROUTES
+============================================================ */
+
+.mmics-network-routes {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+
+  pointer-events: none;
+}
+
+.mmics-network-routes line {
+  fill: none;
+
+  stroke:
+    var(--mmics-orange);
+
+  stroke-width: 0.25;
+
+  stroke-linecap: round;
+
+  stroke-dasharray:
+    1.35 1.1;
+
+  opacity: 0.6;
+
+  vector-effect:
+    non-scaling-stroke;
+
+  animation:
+    mmicsRouteMove
+    2.4s linear
+    infinite;
+}
+
+@keyframes mmicsRouteMove {
+  from {
+    stroke-dashoffset: 7;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+
+/* ============================================================
+   MARKERS
+============================================================ */
+
+.mmics-network-marker {
+  position: absolute;
+
+  z-index: 5;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  pointer-events: none;
+}
+
+.mmics-network-marker-dot {
+  position: relative;
+
+  width: 13px;
+  height: 13px;
+
+  display: block;
+
+  border:
+    2px solid
+    #ffffff;
+
+  border-radius: 50%;
+
+  background:
+    var(--mmics-orange);
+
+  box-shadow:
+    0 0 0 5px
+    rgba(
+      255,
+      105,
+      0,
+      0.18
+    ),
+    0 4px 10px
+    rgba(
+      0,
+      0,
+      0,
+      0.25
+    );
+}
+
+.mmics-network-marker-dot::after {
+  content: "";
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 26px;
+  height: 26px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      105,
+      0,
+      0.6
+    );
+
+  border-radius: 50%;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  animation:
+    mmicsMarkerPulse
+    2s ease-out
+    infinite;
+}
+
+@keyframes mmicsMarkerPulse {
+  0% {
+    opacity: 0.9;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(0.65);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(1.6);
+  }
+}
+
+
+/* ============================================================
+   MARKER LABELS
+============================================================ */
+
+.mmics-network-marker-label {
+  position: absolute;
+
+  top: 50%;
+
+  left: 20px;
+
+  transform:
+    translateY(-50%);
+
+  padding:
+    5px 8px;
+
+  white-space: nowrap;
+
+  border-radius: 5px;
+
+  background:
+    rgba(
+      12,
+      18,
+      34,
+      0.92
+    );
+
+  color: #ffffff;
+
+  font-size: 9px;
+
+  line-height: 1;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 5px 14px
     rgba(
       0,
       0,
@@ -440,378 +916,256 @@
     );
 }
 
+.mmics-network-marker--mumbai
+.mmics-network-marker-label,
 
-.mmics-contact-gallery-btn svg {
-  width:
-    13px;
+.mmics-network-marker--bengaluru
+.mmics-network-marker-label,
 
-  height:
-    13px;
+.mmics-network-marker--coimbatore
+.mmics-network-marker-label {
+  left: auto;
 
-  transition:
-    transform
-    0.2s
-    ease;
+  right: 20px;
 }
 
+.mmics-network-marker--kochi
+.mmics-network-marker-label {
+  top: 19px;
 
-.mmics-contact-gallery-btn:hover svg {
-  transform:
-    translateX(3px);
+  left: 13px;
 }
 
+.mmics-network-marker--puducherry
+.mmics-network-marker-label {
+  top: 19px;
 
-/* ============================================================
-   CONTACT INFO SECTION
-   ============================================================ */
-
-.mmics-contact-info {
-  width:
-    100%;
-
-  padding:
-    var(--space-xl)
-    0;
-
-  background:
-    var(--mmics-bg);
-}
-
-
-.mmics-contact-info-grid {
-  width:
-    100%;
-
-  max-width:
-    1180px;
-
-  margin:
-    0 auto;
-
-  padding:
-    0 24px;
-
-  display:
-    grid;
-
-  grid-template-columns:
-    repeat(
-      4,
-      minmax(
-        0,
-        1fr
-      )
-    );
-
-  gap:
-    18px;
+  left: 14px;
 }
 
 
 /* ============================================================
-   CONTACT CARD
-   ============================================================ */
+   RIGHT CONTACT PANEL
+============================================================ */
 
-.mmics-contact-info-card {
-  min-height:
-    128px;
-
-  padding:
-    20px
-    14px;
-
-  display:
-    flex;
-
-  flex-direction:
-    column;
-
-  align-items:
-    center;
-
-  justify-content:
-    flex-start;
-
-  text-align:
-    center;
-
-  border-radius:
-    var(--mmics-radius-md);
-
-  background:
-    var(--mmics-card-bg);
-
-  box-shadow:
-    var(--mmics-shadow-sm);
-
-  transition:
-    var(--mmics-transition);
-}
-
-
-.mmics-contact-info-card:hover {
-  transform:
-    translateY(-3px);
-
-  box-shadow:
-    var(--mmics-shadow-md);
-}
-
-
-/* ============================================================
-   CONTACT CARD ICON
-   ============================================================ */
-
-.mmics-contact-icon {
-  width:
-    42px;
-
-  height:
-    42px;
-
-  margin-bottom:
-    12px;
-
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  border-radius:
-    50%;
-
-  background:
-    var(--mmics-orange);
-
-  color:
-    #ffffff;
-
-  flex-shrink:
-    0;
-
-  box-shadow:
-    0 4px 12px
-    rgba(
-      255,
-      105,
-      0,
-      0.25
-    );
-}
-
-
-.mmics-contact-icon svg {
-  width:
-    18px;
-
-  height:
-    18px;
-}
-
-
-.mmics-contact-info-card h3 {
-  margin:
-    0 0 8px;
-
-  color:
-    #1a1a1a;
-
-  font-size:
-    var(--fs-card-title);
-
-  line-height:
-    1.2;
-
-  font-weight:
-    600;
-}
-
-
-.mmics-contact-info-card p {
-  margin:
-    0;
-
-  color:
-    var(--mmics-muted);
-
-  font-size:
-    var(--fs-card-desc);
-
-  line-height:
-    1.55;
-
-  font-weight:
-    400;
-}
-
-
-/* ============================================================
-   FORM SECTION
-   ============================================================ */
-
-.mmics-contact-form-section {
-  width:
-    100%;
+.mmics-network-contact-panel {
+  min-width: 0;
 
   padding:
-    10px
-    0
-    var(--space-xl);
+    22px 4px;
 
-  background:
-    var(--mmics-bg);
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
 }
 
-
-.mmics-contact-form-container {
-  width:
-    100%;
-
-  max-width:
-    1180px;
-
-  margin:
-    0 auto;
-
-  padding:
-    0 24px;
-
-  display:
-    grid;
-
-  grid-template-columns:
-    minmax(
-      0,
-      1fr
-    )
-    minmax(
-      0,
-      1fr
-    );
-
-  gap:
-    clamp(
-      30px,
-      5vw,
-      70px
-    );
-
-  align-items:
-    start;
+.mmics-network-contact-heading {
+  margin-bottom: 22px;
 }
 
+.mmics-network-contact-heading > span {
+  display: block;
 
-.mmics-contact-form-wrapper {
-  width:
-    100%;
-
-  max-width:
-    560px;
-}
-
-
-/* ============================================================
-   FORM HEADING
-   ============================================================ */
-
-.mmics-contact-form-heading {
-  margin-bottom:
-    26px;
-}
-
-
-.mmics-contact-form-heading > span {
-  display:
-    block;
-
-  margin-bottom:
-    8px;
+  margin-bottom: 7px;
 
   color:
     var(--mmics-blue);
 
-  font-size:
-    var(--fs-section-kicker);
+  font-size: 10px;
 
-  line-height:
-    1;
+  font-weight: 800;
 
-  font-weight:
-    700;
+  letter-spacing: 1px;
 
-  letter-spacing:
-    1.2px;
-
-  text-transform:
-    uppercase;
+  text-transform: uppercase;
 }
 
-
-.mmics-contact-form-heading h2 {
-  margin:
-    0 0 10px;
+.mmics-network-contact-heading h3 {
+  margin: 0;
 
   color:
     var(--mmics-text);
 
-  font-size:
-    var(--fs-section-title);
+  font-size: clamp(
+    25px,
+    2.3vw,
+    33px
+  );
 
-  line-height:
-    1.15;
+  line-height: 1.1;
 
-  font-weight:
-    700;
-
-  letter-spacing:
-    -0.6px;
+  font-weight: 800;
 }
 
+.mmics-network-contact-heading p {
+  max-width: 300px;
 
-.mmics-contact-form-heading p {
   margin:
+    11px 0
     0;
 
   color:
     var(--mmics-muted);
 
-  font-size:
-    var(--fs-section-desc);
+  font-size: 12px;
 
-  line-height:
-    1.6;
+  line-height: 1.65;
 }
 
 
 /* ============================================================
-   FORM
-   ============================================================ */
+   CONTACT CARDS
+============================================================ */
 
-.mmics-contact-form {
-  width:
-    100%;
+.mmics-network-contact-card {
+  width: 100%;
 
-  display:
-    flex;
+  min-height: 84px;
 
-  flex-direction:
-    column;
+  margin-bottom: 11px;
 
-  gap:
-    18px;
+  padding:
+    14px 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  border:
+    1px solid
+    var(--mmics-border);
+
+  border-radius: 12px;
+
+  background:
+    var(--mmics-cream-card);
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.mmics-network-contact-card:last-child {
+  margin-bottom: 0;
+}
+
+.mmics-network-contact-card:hover {
+  transform:
+    translateX(5px);
+
+  border-color:
+    rgba(
+      255,
+      105,
+      0,
+      0.35
+    );
+
+  box-shadow:
+    0 12px 28px
+    rgba(
+      31,
+      40,
+      70,
+      0.08
+    );
+}
+
+.mmics-network-contact-icon {
+  width: 43px;
+  height: 43px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    var(--mmics-orange);
+
+  color: #ffffff;
+
+  box-shadow:
+    0 6px 15px
+    rgba(
+      255,
+      105,
+      0,
+      0.18
+    );
+}
+
+.mmics-network-contact-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.mmics-network-contact-content {
+  min-width: 0;
+}
+
+.mmics-network-contact-card h4 {
+  margin:
+    0 0
+    4px;
+
+  color:
+    var(--mmics-text);
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+.mmics-network-contact-card p {
+  margin: 0;
+
+  color:
+    var(--mmics-muted);
+
+  font-size: 10px;
+
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
 }
 
 
-.mmics-contact-form-row {
-  width:
-    100%;
+/* ============================================================
+   CONTACT FORM
+============================================================ */
 
-  display:
-    grid;
+.mmics-contact-form-section {
+  width: 100%;
+
+  padding:
+    75px 0
+    90px;
+
+  background: #ffffff;
+}
+
+.mmics-contact-form-container {
+  width:
+    calc(
+      100% - 48px
+    );
+
+  max-width: 1180px;
+
+  margin:
+    0 auto;
+
+  display: grid;
 
   grid-template-columns:
     repeat(
@@ -822,394 +1176,292 @@
       )
     );
 
-  gap:
-    18px;
+  gap: clamp(
+    40px,
+    5vw,
+    70px
+  );
+
+  align-items: start;
+}
+
+.mmics-contact-form-wrapper {
+  width: 100%;
+
+  min-width: 0;
 }
 
 
 /* ============================================================
-   FIELD
-   ============================================================ */
+   FORM HEADING
+============================================================ */
 
-.mmics-contact-field {
-  width:
-    100%;
+.mmics-contact-form-heading {
+  margin-bottom: 27px;
+}
 
-  display:
-    flex;
+.mmics-contact-form-heading > span {
+  display: block;
 
-  flex-direction:
-    column;
+  margin-bottom: 8px;
+
+  color:
+    var(--mmics-blue);
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.1px;
+
+  text-transform: uppercase;
+}
+
+.mmics-contact-form-heading h2 {
+  margin:
+    0 0
+    10px;
+
+  color:
+    var(--mmics-text);
+
+  font-size: clamp(
+    27px,
+    3vw,
+    38px
+  );
+
+  line-height: 1.15;
+
+  font-weight: 800;
+}
+
+.mmics-contact-form-heading p {
+  max-width: 470px;
+
+  margin: 0;
+
+  color:
+    var(--mmics-muted);
+
+  font-size: 13px;
+
+  line-height: 1.7;
 }
 
 
+/* ============================================================
+   FORM LAYOUT
+============================================================ */
+
+.mmics-contact-form {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.mmics-contact-form-row {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 17px;
+}
+
+
+/* ============================================================
+   FORM FIELDS
+============================================================ */
+
+.mmics-contact-field {
+  width: 100%;
+
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
 .mmics-contact-field label {
-  margin-bottom:
-    8px;
+  margin-bottom: 7px;
 
   color:
     var(--mmics-text-soft);
 
-  font-size:
-    var(--fs-label);
+  font-size: 11px;
 
-  line-height:
-    1.2;
-
-  font-weight:
-    600;
-
-  letter-spacing:
-    0.2px;
+  font-weight: 700;
 }
-
-
-/* ============================================================
-   INPUT / SELECT / TEXTAREA
-   ============================================================ */
 
 .mmics-contact-field input,
 .mmics-contact-field select,
 .mmics-contact-field textarea {
-  width:
-    100%;
-
-  outline:
-    none;
+  width: 100%;
 
   border:
-    1px
-    solid
-    var(--mmics-border);
+    1px solid
+    #e5e7eb;
 
-  border-radius:
-    var(--mmics-radius-sm);
+  outline: none;
 
-  background-color:
-    var(--mmics-input-bg);
+  border-radius: 6px;
+
+  background: #f5f5f5;
 
   color:
     var(--mmics-text);
 
-  font-family:
-    var(--mmics-font);
+  font-family: inherit;
 
-  font-size:
-    var(--fs-input);
-
-  font-weight:
-    400;
+  font-size: 13px;
 
   transition:
-    var(--mmics-transition);
-
-  box-sizing:
-    border-box;
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
 }
 
-
-/* ============================================================
-   INPUT
-   ============================================================ */
-
-.mmics-contact-field input {
-  height:
-    46px;
-
-  padding:
-    0 14px;
-}
-
-
-/* ============================================================
-   SELECT WRAPPER
-   ============================================================ */
-
-.mmics-contact-select-wrapper {
-  position:
-    relative;
-
-  width:
-    100%;
-}
-
-
-/* ============================================================
-   SELECT
-   ============================================================ */
-
+.mmics-contact-field input,
 .mmics-contact-field select {
-  height:
-    46px;
+  height: 47px;
 
   padding:
-    0 42px
     0 14px;
-
-  appearance:
-    none;
-
-  -webkit-appearance:
-    none;
-
-  -moz-appearance:
-    none;
-
-  cursor:
-    pointer;
-
-  background-image:
-    linear-gradient(
-      45deg,
-      transparent 50%,
-      var(--mmics-muted) 50%
-    ),
-    linear-gradient(
-      135deg,
-      var(--mmics-muted) 50%,
-      transparent 50%
-    );
-
-  background-position:
-    calc(100% - 18px)
-    20px,
-    calc(100% - 13px)
-    20px;
-
-  background-size:
-    5px 5px,
-    5px 5px;
-
-  background-repeat:
-    no-repeat;
 }
-
-
-.mmics-contact-field select option {
-  color:
-    var(--mmics-text);
-
-  background:
-    #ffffff;
-
-  font-family:
-    var(--mmics-font);
-
-  font-size:
-    var(--fs-input);
-}
-
-
-.mmics-contact-field select option:disabled {
-  color:
-    var(--mmics-placeholder);
-}
-
-
-/* ============================================================
-   TEXTAREA
-   ============================================================ */
 
 .mmics-contact-field textarea {
-  min-height:
-    140px;
+  min-height: 140px;
 
-  padding:
-    14px;
+  padding: 14px;
 
-  resize:
-    vertical;
+  resize: vertical;
 
-  line-height:
-    1.55;
+  line-height: 1.6;
 }
-
-
-/* ============================================================
-   PLACEHOLDER
-   ============================================================ */
 
 .mmics-contact-field input::placeholder,
 .mmics-contact-field textarea::placeholder {
-  color:
-    var(--mmics-placeholder);
-
-  opacity:
-    1;
+  color: #a5a5a5;
 }
-
-
-/* ============================================================
-   FOCUS
-   ============================================================ */
 
 .mmics-contact-field input:focus,
 .mmics-contact-field select:focus,
 .mmics-contact-field textarea:focus {
-  background-color:
-    var(--mmics-input-focus-bg);
-
   border-color:
     var(--mmics-blue);
 
+  background: #ffffff;
+
   box-shadow:
     0 0 0 3px
-    var(--mmics-blue-soft);
-}
-
-
-/* ============================================================
-   DISABLED
-   ============================================================ */
-
-.mmics-contact-field input:disabled,
-.mmics-contact-field select:disabled,
-.mmics-contact-field textarea:disabled {
-  background-color:
-    #eaeaea;
-
-  color:
-    #999999;
-
-  cursor:
-    not-allowed;
-
-  opacity:
-    0.75;
-}
-
-
-/* ============================================================
-   FIELD ERROR
-   ============================================================ */
-
-.mmics-contact-field-error {
-  display:
-    block;
-
-  margin-top:
-    6px;
-
-  color:
-    var(--mmics-error-field);
-
-  font-size:
-    clamp(
-      10px,
-      0.7vw,
-      11px
+    rgba(
+      70,
+      93,
+      162,
+      0.09
     );
-
-  line-height:
-    1.4;
-
-  font-weight:
-    500;
 }
-
 
 .mmics-contact-field input[aria-invalid="true"],
 .mmics-contact-field select[aria-invalid="true"],
 .mmics-contact-field textarea[aria-invalid="true"] {
-  border-color:
-    var(--mmics-error-field);
+  border-color: #dc2626;
 
-  background-color:
-    #fff5f4;
+  background: #fff7f7;
 }
 
+.mmics-contact-field input:disabled,
+.mmics-contact-field select:disabled,
+.mmics-contact-field textarea:disabled {
+  opacity: 0.65;
 
-/* ============================================================
-   HONEYPOT
-   ============================================================ */
+  cursor: not-allowed;
+}
 
-.mmics-contact-botcheck {
-  position:
-    absolute !important;
+.mmics-contact-field-error {
+  display: block;
 
-  width:
-    1px;
+  margin-top: 6px;
 
-  height:
-    1px;
+  color: #c62828;
 
-  opacity:
-    0;
+  font-size: 10px;
 
-  pointer-events:
-    none;
+  line-height: 1.4;
+}
 
-  left:
-    -9999px;
+.mmics-contact-select-wrapper {
+  width: 100%;
+}
+
+.mmics-contact-field select {
+  cursor: pointer;
 }
 
 
 /* ============================================================
    SUBMIT BUTTON
-   ============================================================ */
+============================================================ */
 
 .mmics-contact-submit {
-  width:
-    100%;
+  width: 100%;
 
-  height:
-    50px;
+  height: 50px;
 
-  display:
-    inline-flex;
+  margin-top: 4px;
 
-  align-items:
-    center;
+  display: inline-flex;
 
-  justify-content:
-    center;
+  align-items: center;
+  justify-content: center;
 
-  gap:
-    9px;
+  gap: 9px;
 
-  margin-top:
-    6px;
+  border: 0;
 
-  border:
-    0;
-
-  border-radius:
-    var(--mmics-radius-md);
+  border-radius: 6px;
 
   background:
     var(--mmics-blue);
 
-  color:
-    #ffffff;
+  color: #ffffff;
 
-  font-family:
-    var(--mmics-font);
+  font-family: inherit;
 
-  font-size:
-    var(--fs-button);
+  font-size: 13px;
 
-  font-weight:
-    600;
+  font-weight: 700;
 
-  letter-spacing:
-    0.3px;
-
-  cursor:
-    pointer;
-
-  transition:
-    var(--mmics-transition);
+  cursor: pointer;
 
   box-shadow:
-    0 6px 18px
+    0 8px 22px
     rgba(
-      47,
+      70,
       93,
-      145,
+      162,
       0.22
     );
-}
 
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
 
 .mmics-contact-submit:hover:not(:disabled) {
   background:
@@ -1219,58 +1471,37 @@
     translateY(-2px);
 
   box-shadow:
-    0 10px 26px
+    0 12px 28px
     rgba(
-      47,
+      70,
       93,
-      145,
-      0.32
+      162,
+      0.3
     );
 }
 
-
-.mmics-contact-submit:active:not(:disabled) {
-  transform:
-    translateY(0);
-}
-
-
 .mmics-contact-submit:disabled {
-  opacity:
-    0.65;
+  opacity: 0.65;
 
-  cursor:
-    not-allowed;
-
-  transform:
-    none;
+  cursor: not-allowed;
 }
-
 
 .mmics-contact-submit svg {
-  width:
-    15px;
-
-  height:
-    15px;
-
-  flex-shrink:
-    0;
+  width: 15px;
+  height: 15px;
 }
 
 
 /* ============================================================
    SPINNER
-   ============================================================ */
+============================================================ */
 
 .mmics-contact-spinner {
   animation:
     mmicsContactSpin
-    0.8s
-    linear
+    0.8s linear
     infinite;
 }
-
 
 @keyframes mmicsContactSpin {
   to {
@@ -1282,262 +1513,183 @@
 
 /* ============================================================
    ALERTS
-   ============================================================ */
+============================================================ */
 
 .mmics-contact-alert {
-  display:
-    flex;
-
-  align-items:
-    flex-start;
-
-  gap:
-    10px;
-
-  margin-bottom:
-    18px;
+  margin-bottom: 17px;
 
   padding:
-    14px
-    16px;
+    13px 14px;
 
-  border-radius:
-    var(--mmics-radius-md);
+  display: flex;
 
-  font-size:
-    clamp(
-      11px,
-      0.75vw,
-      12px
-    );
+  align-items: flex-start;
 
-  line-height:
-    1.55;
+  gap: 9px;
 
-  font-weight:
-    500;
+  border-radius: 6px;
 
-  animation:
-    mmicsAlertIn
-    0.3s
-    ease
-    both;
+  font-size: 12px;
+
+  line-height: 1.55;
 }
-
-
-@keyframes mmicsAlertIn {
-  from {
-    opacity:
-      0;
-
-    transform:
-      translateY(-4px);
-  }
-
-  to {
-    opacity:
-      1;
-
-    transform:
-      translateY(0);
-  }
-}
-
 
 .mmics-contact-alert svg {
-  width:
-    16px;
+  width: 16px;
+  height: 16px;
 
-  height:
-    16px;
+  flex-shrink: 0;
 
-  flex-shrink:
-    0;
-
-  margin-top:
-    1px;
+  margin-top: 1px;
 }
-
 
 .mmics-contact-success {
+  border-left:
+    3px solid
+    #22c55e;
+
   background:
-    var(--mmics-success-bg);
+    #eefaf1;
 
   color:
-    var(--mmics-success-text);
-
-  border-left:
-    3px
-    solid
-    var(--mmics-green);
+    #26753c;
 }
-
 
 .mmics-contact-error {
+  border-left:
+    3px solid
+    #dc2626;
+
   background:
-    var(--mmics-error-bg);
+    #fff1f1;
 
   color:
-    var(--mmics-error-text);
-
-  border-left:
-    3px
-    solid
-    var(--mmics-error-text);
+    #a12c2c;
 }
 
 
 /* ============================================================
-   MAP
-   ============================================================ */
+   GOOGLE MAP
+============================================================ */
 
 .mmics-contact-map-wrapper {
-  width:
-    100%;
+  position: sticky;
 
-  height:
-    460px;
+  top: 25px;
 
-  overflow:
-    hidden;
+  width: 100%;
 
-  border-radius:
-    var(--mmics-radius-md);
+  height: 520px;
 
-  background:
-    #e8eeee;
-
-  box-shadow:
-    var(--mmics-shadow-sm);
-
-  position:
-    sticky;
-
-  top:
-    24px;
-}
-
-
-.mmics-contact-map-wrapper iframe {
-  width:
-    100%;
-
-  height:
-    100%;
-
-  display:
-    block;
+  overflow: hidden;
 
   border:
-    0;
+    1px solid
+    #e7e7e7;
+
+  border-radius: 12px;
+
+  background: #e8eeee;
+
+  box-shadow:
+    0 14px 36px
+    rgba(
+      31,
+      50,
+      85,
+      0.08
+    );
+}
+
+.mmics-contact-map-wrapper iframe {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  border: 0;
 }
 
 
 /* ============================================================
-   BREAKPOINT — 1440px+
-   ============================================================ */
-
-@media (min-width: 1440px) {
-
-  .mmics-contact-hero {
-    height:
-      480px;
-  }
-
-
-  .mmics-contact-hero-content {
-    width:
-      min(
-        560px,
-        50vw
-      );
-  }
-
-
-  .mmics-contact-form-container {
-    gap:
-      80px;
-  }
-
-
-  .mmics-contact-map-wrapper {
-    height:
-      520px;
-  }
-}
-
-
-/* ============================================================
-   BREAKPOINT — 1920px+
-   ============================================================ */
-
-@media (min-width: 1920px) {
-
-  .mmics-contact-info-grid,
-  .mmics-contact-form-container {
-    max-width:
-      1320px;
-  }
-
-
-  .mmics-contact-hero-content {
-    width:
-      560px;
-  }
-
-
-  .mmics-contact-map-wrapper {
-    height:
-      560px;
-  }
-}
-
-
-/* ============================================================
-   BREAKPOINT — 1200px
-   ============================================================ */
+   LARGE LAPTOP
+============================================================ */
 
 @media (max-width: 1200px) {
 
-  .mmics-contact-info-grid,
-  .mmics-contact-form-container {
-    padding:
-      0 22px;
+  .mmics-network-brand-logo {
+    top: 18px;
+    left: 18px;
+
+    right: auto;
+
+    width: clamp(
+      115px,
+      12vw,
+      150px
+    );
   }
 
-
-  .mmics-contact-hero-content {
-    left:
-      40px;
-
-    width:
-      min(
-        460px,
-        55vw
-      );
-  }
 }
 
 
 /* ============================================================
-   BREAKPOINT — 1024px
-   ============================================================ */
+   TABLET
+============================================================ */
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
 
-  .mmics-contact-hero-content {
-    left:
-      32px;
-
+  .mmics-network-container,
+  .mmics-contact-form-container {
     width:
-      min(
-        440px,
-        60vw
+      calc(
+        100% - 40px
       );
   }
 
+  .mmics-network-layout {
+    grid-template-columns:
+      1fr;
 
-  .mmics-contact-info-grid {
+    gap: 30px;
+  }
+
+  .mmics-network-map {
+    min-height: 520px;
+  }
+
+  .mmics-network-map-canvas {
+    max-width: 790px;
+  }
+
+  /* LOGO */
+
+  .mmics-network-brand-logo {
+    top: 17px;
+    left: 17px;
+
+    right: auto;
+
+    width: clamp(
+      105px,
+      16vw,
+      135px
+    );
+  }
+
+  /* DESCRIPTION */
+
+  .mmics-network-map-description {
+    width: 250px;
+  }
+
+  /* CONTACT PANEL */
+
+  .mmics-network-contact-panel {
+    padding: 0;
+
+    display: grid;
+
     grid-template-columns:
       repeat(
         2,
@@ -1547,397 +1699,227 @@
         )
       );
 
-    gap:
-      16px;
+    gap: 13px;
   }
 
+  .mmics-network-contact-heading {
+    grid-column:
+      1 / -1;
+  }
+
+  .mmics-network-contact-card {
+    margin: 0;
+  }
+
+  /* FORM */
 
   .mmics-contact-form-container {
     grid-template-columns:
       1fr;
-
-    gap:
-      40px;
   }
-
-
-  .mmics-contact-form-wrapper {
-    max-width:
-      none;
-  }
-
 
   .mmics-contact-map-wrapper {
-    height:
-      400px;
+    position: static;
 
-    position:
-      static;
+    height: 400px;
   }
+
 }
 
 
 /* ============================================================
-   BREAKPOINT — 900px
-   ============================================================ */
-
-@media (max-width: 900px) {
-
-  .mmics-contact-hero {
-    height:
-      360px;
-  }
-
-
-  .mmics-contact-hero-content {
-    left:
-      32px;
-
-    width:
-      min(
-        420px,
-        65vw
-      );
-  }
-
-
-  .mmics-contact-hero-content h1 {
-    letter-spacing:
-      -0.9px;
-  }
-
-
-  .mmics-contact-info {
-    padding:
-      40px 0;
-  }
-
-
-  .mmics-contact-info-grid {
-    padding:
-      0 20px;
-
-    gap:
-      14px;
-  }
-
-
-  .mmics-contact-info-card {
-    min-height:
-      118px;
-  }
-
-
-  .mmics-contact-form-section {
-    padding:
-      10px
-      0
-      50px;
-  }
-
-
-  .mmics-contact-form-container {
-    padding:
-      0 20px;
-
-    gap:
-      32px;
-  }
-
-
-  .mmics-contact-form-row {
-    gap:
-      16px;
-  }
-
-
-  .mmics-contact-form {
-    gap:
-      16px;
-  }
-
-
-  .mmics-contact-map-wrapper {
-    height:
-      340px;
-  }
-}
-
-
-/* ============================================================
-   BREAKPOINT — 768px
-   ============================================================ */
+   SMALL TABLET
+============================================================ */
 
 @media (max-width: 768px) {
 
-  .mmics-contact-hero {
-    height:
-      340px;
+  .mmics-network-brand-logo {
+    top: 15px;
+    left: 15px;
+
+    right: auto;
+
+    width: clamp(
+      95px,
+      17vw,
+      120px
+    );
   }
 
-
-  .mmics-contact-hero-content {
-    left:
-      24px;
-
-    right:
-      24px;
-
-    width:
-      auto;
-
-    max-width:
-      520px;
-  }
-
-
-  .mmics-contact-hero-content p {
-    max-width:
-      100%;
-  }
-
-
-  .mmics-contact-info-grid {
-    gap:
-      12px;
-  }
-
-
-  .mmics-contact-info-card {
-    min-height:
-      112px;
-
-    padding:
-      18px
-      12px;
-  }
-
-
-  .mmics-contact-icon {
-    width:
-      40px;
-
-    height:
-      40px;
-  }
-
-
-  .mmics-contact-icon svg {
-    width:
-      17px;
-
-    height:
-      17px;
-  }
-
-
-  .mmics-contact-form-row {
-    grid-template-columns:
-      1fr;
-
-    gap:
-      16px;
-  }
-
-
-  .mmics-contact-field input,
-  .mmics-contact-field select {
-    height:
-      48px;
-
-    font-size:
-      14px;
-  }
-
-
-  .mmics-contact-field select {
-    background-position:
-      calc(100% - 18px)
-      21px,
-      calc(100% - 13px)
-      21px;
-  }
-
-
-  .mmics-contact-field textarea {
-    font-size:
-      14px;
-
-    min-height:
-      130px;
-  }
-
-
-  .mmics-contact-submit {
-    height:
-      52px;
-
-    font-size:
-      14px;
-  }
-
-
-  .mmics-contact-map-wrapper {
-    height:
-      320px;
-  }
 }
 
 
 /* ============================================================
-   BREAKPOINT — 640px
-   ============================================================ */
+   MOBILE
+============================================================ */
 
 @media (max-width: 640px) {
 
   .mmics-contact-hero {
-    height:
-      380px;
+    height: 380px;
+  }
+
+  .mmics-contact-hero-content {
+    left: 20px;
+    right: 20px;
+
+    width: auto;
+  }
+
+  .mmics-contact-hero-content h1 {
+    font-size: 34px;
+  }
+
+  .mmics-contact-hero-content p {
+    font-size: 13px;
   }
 
 
-  .mmics-contact-hero-overlay {
-    background:
-      linear-gradient(
-        90deg,
-        rgba(
-          0,
-          0,
-          0,
-          0.68
-        )
-        0%,
-        rgba(
-          0,
-          0,
-          0,
-          0.32
-        )
-        100%
+  /* NETWORK */
+
+  .mmics-network-section {
+    padding:
+      55px 0
+      65px;
+  }
+
+  .mmics-network-container,
+  .mmics-contact-form-container {
+    width:
+      calc(
+        100% - 30px
       );
   }
 
+  .mmics-network-heading {
+    margin-bottom: 30px;
+  }
 
-  .mmics-contact-hero-content {
-    left:
-      20px;
+  .mmics-network-heading h2 {
+    font-size: 30px;
+  }
 
-    right:
-      20px;
+  .mmics-network-heading p {
+    font-size: 13px;
+  }
+
+  .mmics-network-map {
+    min-height: 430px;
+  }
+
+  .mmics-network-map-canvas {
+    width: 100%;
+
+    max-width: 580px;
   }
 
 
-  .mmics-contact-info {
+  /* ==========================================================
+     MOBILE LOGO — TOP LEFT
+  ========================================================== */
+
+  .mmics-network-brand-logo {
+    top: 12px;
+    left: 12px;
+
+    right: auto;
+
+    width: clamp(
+      82px,
+      21vw,
+      105px
+    );
+
+    padding: 0;
+
+    min-height: 0;
+
+    border: none;
+
+    border-radius: 0;
+
+    background: transparent;
+
+    box-shadow: none;
+  }
+
+  .mmics-network-brand-logo img {
+    width: 100%;
+
+    max-width: none;
+    max-height: none;
+  }
+
+
+  /* DESCRIPTION */
+
+  .mmics-network-map-description {
+    right: 14px;
+    bottom: 14px;
+
+    width: 185px;
+
     padding:
-      34px 0;
+      11px 12px;
+
+    border-radius: 8px;
+  }
+
+  .mmics-network-map-description > span {
+    font-size: 7px;
+  }
+
+  .mmics-network-map-description h3 {
+    font-size: 13px;
+  }
+
+  .mmics-network-map-description p {
+    font-size: 8px;
+
+    line-height: 1.5;
   }
 
 
-  .mmics-contact-info-grid {
+  /* MARKERS */
+
+  .mmics-network-marker-dot {
+    width: 10px;
+    height: 10px;
+
+    border-width: 1.5px;
+  }
+
+  .mmics-network-marker-dot::after {
+    width: 21px;
+    height: 21px;
+  }
+
+  .mmics-network-marker-label {
+    left: 16px;
+
     padding:
-      0 16px;
+      4px 6px;
 
-    gap:
-      12px;
+    font-size: 7px;
+  }
+
+  .mmics-network-marker--mumbai
+  .mmics-network-marker-label,
+
+  .mmics-network-marker--bengaluru
+  .mmics-network-marker-label,
+
+  .mmics-network-marker--coimbatore
+  .mmics-network-marker-label {
+    left: auto;
+
+    right: 16px;
   }
 
 
-  .mmics-contact-info-card {
-    min-height:
-      118px;
+  /* CONTACT PANEL */
 
-    padding:
-      16px
-      10px;
-  }
-
-
-  .mmics-contact-form-section {
-    padding:
-      10px
-      0
-      46px;
-  }
-
-
-  .mmics-contact-form-container {
-    padding:
-      0 16px;
-
-    gap:
-      28px;
-  }
-
-
-  .mmics-contact-form-heading {
-    margin-bottom:
-      22px;
-  }
-
-
-  .mmics-contact-form {
-    gap:
-      16px;
-  }
-
-
-  .mmics-contact-submit {
-    height:
-      50px;
-  }
-
-
-  .mmics-contact-alert {
-    padding:
-      12px
-      14px;
-
-    font-size:
-      12px;
-  }
-
-
-  .mmics-contact-map-wrapper {
-    height:
-      300px;
-  }
-}
-
-
-/* ============================================================
-   BREAKPOINT — 480px
-   ============================================================ */
-
-@media (max-width: 480px) {
-
-  .mmics-contact-hero {
-    height:
-      400px;
-  }
-
-
-  .mmics-contact-hero-content {
-    left:
-      18px;
-
-    right:
-      18px;
-  }
-
-
-  .mmics-contact-hero-content h1 {
-    letter-spacing:
-      -0.6px;
-  }
-
-
-  .mmics-contact-info {
-    padding:
-      30px 0;
-  }
-
-
-  .mmics-contact-info-grid {
+  .mmics-network-contact-panel {
     grid-template-columns:
       repeat(
         2,
@@ -1947,387 +1929,278 @@
         )
       );
 
-    padding:
-      0 14px;
+    gap: 10px;
+  }
 
-    gap:
-      10px;
+  .mmics-network-contact-card {
+    min-height: 108px;
+
+    padding: 12px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .mmics-network-contact-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .mmics-network-contact-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mmics-network-contact-card h4 {
+    font-size: 12px;
+  }
+
+  .mmics-network-contact-card p {
+    font-size: 9px;
   }
 
 
-  .mmics-contact-info-card {
-    min-height:
-      116px;
-
-    padding:
-      16px
-      8px;
-  }
-
-
-  .mmics-contact-icon {
-    width:
-      38px;
-
-    height:
-      38px;
-
-    margin-bottom:
-      10px;
-  }
-
-
-  .mmics-contact-icon svg {
-    width:
-      16px;
-
-    height:
-      16px;
-  }
-
+  /* FORM */
 
   .mmics-contact-form-section {
     padding:
-      10px
-      0
-      42px;
+      55px 0
+      65px;
   }
 
+  .mmics-contact-form-row {
+    grid-template-columns: 1fr;
 
-  .mmics-contact-form-container {
-    padding:
-      0 14px;
+    gap: 16px;
   }
-
-
-  .mmics-contact-form-heading h2 {
-    font-size:
-      20px;
-  }
-
 
   .mmics-contact-field input,
   .mmics-contact-field select {
-    height:
-      46px;
+    height: 48px;
 
-    font-size:
-      13px;
-
-    padding-left:
-      12px;
+    font-size: 14px;
   }
-
-
-  .mmics-contact-field select {
-    padding-right:
-      40px;
-
-    background-position:
-      calc(100% - 17px)
-      20px,
-      calc(100% - 12px)
-      20px;
-  }
-
 
   .mmics-contact-field textarea {
-    font-size:
-      13px;
+    min-height: 130px;
 
-    padding:
-      12px;
-
-    min-height:
-      120px;
+    font-size: 14px;
   }
-
 
   .mmics-contact-submit {
-    height:
-      48px;
+    height: 50px;
 
-    font-size:
-      13px;
+    font-size: 14px;
   }
-
 
   .mmics-contact-map-wrapper {
-    height:
-      280px;
+    height: 320px;
   }
+
 }
 
 
 /* ============================================================
-   BREAKPOINT — 380px
-   ============================================================ */
+   SMALL MOBILE
+============================================================ */
 
-@media (max-width: 380px) {
+@media (max-width: 480px) {
+
+  .mmics-network-brand-logo {
+    top: 10px;
+    left: 10px;
+
+    right: auto;
+
+    width: clamp(
+      72px,
+      20vw,
+      92px
+    );
+  }
+
+}
+
+
+/* ============================================================
+   VERY SMALL MOBILE
+============================================================ */
+
+@media (max-width: 420px) {
+
+  .mmics-network-container,
+  .mmics-contact-form-container {
+    width:
+      calc(
+        100% - 24px
+      );
+  }
 
   .mmics-contact-hero {
-    height:
-      420px;
+    height: 350px;
   }
-
 
   .mmics-contact-hero-content h1 {
-    font-size:
-      24px;
+    font-size: 30px;
+  }
 
-    letter-spacing:
-      -0.4px;
+  .mmics-network-heading h2 {
+    font-size: 27px;
+  }
+
+  .mmics-network-map {
+    min-height: 355px;
   }
 
 
-  .mmics-contact-hero-content p {
-    font-size:
-      11px;
+  /* LOGO */
 
-    line-height:
-      1.55;
+  .mmics-network-brand-logo {
+    top: 9px;
+    left: 9px;
+
+    right: auto;
+
+    width: clamp(
+      68px,
+      19vw,
+      86px
+    );
   }
 
 
-  .mmics-contact-gallery-btn {
-    height:
-      34px;
+  /* DESCRIPTION */
 
-    font-size:
-      11px;
+  .mmics-network-map-description {
+    right: 10px;
+    bottom: 10px;
+
+    width: 150px;
 
     padding:
-      0 14px;
+      9px 10px;
 
-    min-width:
-      108px;
+    border-radius: 7px;
+  }
+
+  .mmics-network-map-description > span {
+    margin-bottom: 4px;
+
+    font-size: 6px;
+  }
+
+  .mmics-network-map-description h3 {
+    margin-bottom: 4px;
+
+    font-size: 11px;
+  }
+
+  .mmics-network-map-description p {
+    font-size: 7px;
   }
 
 
-  .mmics-contact-info-grid {
+  /* MARKERS */
+
+  .mmics-network-marker-label {
+    padding:
+      3px 5px;
+
+    font-size: 6px;
+  }
+
+  .mmics-network-marker-dot {
+    width: 8px;
+    height: 8px;
+
+    border-width: 1px;
+  }
+
+
+  /* CONTACT */
+
+  .mmics-network-contact-panel {
     grid-template-columns:
       1fr;
-
-    gap:
-      10px;
   }
 
+  .mmics-network-contact-card {
+    min-height: 78px;
 
-  .mmics-contact-info-card {
-    min-height:
-      100px;
+    flex-direction: row;
 
-    flex-direction:
-      row;
-
-    justify-content:
-      flex-start;
-
-    text-align:
-      left;
-
-    gap:
-      12px;
-
-    padding:
-      14px;
+    align-items: center;
   }
-
-
-  .mmics-contact-icon {
-    margin-bottom:
-      0;
-
-    flex-shrink:
-      0;
-  }
-
-
-  .mmics-contact-info-card h3 {
-    margin-bottom:
-      3px;
-  }
-
-
-  .mmics-contact-form-heading h2 {
-    font-size:
-      19px;
-  }
-
-
-  .mmics-contact-submit {
-    height:
-      46px;
-
-    font-size:
-      12px;
-  }
-
 
   .mmics-contact-map-wrapper {
-    height:
-      260px;
+    height: 280px;
   }
+
 }
 
 
 /* ============================================================
-   BREAKPOINT — 320px
-   ============================================================ */
+   360PX DEVICES
+============================================================ */
 
-@media (max-width: 320px) {
+@media (max-width: 360px) {
 
-  .mmics-contact-hero {
-    height:
-      440px;
+  .mmics-network-brand-logo {
+    top: 8px;
+    left: 8px;
+
+    right: auto;
+
+    width: clamp(
+      62px,
+      19vw,
+      78px
+    );
   }
 
-
-  .mmics-contact-hero-content h1 {
-    font-size:
-      22px;
+  .mmics-network-map {
+    min-height: 330px;
   }
 
-
-  .mmics-contact-hero-content p {
-    font-size:
-      10px;
+  .mmics-network-map-description {
+    width: 137px;
   }
 
-
-  .mmics-contact-info-grid {
-    padding:
-      0 12px;
+  .mmics-network-map-description h3 {
+    font-size: 10px;
   }
 
-
-  .mmics-contact-form-container {
-    padding:
-      0 12px;
+  .mmics-network-map-description p {
+    font-size: 6.5px;
   }
 
-
-  .mmics-contact-field label {
-    font-size:
-      10px;
+  .mmics-network-marker-label {
+    font-size: 5.5px;
   }
 
+}
 
-  .mmics-contact-field input,
-  .mmics-contact-field select {
-    height:
-      44px;
 
-    font-size:
-      12px;
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+
+  .mmics-network-routes line,
+  .mmics-network-marker-dot::after,
+  .mmics-contact-spinner {
+    animation: none;
   }
 
-
-  .mmics-contact-field select {
-    padding-right:
-      38px;
-
-    background-position:
-      calc(100% - 16px)
-      19px,
-      calc(100% - 11px)
-      19px;
-  }
-
-
+  .mmics-contact-gallery-btn,
+  .mmics-network-contact-card,
   .mmics-contact-submit {
-    height:
-      44px;
-
-    font-size:
-      12px;
+    transition: none;
   }
 
-
-  .mmics-contact-map-wrapper {
-    height:
-      240px;
-  }
-}
-
-
-/* ============================================================
-   ACCESSIBILITY — REDUCED MOTION
-   ============================================================ */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .mmics-contact-page *,
-  .mmics-contact-page *::before,
-  .mmics-contact-page *::after {
-    animation-duration:
-      0.01ms !important;
-
-    animation-iteration-count:
-      1 !important;
-
-    transition-duration:
-      0.01ms !important;
-
-    scroll-behavior:
-      auto !important;
-  }
-}
-
-
-/* ============================================================
-   ACCESSIBILITY — FOCUS VISIBLE
-   ============================================================ */
-
-.mmics-contact-page a:focus-visible,
-.mmics-contact-page button:focus-visible,
-.mmics-contact-page input:focus-visible,
-.mmics-contact-page select:focus-visible,
-.mmics-contact-page textarea:focus-visible {
-  outline:
-    2px
-    solid
-    var(--mmics-blue);
-
-  outline-offset:
-    2px;
-}
-
-
-/* ============================================================
-   PRINT
-   ============================================================ */
-
-@media print {
-
-  .mmics-contact-hero,
-  .mmics-contact-map-wrapper,
-  .mmics-contact-submit,
-  .mmics-contact-gallery-btn {
-    display:
-      none !important;
-  }
-
-
-  .mmics-contact-page {
-    color:
-      #000000;
-
-    background:
-      #ffffff;
-  }
-
-
-  .mmics-contact-info-card {
-    box-shadow:
-      none;
-
-    border:
-      1px
-      solid
-      #dddddd;
-
-    background:
-      #ffffff;
-  }
 }

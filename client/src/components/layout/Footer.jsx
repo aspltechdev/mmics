@@ -48,22 +48,21 @@ const Footer = () => {
 
         <div className="footer-col footer-contact">
           <h4>Contact</h4>
-          <p>#211, Sri Ganapathi Nagar Colony,<br />
+          <p><strong>Address:</strong><br />#211, Sri Ganapathi Nagar Colony,<br />
             Salarapattinam, Maramalai Nagar, Chengapattu,<br />
             Tamil Nadu - 603 209, India.</p>
-          <p>Phone: +91 98402 77476<br />
-            +91 94435 54370<br />
-            +91 88706 66471</p>
-          <p>Email: mmmicslimited@gmail.com</p>
+          <p><strong>Phone:</strong><br />+91 94435 54370</p>
+          <p><strong>Email:</strong><br />mmmicslimited@gmail.com</p>
         </div>
       </div>
 
       <div className="footer-bottom">
         <div>© 2026 MMMICS Limited. All Rights Reserved.</div>
+        <div>Designed and Developed by <strong>ASPL Tech Solutions Pvt Ltd</strong>, Bengaluru.</div>
         <div className="footer-bottom-links">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms & Conditions</a>
-        </div>
+        </div> 
       </div>
     </footer>
   );

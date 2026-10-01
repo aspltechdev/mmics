@@ -39,15 +39,15 @@ const AboutSection = () => {
         </h2>
 
         <p className="about-desc">
-          MMMICS Limited is a manufacturing and industrial cooperative providing practical
-          packaging and industrial solutions for businesses across diverse sectors. We focus on
-          quality, reliability and shared growth, helping businesses meet their packaging, storage
-          and material-handling needs.
+          MMMICS Limited is a manufacturing and industrial cooperative providing practical packaging and 
+          industrial solutions for various departments across diverse sectors. Built on the principles of 
+          cooperation, shared responsibility and collective growth, we focus on quality, reliability and 
+          sustainable development while helping different departments meet their packaging, storage and material-handling needs.
         </p>
 
         <p className="about-desc">
-          Our solutions span packaging products, eco-friendly alternatives and material-handling
-          solutions, supporting businesses with practical products designed for everyday requirements.
+          Our cooperative solutions span packaging products, eco-friendly alternatives and material-handling solutions, 
+          supporting various departments with practical, reliable and sustainable products designed to meet their everyday operational requirements.
         </p>
 
         <div className="about-features">

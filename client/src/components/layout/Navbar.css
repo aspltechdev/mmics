@@ -1,13 +1,18 @@
 /* ============================================================
-   NAVBAR
+   NAVBAR WRAPPER
+   FIXED / ALWAYS VISIBLE
 ============================================================ */
 
 .navbar-wrapper {
-  position: relative;
+  position: fixed !important;
 
-  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
 
   width: 100%;
+
+  z-index: 999999;
 
   background: #ffffff;
 
@@ -16,6 +21,15 @@
     Arial,
     Helvetica,
     sans-serif;
+
+  box-shadow:
+    0 3px 14px
+    rgba(
+      15,
+      23,
+      42,
+      0.08
+    );
 }
 
 
@@ -27,10 +41,27 @@
 
 
 /* ============================================================
+   NAVBAR SPACER
+============================================================ */
+
+.navbar-spacer {
+  width: 100%;
+
+  flex-shrink: 0;
+
+  pointer-events: none;
+
+  visibility: hidden;
+}
+
+
+/* ============================================================
    TOP BAR
 ============================================================ */
 
 .top-bar {
+  position: relative;
+
   width: 100%;
 
   min-height: 40px;
@@ -46,9 +77,11 @@
 
   gap: 20px;
 
-  background: #0857A1;
+  background: #3454a4;
 
   color: #ffffff;
+
+  z-index: 2;
 }
 
 
@@ -67,7 +100,7 @@
 }
 
 
-.top-bar-left > span {
+.top-contact-link {
   display: inline-flex;
 
   align-items: center;
@@ -76,15 +109,29 @@
 
   color: #ffffff;
 
+  text-decoration: none;
+
   font-size: 13px;
 
   line-height: 1;
 
   white-space: nowrap;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 
-.top-bar-left svg {
+.top-contact-link:hover {
+  opacity: 0.85;
+
+  transform:
+    translateY(-1px);
+}
+
+
+.top-contact-link svg {
   width: 15px;
 
   height: 15px;
@@ -135,7 +182,10 @@
 
 .top-bar-right a:hover {
   opacity: 0.8;
-
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: #3454a4;
+  padding: 5px;
   transform:
     translateY(-1px);
 }
@@ -163,16 +213,27 @@
 
   gap: 28px;
 
-  background: #f1f5f9;
+  background: #f7f2e9;
+
+  border-bottom:
+    1px solid
+    rgba(
+      15,
+      23,
+      42,
+      0.06
+    );
 
   box-shadow:
-    0 2px 4px
+    0 2px 5px
     rgba(
-      0,
-      0,
-      0,
-      0.05
+      15,
+      23,
+      42,
+      0.04
     );
+
+  z-index: 2;
 }
 
 
@@ -303,7 +364,7 @@
 
   border-radius: 6px;
 
-  background: #1e3a8a;
+  background: #2f228e;
 
   color: #ffffff;
 
@@ -326,7 +387,7 @@
 
 .nav-cta:hover,
 .nav-cta.active {
-  background: #152c6b;
+  background: #20166f;
 }
 
 
@@ -337,17 +398,16 @@
   box-shadow:
     0 6px 15px
     rgba(
-      30,
-      58,
-      138,
-      0.18
+      47,
+      34,
+      142,
+      0.2
     );
 }
 
 
 /* ============================================================
    HAMBURGER
-   HIDDEN BY DEFAULT
 ============================================================ */
 
 .mobile-menu-toggle {
@@ -373,9 +433,14 @@
 
   background: #ffffff;
 
-  color: #1e3a8a;
+  color: #2f228e;
 
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 
@@ -387,9 +452,9 @@
 
 
 .mobile-menu-toggle.open {
-  background: #1e3a8a;
+  background: #2f228e;
 
-  border-color: #1e3a8a;
+  border-color: #2f228e;
 
   color: #ffffff;
 }
@@ -397,7 +462,6 @@
 
 /* ============================================================
    MOBILE NAV
-   COMPLETELY HIDDEN ON DESKTOP + TABLET
 ============================================================ */
 
 .mobile-nav {
@@ -446,7 +510,6 @@
 
 /* ============================================================
    SMALL LAPTOP / LARGE TABLET
-   STILL NORMAL NAVBAR
 ============================================================ */
 
 @media (max-width: 1024px) {
@@ -493,7 +556,7 @@
   }
 
 
-  .top-bar-left > span {
+  .top-contact-link {
     font-size: 12px;
   }
 
@@ -507,7 +570,6 @@
 
 /* ============================================================
    TABLET
-   STILL NO HAMBURGER
 ============================================================ */
 
 @media (max-width: 850px) {
@@ -562,12 +624,12 @@
   }
 
 
-  .top-bar-left > span {
+  .top-contact-link {
     font-size: 11px;
   }
 
 
-  .top-bar-left svg {
+  .top-contact-link svg {
     width: 13px;
 
     height: 13px;
@@ -587,8 +649,7 @@
 
 
 /* ============================================================
-   768px TABLET
-   KEEP DESKTOP STYLE
+   641px - 768px TABLET
 ============================================================ */
 
 @media (
@@ -641,7 +702,7 @@
   }
 
 
-  .top-bar-left > span {
+  .top-contact-link {
     font-size: 10px;
   }
 
@@ -660,7 +721,6 @@
 
 /* ============================================================
    MOBILE ONLY
-   HAMBURGER STARTS HERE
 ============================================================ */
 
 @media (max-width: 640px) {
@@ -695,7 +755,7 @@
   }
 
 
-  .top-bar-left > span {
+  .top-contact-link {
     font-size: 12px;
   }
 
@@ -737,7 +797,7 @@
   }
 
 
-  /* hide desktop/tablet navigation */
+  /* HIDE DESKTOP NAV */
 
   .nav-links {
     display: none;
@@ -749,7 +809,7 @@
   }
 
 
-  /* show hamburger only mobile */
+  /* SHOW HAMBURGER */
 
   .mobile-menu-toggle {
     display: inline-flex;
@@ -761,6 +821,11 @@
   ========================================================== */
 
   .mobile-nav {
+    position: absolute;
+
+    top: 100%;
+    left: 0;
+
     width: 100%;
 
     max-height: 0;
@@ -780,12 +845,12 @@
     background: #ffffff;
 
     box-shadow:
-      0 8px 20px
+      0 10px 30px
       rgba(
         15,
         23,
         42,
-        0.08
+        0.15
       );
 
     transition:
@@ -797,13 +862,17 @@
 
 
   .mobile-nav.mobile-nav-open {
-    max-height: 500px;
+    max-height:
+      calc(100vh - 120px);
+
+    overflow-y: auto;
 
     visibility: visible;
 
     opacity: 1;
 
-    border-top-color: #e7ebf0;
+    border-top-color:
+      #e7ebf0;
   }
 
 
@@ -933,7 +1002,7 @@
 
     border-radius: 6px;
 
-    background: #1e3a8a;
+    background: #2f228e;
 
     color: #ffffff;
 
@@ -942,11 +1011,15 @@
     font-size: 14px;
 
     font-weight: 600;
+
+    transition:
+      background 0.2s ease;
   }
 
 
-  .mobile-nav-contact:hover {
-    background: #152c6b;
+  .mobile-nav-contact:hover,
+  .mobile-nav-contact.active {
+    background: #20166f;
   }
 
 }
@@ -971,7 +1044,7 @@
   }
 
 
-  .top-bar-left > span {
+  .top-contact-link {
     justify-content: center;
 
     font-size: 11px;
@@ -1026,7 +1099,7 @@
   }
 
 
-  .top-bar-left > span {
+  .top-contact-link {
     font-size: 10.5px;
   }
 

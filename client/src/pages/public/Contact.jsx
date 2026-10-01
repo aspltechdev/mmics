@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   MapPin,
   Phone,
@@ -11,11 +12,128 @@ import {
 } from "lucide-react";
 
 import api from "../../services/api";
+
 import "./Contact.css";
 
-import contectHero from "../../assets/contactus.png";
+/* ============================================================
+   IMAGES
+============================================================ */
+
+import contactUsImage from "../../assets/map.png";
+import indiaMap from "../../assets/india_outline.svg";
+import companyLogo from "../../assets/logo.png";
+
+/* ============================================================
+   NETWORK LOCATIONS
+============================================================ */
+
+const networkLocations = [
+  {
+    id: "delhi",
+    name: "Delhi",
+    x: 40.0,
+    y: 31.5,
+  },
+  {
+    id: "ahmedabad",
+    name: "Ahmedabad",
+    x: 31.2,
+    y: 49.5,
+  },
+  {
+    id: "mumbai",
+    name: "Mumbai",
+    x: 31.8,
+    y: 62.2,
+  },
+  {
+    id: "pune",
+    name: "Pune",
+    x: 33.6,
+    y: 64.0,
+  },
+  {
+    id: "hyderabad",
+    name: "Hyderabad",
+    x: 42.5,
+    y: 67.7,
+  },
+  {
+    id: "bengaluru",
+    name: "Bengaluru",
+    x: 40.7,
+    y: 81.8,
+  },
+  {
+    id: "coimbatore",
+    name: "Coimbatore",
+    x: 40.4,
+    y: 88.2,
+  },
+  {
+    id: "kochi",
+    name: "Kochi",
+    x: 39.1,
+    y: 90.8,
+  },
+  {
+    id: "chennai",
+    name: "Chennai",
+    x: 44.8,
+    y: 81.5,
+  },
+  {
+    id: "puducherry",
+    name: "Puducherry",
+    x: 44.8,
+    y: 85.3,
+  },
+  {
+    id: "kolkata",
+    name: "Kolkata",
+    x: 60.8,
+    y: 50.8,
+  },
+];
+
+/* ============================================================
+   NETWORK ROUTES
+============================================================ */
+
+const networkRoutes = [
+  ["delhi", "ahmedabad"],
+  ["delhi", "kolkata"],
+
+  ["ahmedabad", "mumbai"],
+
+  ["mumbai", "pune"],
+
+  ["pune", "hyderabad"],
+
+  ["hyderabad", "kolkata"],
+  ["hyderabad", "bengaluru"],
+  ["hyderabad", "chennai"],
+
+  ["bengaluru", "chennai"],
+  ["bengaluru", "coimbatore"],
+
+  ["coimbatore", "kochi"],
+
+  ["chennai", "puducherry"],
+];
+
+const networkLocationMap = Object.fromEntries(
+  networkLocations.map((location) => [
+    location.id,
+    location,
+  ])
+);
 
 const Contact = () => {
+  /* ==========================================================
+     FORM STATE
+  ========================================================== */
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -31,9 +149,9 @@ const Contact = () => {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
 
-  // ============================================================
-  // HANDLE CHANGE
-  // ============================================================
+  /* ==========================================================
+     HANDLE CHANGE
+  ========================================================== */
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,9 +172,9 @@ const Contact = () => {
     setError("");
   };
 
-  // ============================================================
-  // VALIDATE
-  // ============================================================
+  /* ==========================================================
+     VALIDATE FORM
+  ========================================================== */
 
   const validateForm = () => {
     const errors = {};
@@ -82,13 +200,8 @@ const Contact = () => {
         formData.phone
       )
     ) {
-      errors.phone =
-        "Enter a valid phone number";
+      errors.phone = "Enter a valid phone number";
     }
-
-    // ============================================================
-    // ENQUIRY TYPE VALIDATION
-    // ============================================================
 
     if (!formData.type) {
       errors.type =
@@ -112,14 +225,12 @@ const Contact = () => {
 
     setFieldErrors(errors);
 
-    return (
-      Object.keys(errors).length === 0
-    );
+    return Object.keys(errors).length === 0;
   };
 
-  // ============================================================
-  // HANDLE SUBMIT
-  // ============================================================
+  /* ==========================================================
+     HANDLE SUBMIT
+  ========================================================== */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -137,22 +248,14 @@ const Contact = () => {
       const response = await api.post(
         "/enquiries",
         {
-          name:
-            formData.name.trim(),
-
-          email:
-            formData.email.trim(),
-
-          phone:
-            formData.phone.trim(),
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
 
           company:
-            formData.company.trim() ||
-            null,
+            formData.company.trim() || null,
 
-          // Product or Membership
-          type:
-            formData.type,
+          type: formData.type,
 
           subject:
             formData.subject.trim(),
@@ -170,10 +273,6 @@ const Contact = () => {
       setSuccess(
         "Thank you! Your enquiry has been sent successfully. Our team will contact you shortly."
       );
-
-      // ============================================================
-      // RESET FORM
-      // ============================================================
 
       setFormData({
         name: "",
@@ -204,9 +303,7 @@ const Contact = () => {
 
       setError(serverMessage);
 
-      if (
-        err?.response?.data?.errors
-      ) {
+      if (err?.response?.data?.errors) {
         setFieldErrors(
           err.response.data.errors
         );
@@ -216,10 +313,6 @@ const Contact = () => {
     }
   };
 
-  // ============================================================
-  // RENDER
-  // ============================================================
-
   return (
     <main className="mmics-contact-page">
 
@@ -228,11 +321,12 @@ const Contact = () => {
       ===================================================== */}
 
       <section className="mmics-contact-hero">
+
         <div className="mmics-contact-hero-image">
 
           <img
-            src={contectHero}
-            alt="MMICS industrial facility"
+            src={contactUsImage}
+            alt="MMMICS industrial facility"
           />
 
           <div className="mmics-contact-hero-overlay" />
@@ -248,9 +342,9 @@ const Contact = () => {
             </h1>
 
             <p>
-              Have a question or a project in
-              mind? Our team is here to help
-              you find the right solution.
+              Have a question or a project in mind?
+              Our team is here to help you find the
+              right solution.
             </p>
 
             <a
@@ -258,102 +352,299 @@ const Contact = () => {
               className="mmics-contact-gallery-btn"
             >
               Explore Gallery
-
-              <ArrowRight size={13} />
+              <ArrowRight size={14} />
             </a>
 
           </div>
 
         </div>
+
       </section>
 
-
       {/* =====================================================
-          CONTACT CARDS
+          NETWORK
       ===================================================== */}
 
-      <section className="mmics-contact-info">
+      <section className="mmics-network-section">
 
-        <div className="mmics-contact-info-grid">
+        <div className="mmics-network-container">
 
-          {/* VISIT */}
+          {/* HEADING */}
 
-          <div className="mmics-contact-info-card">
+          <div className="mmics-network-heading">
 
-            <div className="mmics-contact-icon">
-              <MapPin />
-            </div>
+            <span>
+              OUR NETWORK
+            </span>
 
-            <h3>
-              Visit Us
-            </h3>
+            <h2>
+              Connecting Businesses{" "}
+              <strong>
+                Across India
+              </strong>
+            </h2>
 
             <p>
-              Manar Manufacturing
-              <br />
-              Industrial Cooperative
+              Connecting manufacturers,
+              businesses and cooperative
+              opportunities across key
+              industrial regions.
             </p>
 
           </div>
 
+          {/* MAP + CONTACT */}
 
-          {/* PHONE */}
+          <div className="mmics-network-layout">
 
-          <div className="mmics-contact-info-card">
+            {/* =================================================
+                MAP
+            ================================================= */}
 
-            <div className="mmics-contact-icon">
-              <Phone />
+            <div className="mmics-network-map">
+
+              {/* BACKGROUND IMAGE */}
+
+              <img
+                src={contactUsImage}
+                alt=""
+                aria-hidden="true"
+                className="mmics-network-background-image"
+              />
+
+              {/* OVERLAY */}
+
+              <div className="mmics-network-background-overlay" />
+
+              {/* =================================================
+                  COMPANY LOGO — TOP LEFT
+              ================================================= */}
+
+              <div className="mmics-network-brand-logo">
+
+                <img
+                  src={companyLogo}
+                  alt="MMMICS Logo"
+                />
+
+              </div>
+
+              {/* =================================================
+                  DESCRIPTION — BOTTOM RIGHT
+              ================================================= */}
+
+              <div className="mmics-network-map-description">
+
+                <span>
+                  CONNECT WITH MMMICS
+                </span>
+
+                <h3>
+                  Building Stronger Connections
+                </h3>
+
+                <p>
+                  Connect with our team for product,
+                  membership and business enquiries
+                  across our growing industrial network.
+                </p>
+
+              </div>
+
+              {/* =================================================
+                  INDIA MAP
+              ================================================= */}
+
+              <div className="mmics-network-map-canvas">
+
+                <img
+                  src={indiaMap}
+                  alt="MMMICS India business network"
+                  className="mmics-india-map"
+                />
+
+                {/* ROUTES */}
+
+                <svg
+                  className="mmics-network-routes"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+
+                  {networkRoutes.map(
+                    ([fromId, toId], index) => {
+                      const from =
+                        networkLocationMap[fromId];
+
+                      const to =
+                        networkLocationMap[toId];
+
+                      if (!from || !to) {
+                        return null;
+                      }
+
+                      return (
+                        <line
+                          key={`${fromId}-${toId}-${index}`}
+                          x1={from.x}
+                          y1={from.y}
+                          x2={to.x}
+                          y2={to.y}
+                        />
+                      );
+                    }
+                  )}
+
+                </svg>
+
+                {/* MARKERS */}
+
+                {networkLocations.map(
+                  (location) => (
+
+                    <div
+                      key={location.id}
+                      className={`
+                        mmics-network-marker
+                        mmics-network-marker--${location.id}
+                      `}
+                      style={{
+                        left: `${location.x}%`,
+                        top: `${location.y}%`,
+                      }}
+                    >
+
+                      <span className="mmics-network-marker-dot" />
+
+                      <span className="mmics-network-marker-label">
+                        {location.name}
+                      </span>
+
+                    </div>
+
+                  )
+                )}
+
+              </div>
+
             </div>
 
-            <h3>
-              Contact
-            </h3>
+            {/* =================================================
+                RIGHT CONTACT PANEL
+            ================================================= */}
 
-            <p>
-              +91 96402 77746
-              <br />
-              +91 95425 45709
-            </p>
+            <div className="mmics-network-contact-panel">
 
-          </div>
+              <div className="mmics-network-contact-heading">
 
+                <span>
+                  CONNECT WITH MMMICS
+                </span>
 
-          {/* EMAIL */}
+                <h3>
+                  We're Here To Help
+                </h3>
 
-          <div className="mmics-contact-info-card">
+                <p>
+                  Reach our team for product,
+                  membership and business enquiries.
+                </p>
 
-            <div className="mmics-contact-icon">
-              <Mail />
+              </div>
+
+              {/* VISIT */}
+
+              <div className="mmics-network-contact-card">
+
+                <div className="mmics-network-contact-icon">
+                  <MapPin />
+                </div>
+
+                <div className="mmics-network-contact-content">
+
+                  <h4>
+                    Visit Us
+                  </h4>
+
+                  <p>
+                    Manar Manufacturing
+                    <br />
+                    Industrial Cooperative
+                  </p>
+
+                </div>
+
+              </div>
+
+              {/* CONTACT */}
+
+              <div className="mmics-network-contact-card">
+
+                <div className="mmics-network-contact-icon">
+                  <Phone />
+                </div>
+
+                <div className="mmics-network-contact-content">
+
+                  <h4>
+                    Contact
+                  </h4>
+
+                  <p>
+                    +91 94435 54370
+                  </p>
+
+                </div>
+
+              </div>
+
+              {/* EMAIL */}
+
+              <div className="mmics-network-contact-card">
+
+                <div className="mmics-network-contact-icon">
+                  <Mail />
+                </div>
+
+                <div className="mmics-network-contact-content">
+
+                  <h4>
+                    Email
+                  </h4>
+
+                  <p>
+                    mmicslimited@gmail.com
+                  </p>
+
+                </div>
+
+              </div>
+
+              {/* ENQUIRIES */}
+
+              <div className="mmics-network-contact-card">
+
+                <div className="mmics-network-contact-icon">
+                  <MessageSquare />
+                </div>
+
+                <div className="mmics-network-contact-content">
+
+                  <h4>
+                    Enquiries
+                  </h4>
+
+                  <p>
+                    For product enquiries and
+                    membership requirements.
+                  </p>
+
+                </div>
+
+              </div>
+
             </div>
-
-            <h3>
-              Email
-            </h3>
-
-            <p>
-              mmicslimited@gmail.com
-            </p>
-
-          </div>
-
-
-          {/* ENQUIRIES */}
-
-          <div className="mmics-contact-info-card">
-
-            <div className="mmics-contact-icon">
-              <MessageSquare />
-            </div>
-
-            <h3>
-              Enquiries
-            </h3>
-
-            <p>
-              For product enquiries
-              <br />
-              and membership requirements.
-            </p>
 
           </div>
 
@@ -361,25 +652,22 @@ const Contact = () => {
 
       </section>
 
-
       {/* =====================================================
-          MESSAGE + MAP
+          CONTACT FORM
       ===================================================== */}
 
       <section className="mmics-contact-form-section">
 
         <div className="mmics-contact-form-container">
 
-          {/* ==================================================
-              LEFT — FORM
-          ================================================== */}
+          {/* FORM */}
 
           <div className="mmics-contact-form-wrapper">
 
             <div className="mmics-contact-form-heading">
 
               <span>
-                CONTACT MMICS
+                CONTACT MMMICS
               </span>
 
               <h2>
@@ -394,12 +682,10 @@ const Contact = () => {
 
             </div>
 
-
-            {/* ==================================================
-                SUCCESS
-            ================================================== */}
+            {/* SUCCESS */}
 
             {success && (
+
               <div className="mmics-contact-alert mmics-contact-success">
 
                 <CheckCircle2 />
@@ -409,14 +695,13 @@ const Contact = () => {
                 </span>
 
               </div>
+
             )}
 
-
-            {/* ==================================================
-                ERROR
-            ================================================== */}
+            {/* ERROR */}
 
             {error && (
+
               <div className="mmics-contact-alert mmics-contact-error">
 
                 <AlertCircle />
@@ -426,8 +711,8 @@ const Contact = () => {
                 </span>
 
               </div>
-            )}
 
+            )}
 
             <form
               className="mmics-contact-form"
@@ -435,13 +720,9 @@ const Contact = () => {
               noValidate
             >
 
-              {/* ==================================================
-                  ROW 1 — NAME + EMAIL
-              ================================================== */}
+              {/* NAME + EMAIL */}
 
               <div className="mmics-contact-form-row">
-
-                {/* NAME */}
 
                 <div className="mmics-contact-field">
 
@@ -466,15 +747,14 @@ const Contact = () => {
                   />
 
                   {fieldErrors.name && (
+
                     <small className="mmics-contact-field-error">
                       {fieldErrors.name}
                     </small>
+
                   )}
 
                 </div>
-
-
-                {/* EMAIL */}
 
                 <div className="mmics-contact-field">
 
@@ -499,23 +779,20 @@ const Contact = () => {
                   />
 
                   {fieldErrors.email && (
+
                     <small className="mmics-contact-field-error">
                       {fieldErrors.email}
                     </small>
+
                   )}
 
                 </div>
 
               </div>
 
-
-              {/* ==================================================
-                  ROW 2 — PHONE + COMPANY
-              ================================================== */}
+              {/* PHONE + COMPANY */}
 
               <div className="mmics-contact-form-row">
-
-                {/* PHONE */}
 
                 <div className="mmics-contact-field">
 
@@ -540,15 +817,14 @@ const Contact = () => {
                   />
 
                   {fieldErrors.phone && (
+
                     <small className="mmics-contact-field-error">
                       {fieldErrors.phone}
                     </small>
+
                   )}
 
                 </div>
-
-
-                {/* COMPANY */}
 
                 <div className="mmics-contact-field">
 
@@ -571,10 +847,7 @@ const Contact = () => {
 
               </div>
 
-
-              {/* ==================================================
-                  ENQUIRY TYPE
-              ================================================== */}
+              {/* ENQUIRY TYPE */}
 
               <div className="mmics-contact-field">
 
@@ -617,17 +890,16 @@ const Contact = () => {
                 </div>
 
                 {fieldErrors.type && (
+
                   <small className="mmics-contact-field-error">
                     {fieldErrors.type}
                   </small>
+
                 )}
 
               </div>
 
-
-              {/* ==================================================
-                  SUBJECT
-              ================================================== */}
+              {/* SUBJECT */}
 
               <div className="mmics-contact-field">
 
@@ -651,17 +923,16 @@ const Contact = () => {
                 />
 
                 {fieldErrors.subject && (
+
                   <small className="mmics-contact-field-error">
                     {fieldErrors.subject}
                   </small>
+
                 )}
 
               </div>
 
-
-              {/* ==================================================
-                  MESSAGE
-              ================================================== */}
+              {/* MESSAGE */}
 
               <div className="mmics-contact-field">
 
@@ -685,17 +956,16 @@ const Contact = () => {
                 />
 
                 {fieldErrors.message && (
+
                   <small className="mmics-contact-field-error">
                     {fieldErrors.message}
                   </small>
+
                 )}
 
               </div>
 
-
-              {/* ==================================================
-                  SUBMIT
-              ================================================== */}
+              {/* SUBMIT */}
 
               <button
                 type="submit"
@@ -727,15 +997,14 @@ const Contact = () => {
 
           </div>
 
-
           {/* ==================================================
-              RIGHT — MAP
+              GOOGLE MAP
           ================================================== */}
 
           <div className="mmics-contact-map-wrapper">
 
             <iframe
-              title="MMICS Location"
+              title="MMMICS Location"
               src="https://www.google.com/maps?q=Manarang+Manufacturing+Multistate+Industrial+Cooperative+Society+Limited,+No.211,+Ganapathi+Nagar+Colony,+Sattamangalam+Padappai+Rd,+Maraimalai+Nagar,+Siruvanjur,+Tamil+Nadu+603203&output=embed"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

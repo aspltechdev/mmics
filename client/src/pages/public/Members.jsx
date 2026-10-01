@@ -22,7 +22,7 @@ import "./Members.css";
 
 import memberHero from "../../assets/memberhero.png";
 import memberCta from "../../assets/membercta.png";
-
+import memberBenefits from "../../assets/member.png";
 
 
 // ============================================================
@@ -45,7 +45,6 @@ const SERVER_URL =
 // ============================================================
 
 const getImageUrl = (imageUrl) => {
-
   if (!imageUrl) {
     return "";
   }
@@ -71,7 +70,6 @@ const getImageUrl = (imageUrl) => {
 const normalizeMembers = (
   response
 ) => {
-
   if (Array.isArray(response)) {
     return response;
   }
@@ -109,7 +107,6 @@ const normalizeMembers = (
 // ============================================================
 
 const Members = () => {
-
   const [members, setMembers] =
     useState([]);
 
@@ -122,14 +119,20 @@ const Members = () => {
   const [search, setSearch] =
     useState("");
 
-  const [designation, setDesignation] =
-    useState("all");
+  const [
+    designation,
+    setDesignation,
+  ] = useState("all");
 
-  const [imageErrors, setImageErrors] =
-    useState({});
+  const [
+    imageErrors,
+    setImageErrors,
+  ] = useState({});
 
-  const [selectedMember, setSelectedMember] =
-    useState(null);
+  const [
+    selectedMember,
+    setSelectedMember,
+  ] = useState(null);
 
 
   // ==========================================================
@@ -137,9 +140,7 @@ const Members = () => {
   // ==========================================================
 
   const fetchMembers = async () => {
-
     try {
-
       setLoading(true);
       setError("");
 
@@ -151,14 +152,13 @@ const Members = () => {
           response
         );
 
-      // Only active members
       const activeMembers =
         data.filter(
           (member) =>
             member.status ===
-            undefined ||
+              undefined ||
             member.status ===
-            "ACTIVE"
+              "ACTIVE"
         );
 
       setMembers(
@@ -177,11 +177,8 @@ const Members = () => {
       );
 
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
 
@@ -190,9 +187,7 @@ const Members = () => {
   // ==========================================================
 
   useEffect(() => {
-
     fetchMembers();
-
   }, []);
 
 
@@ -202,7 +197,6 @@ const Members = () => {
 
   const designations =
     useMemo(() => {
-
       const values =
         members
           .map(
@@ -214,7 +208,6 @@ const Members = () => {
       return [
         ...new Set(values),
       ];
-
     }, [members]);
 
 
@@ -224,7 +217,6 @@ const Members = () => {
 
   const filteredMembers =
     useMemo(() => {
-
       const query =
         search
           .trim()
@@ -232,7 +224,6 @@ const Members = () => {
 
       return members.filter(
         (member) => {
-
           const matchesSearch =
             !query ||
             member.name
@@ -254,16 +245,14 @@ const Members = () => {
           const matchesDesignation =
             designation === "all" ||
             member.designation ===
-            designation;
+              designation;
 
           return (
             matchesSearch &&
             matchesDesignation
           );
-
         }
       );
-
     }, [
       members,
       search,
@@ -278,14 +267,12 @@ const Members = () => {
   const handleImageError = (
     memberId
   ) => {
-
     setImageErrors(
       (previous) => ({
         ...previous,
         [memberId]: true,
       })
     );
-
   };
 
 
@@ -294,13 +281,11 @@ const Members = () => {
   // ==========================================================
 
   const clearSearch = () => {
-
     setSearch("");
 
     setDesignation(
       "all"
     );
-
   };
 
 
@@ -310,7 +295,6 @@ const Members = () => {
 
   return (
     <main className="mmics-members-page">
-
 
       {/* ====================================================
           HERO
@@ -329,7 +313,7 @@ const Members = () => {
         <div className="mmics-members-hero-content">
 
           <span className="mmics-members-hero-kicker">
-            MMICS COMMUNITY
+            MMMICS COMMUNITY
           </span>
 
           <h1>
@@ -342,10 +326,356 @@ const Members = () => {
           <p>
             Meet the businesses and
             professionals who are part of
-            the MMICS community, building
+            the MMMICS community, building
             stronger connections and
             opportunities together.
           </p>
+
+        </div>
+
+      </section>
+
+
+      {/* ====================================================
+          MEMBER BENEFITS
+      ==================================================== */}
+
+      <section className="mmics-member-benefits">
+
+        <div className="mmics-member-benefits-container">
+
+          {/* ==================================================
+              HEADING
+          ================================================== */}
+
+          <div className="mmics-member-benefits-heading">
+
+            <span>
+              WHY MANARANG
+            </span>
+
+            <h2>
+              Benefits of Becoming a{" "}
+              <strong>
+                Member of Manarang
+              </strong>
+            </h2>
+
+            <p>
+              A cooperative platform connecting
+              manufacturers, MSMEs and entrepreneurs
+              for stronger business opportunities
+              and shared growth.
+            </p>
+
+          </div>
+
+
+          {/* ==================================================
+              CONTENT + IMAGE
+          ================================================== */}
+
+          <div className="mmics-member-benefits-grid">
+
+            {/* =================================================
+                LEFT CONTENT
+            ================================================= */}
+
+            <div className="mmics-member-benefits-content">
+
+              <span className="mmics-member-benefits-label">
+                MEMBERSHIP BENEFITS
+              </span>
+
+              <h3>
+                Grow Together Through{" "}
+                <strong>
+                  Cooperation and Opportunity
+                </strong>
+              </h3>
+
+              <p>
+                MANARANG connects manufacturers,
+                MSMEs and entrepreneurs through
+                a strong cooperative network.
+                Members can explore collective
+                procurement, business networking,
+                market access and institutional
+                supply opportunities.
+                The network supports collaboration,
+                industrial development and
+                long-term mutual growth.
+              </p>
+
+
+              {/* =================================================
+                  BENEFITS LIST
+              ================================================= */}
+
+              <div className="mmics-member-benefit-list">
+
+                {/* COLLECTIVE BUSINESS */}
+
+                <div className="mmics-member-benefit-item">
+
+                  <span>
+                    ✓
+                  </span>
+
+                  <div>
+
+                    <h4>
+                      Collective Business Opportunities
+                    </h4>
+
+                    <p>
+                      Create new opportunities
+                      through cooperative participation.
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                {/* RAW MATERIAL */}
+
+                <div className="mmics-member-benefit-item">
+
+                  <span>
+                    ✓
+                  </span>
+
+                  <div>
+
+                    <h4>
+                      Raw Material Support
+                    </h4>
+
+                    <p>
+                      Explore better sourcing
+                      through collective procurement.
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                {/* MARKETING */}
+
+                <div className="mmics-member-benefit-item">
+
+                  <span>
+                    ✓
+                  </span>
+
+                  <div>
+
+                    <h4>
+                      Marketing Support
+                    </h4>
+
+                    <p>
+                      Improve market reach
+                      and product visibility.
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                {/* INSTITUTIONAL SUPPLY */}
+
+                <div className="mmics-member-benefit-item">
+
+                  <span>
+                    ✓
+                  </span>
+
+                  <div>
+
+                    <h4>
+                      Institutional Supply
+                    </h4>
+
+                    <p>
+                      Connect with larger companies
+                      and institutional buyers.
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                {/* BUSINESS NETWORKING */}
+
+                <div className="mmics-member-benefit-item">
+
+                  <span>
+                    ✓
+                  </span>
+
+                  <div>
+
+                    <h4>
+                      Business Networking
+                    </h4>
+
+                    <p>
+                      Build stronger industry
+                      relationships and partnerships.
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                {/* GROWTH */}
+
+                <div className="mmics-member-benefit-item">
+
+                  <span>
+                    ✓
+                  </span>
+
+                  <div>
+
+                    <h4>
+                      Growth Opportunities
+                    </h4>
+
+                    <p>
+                      Support mutual growth
+                      and industrial development.
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            {/* =================================================
+                RIGHT IMAGE
+            ================================================= */}
+
+            <div className="mmics-member-benefits-image">
+
+              <img
+                src={memberBenefits}
+                alt="MANARANG cooperative manufacturing network"
+              />
+
+              <div className="mmics-member-benefits-image-overlay" />
+
+              <div className="mmics-member-benefits-image-text">
+
+                <span>
+                  MANARANG
+                </span>
+
+                <h3>
+                  Together We Manufacture.
+                  Together We Grow.
+                </h3>
+
+                <p>
+                  Building stronger opportunities
+                  through cooperation.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          {/* ==================================================
+              VIDEO HEADING
+          ================================================== */}
+
+          <div className="mmics-member-video-heading">
+
+            <span>
+              WATCH & DISCOVER
+            </span>
+
+            <h3>
+              Discover the MANARANG Network
+            </h3>
+
+            <p>
+              Learn how MANARANG supports
+              manufacturers through cooperation,
+              networking and business opportunities.
+            </p>
+
+          </div>
+
+
+          {/* ==================================================
+              VIDEOS
+          ================================================== */}
+
+          <div className="mmics-member-video-grid">
+
+            {/* =================================================
+                YOUTUBE VIDEO
+            ================================================= */}
+
+            <div className="mmics-member-video-card">
+
+              <div className="mmics-member-video-wrapper">
+
+                <iframe
+                  src="https://www.youtube.com/embed/4JMj46GyKPU"
+                  title="MANARANG Cooperative Network"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+
+              </div>
+
+            </div>
+
+
+            {/* =================================================
+                LOCAL VIDEO
+            ================================================= */}
+
+            <div className="mmics-member-video-card">
+
+              <div className="mmics-member-video-wrapper">
+
+                <video
+                  controls
+                  playsInline
+                  preload="metadata"
+                >
+
+                  <source
+                    src="/member-benefits.mp4"
+                    type="video/mp4"
+                  />
+
+                  Your browser does not
+                  support the video tag.
+
+                </video>
+
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
@@ -360,7 +690,6 @@ const Members = () => {
 
         <div className="mmics-members-container">
 
-
           {/* ==================================================
               HEADING
           ================================================== */}
@@ -374,7 +703,7 @@ const Members = () => {
             <h2>
               Connect with the{" "}
               <strong>
-                MMICS Community
+                MMMICS Community
               </strong>
             </h2>
 
@@ -382,7 +711,7 @@ const Members = () => {
               Explore our member network
               and discover businesses,
               professionals and organizations
-              connected through MMICS.
+              connected through MMMICS.
             </p>
 
           </div>
@@ -393,7 +722,6 @@ const Members = () => {
           ================================================== */}
 
           <div className="mmics-members-toolbar">
-
 
             {/* SEARCH */}
 
@@ -413,6 +741,7 @@ const Members = () => {
               />
 
               {search && (
+
                 <button
                   type="button"
                   onClick={() =>
@@ -422,6 +751,7 @@ const Members = () => {
                 >
                   <X />
                 </button>
+
               )}
 
             </div>
@@ -445,12 +775,14 @@ const Members = () => {
 
               {designations.map(
                 (item) => (
+
                   <option
                     key={item}
                     value={item}
                   >
                     {item}
                   </option>
+
                 )
               )}
 
@@ -465,19 +797,24 @@ const Members = () => {
 
           {!loading &&
             !error && (
+
               <div className="mmics-members-result-count">
 
                 Showing{" "}
+
                 <strong>
                   {filteredMembers.length}
                 </strong>{" "}
+
                 member
+
                 {filteredMembers.length !==
-                  1
+                1
                   ? "s"
                   : ""}
 
               </div>
+
             )}
 
 
@@ -486,6 +823,7 @@ const Members = () => {
           ================================================== */}
 
           {loading && (
+
             <div className="mmics-members-state">
 
               <Loader2 className="mmics-members-spinner" />
@@ -495,6 +833,7 @@ const Members = () => {
               </span>
 
             </div>
+
           )}
 
 
@@ -523,9 +862,11 @@ const Members = () => {
                     fetchMembers
                   }
                 >
+
                   <RefreshCw />
 
                   Retry
+
                 </button>
 
               </div>
@@ -540,7 +881,7 @@ const Members = () => {
           {!loading &&
             !error &&
             filteredMembers.length ===
-            0 && (
+              0 && (
 
               <div className="mmics-members-state">
 
@@ -557,18 +898,18 @@ const Members = () => {
 
                 {(search ||
                   designation !==
-                  "all") && (
+                    "all") && (
 
-                    <button
-                      type="button"
-                      onClick={
-                        clearSearch
-                      }
-                    >
-                      Clear Filters
-                    </button>
+                  <button
+                    type="button"
+                    onClick={
+                      clearSearch
+                    }
+                  >
+                    Clear Filters
+                  </button>
 
-                  )}
+                )}
 
               </div>
 
@@ -582,7 +923,7 @@ const Members = () => {
           {!loading &&
             !error &&
             filteredMembers.length >
-            0 && (
+              0 && (
 
               <div className="mmics-members-grid">
 
@@ -592,9 +933,12 @@ const Members = () => {
                     index
                   ) => {
 
-                    const image = member.profileImage
-                      ? getImageUrl(member.profileImage)
-                      : "/profile.jpg";
+                    const image =
+                      member.profileImage
+                        ? getImageUrl(
+                            member.profileImage
+                          )
+                        : "/profile.jpg";
 
                     return (
 
@@ -603,17 +947,21 @@ const Members = () => {
                         key={
                           member.id
                         }
+                        onClick={() =>
+                          setSelectedMember(
+                            member
+                          )
+                        }
                       >
-
 
                         {/* IMAGE */}
 
                         <div className="mmics-member-image">
 
                           {image &&
-                            !imageErrors[
+                          !imageErrors[
                             member.id
-                            ] ? (
+                          ] ? (
 
                             <img
                               src={image}
@@ -663,20 +1011,22 @@ const Members = () => {
 
 
                           {member.designation && (
+
                             <p className="mmics-member-designation">
-                              {member.designation}
+
+                              {
+                                member.designation
+                              }
+
                             </p>
+
                           )}
-
-
-                         
 
                         </div>
 
                       </article>
 
                     );
-
                   }
                 )}
 
@@ -712,14 +1062,14 @@ const Members = () => {
           <h2>
             Be Part of the{" "}
             <strong>
-              MMICS Network
+              MMMICS Network
             </strong>
           </h2>
 
           <p>
             Connect with businesses,
             discover opportunities and
-            grow together with the MMICS
+            grow together with the MMMICS
             community.
           </p>
 
@@ -730,7 +1080,6 @@ const Members = () => {
             Become a Member
 
             <ArrowRight />
-
           </Link>
 
         </div>
@@ -770,21 +1119,31 @@ const Members = () => {
             </button>
 
 
-           {/* MODAL IMAGE */}
-<div className="mmics-member-modal-image">
-  <img
-    src={
-      selectedMember.profileImage &&
-      !imageErrors[selectedMember.id]
-        ? getImageUrl(selectedMember.profileImage)
-        : "/profile.jpg"
-    }
-    alt={selectedMember.name}
-    onError={(event) => {
-      event.currentTarget.src = "/default-avatar.png";
-    }}
-  />
-</div>
+            {/* MODAL IMAGE */}
+
+            <div className="mmics-member-modal-image">
+
+              <img
+                src={
+                  selectedMember.profileImage &&
+                  !imageErrors[
+                    selectedMember.id
+                  ]
+                    ? getImageUrl(
+                        selectedMember.profileImage
+                      )
+                    : "/profile.jpg"
+                }
+                alt={
+                  selectedMember.name
+                }
+                onError={(event) => {
+                  event.currentTarget.src =
+                    "/default-avatar.png";
+                }}
+              />
+
+            </div>
 
 
             {/* MODAL CONTENT */}
@@ -792,57 +1151,85 @@ const Members = () => {
             <div className="mmics-member-modal-content">
 
               <span>
+
                 {selectedMember.membershipNumber ||
                   "MMICS MEMBER"}
+
               </span>
+
 
               <h2>
                 {selectedMember.name}
               </h2>
 
+
               {selectedMember.designation && (
+
                 <p className="mmics-member-modal-designation">
-                  {selectedMember.designation}
+
+                  {
+                    selectedMember.designation
+                  }
+
                 </p>
+
               )}
 
 
               {selectedMember.email && (
+
                 <div>
+
                   <small>
                     Email
                   </small>
 
                   <p>
-                    {selectedMember.email}
+                    {
+                      selectedMember.email
+                    }
                   </p>
+
                 </div>
+
               )}
 
 
               {selectedMember.phone && (
+
                 <div>
+
                   <small>
                     Phone
                   </small>
 
                   <p>
-                    {selectedMember.phone}
+                    {
+                      selectedMember.phone
+                    }
                   </p>
+
                 </div>
+
               )}
 
 
               {selectedMember.address && (
+
                 <div>
+
                   <small>
                     Address
                   </small>
 
                   <p>
-                    {selectedMember.address}
+                    {
+                      selectedMember.address
+                    }
                   </p>
+
                 </div>
+
               )}
 
             </div>
@@ -856,5 +1243,6 @@ const Members = () => {
     </main>
   );
 };
+
 
 export default Members;

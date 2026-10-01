@@ -37,11 +37,10 @@ const OurStorySection = () => {
         where our <span className="highlight">Journey</span> Began
       </h2>
       <p className="story-subtitle">
-        MMMICS Limited brings cooperation, practical solutions and business
-        opportunities together. We provide reliable packaging and
-        material-handling solutions while creating value for our members,
-        customers and communities. Our journey is driven by quality,
-        collaboration and responsible growth.
+        MMMICS Limited brings cooperation, practical solutions and growth opportunities together. 
+        We provide reliable packaging and material-handling solutions to support the operational needs 
+        of various departments and sectors, while creating long-term value for our cooperative members 
+        and communities. Our journey is driven by quality, collaboration, shared responsibility and sustainable growth.
       </p>
 
       <div className="story-grid">
