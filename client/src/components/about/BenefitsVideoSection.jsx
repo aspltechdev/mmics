@@ -1,5 +1,6 @@
 import React from "react";
 import "./BenefitsVideoSection.css";
+import video1 from "../../assets/mmmics.mp4";
 
 const BenefitsVideoSection = () => {
   return (
@@ -43,7 +44,7 @@ const BenefitsVideoSection = () => {
                 preload="metadata"
               >
                 <source
-                  src="/your-video.mp4"
+                  src={video1}
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.

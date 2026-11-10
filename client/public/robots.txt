@@ -1,0 +1,11 @@
+
+User-agent: *
+Allow: /
+
+# Block private application pages
+Disallow: /admin/
+Disallow: /member/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://mmmicslimited.com/sitemap.xml
