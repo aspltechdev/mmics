@@ -37,7 +37,7 @@ const Hero = () => {
      VITE_API_URL example:
 
      Local:
-     http://localhost:5000/api
+     https://mmmicslimited.in/api
 
      Production:
      https://your-server.vercel.app/api
@@ -45,7 +45,7 @@ const Hero = () => {
 
   const serverBaseUrl = (
     import.meta.env.VITE_API_URL ||
-    "http://localhost:5000/api"
+    "https://mmmicslimited.in/api"
   ).replace(/\/api\/?$/, "");
 
 
