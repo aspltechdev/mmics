@@ -279,7 +279,7 @@ const deleteStoredImage =
    REMOVE LEGACY LOCALHOST URL FROM API RESPONSE
 
    Old production records like:
-   http://localhost:5000/uploads/...
+   https://mmmicslimited.in/uploads/...
 
    cannot work on mmics.vercel.app.
 

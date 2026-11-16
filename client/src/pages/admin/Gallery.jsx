@@ -69,10 +69,10 @@ const getImageUrl = (imageUrl) => {
   }
 
   if (imageUrl.startsWith("/")) {
-    return `http://localhost:5000${imageUrl}`;
+    return `https://mmmicslimited.in${imageUrl}`;
   }
 
-  return `http://localhost:5000/${imageUrl}`;
+  return `https://mmmicslimited.in/${imageUrl}`;
 };
 
 /* =========================================================
